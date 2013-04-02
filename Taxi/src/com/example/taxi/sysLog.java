@@ -12,14 +12,15 @@ import java.io.OutputStreamWriter;
 
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 
-public class sysLog {
+public class sysLog  {
 	private static final String TAG = "sysLog";
 	private static final int MODE_PRIVATE = 32768;
 	
 	public void logwriter(String file, String path, String strput)
-	{
+	{   
 		// проверяем доступность SD
 	    /*if (!Environment.getExternalStorageState().equals(
 	        Environment.MEDIA_MOUNTED)) {
@@ -38,11 +39,12 @@ public class sysLog {
 	    try {
 	      // открываем поток для записи
 	      BufferedWriter bw = new BufferedWriter(new FileWriter(sdFile));
+	      //BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(openFileOutput(sdFile, MODE_PRIVATE)));
 	      // пишем данные
 	      bw.write(strput+"\n");
 	      // закрываем поток
 	      bw.close();
-	      Log.d(TAG, "Файл записан на SD: " + sdFile.getAbsolutePath());
+	      Log.d(TAG, "Файл лог записан: " + sdFile.getAbsolutePath());
 	    } catch (IOException e) {
 	      e.printStackTrace();
 	    }
