@@ -10,7 +10,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -149,34 +151,30 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 			    String str_address = editTaxiServer.getText().toString().trim();
 	            int str_port = Integer.parseInt(editTaxiPort.getText().toString().trim());
 	            String str_command = editTaxiCmd.getText().toString().trim();
-	            rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+str_command);
+	            /*rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+str_command);
 
 	            Socket s = new Socket(str_address, str_port);
 
 	            str_command = str_command+"\n";//+s.getInetAddress().getHostAddress()+":"+s.getLocalPort();
 	            s.getOutputStream().write(str_command.getBytes());
-
-	           
-	            //byte buf[] = new byte[100];
-	            //int r = s.getInputStream().read(buf);
-	            //String data = new String(buf, 0, r);
-	            //rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+data);
-	            
-	            BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF8"));
+          
+	            BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF8"),16384);
 	            String line = null;
 	            StringBuilder responseData = new StringBuilder();
 	            while((line = in.readLine()) != null) {
 	            	//System.out.println( line);
 		            rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+ line);
-	            } 
-	            
-	            //Socket s = new Socket("90.189.119.84", 35572);
-			    //String message = "imei:353451047760580:orders_list,quit;";//+"\n"+s.getInetAddress().getHostAddress()+":"+s.getLocalPort();
-	            //s.getOutputStream().write(message.getBytes());
-	            //            byte buf[] = new byte[100];
-	            //int r = s.getInputStream().read(buf);
-	            //String data = new String(buf, 0, r);
-
+	            } */
+	            rsltTXT.setText("");
+	            SocketTAXI mSocket = new SocketTAXI();
+	            List<clsOrders> list = mSocket.ServerPutCmdOrders(this.uid,str_address, str_port,str_command);
+	            //String list = mSocket.ServerPutCmdOrders(this.uid,str_address, str_port,str_command);
+	 		    for(clsOrders tmp : list) {
+				//	 System.out.println(tmp.toString());
+					 rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+tmp.getId());
+	       	    //rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+list);
+			      // 
+					 }
 
 	            
 	            
