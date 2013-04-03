@@ -67,7 +67,6 @@ public class SocketTAXI {
             	//list=list+"\n"+ line;
             	 tokens = line.split(delims);
             	 Log.d(TAG, "line: "+line);
-            	 Log.d(TAG, ""+tokens[1]);
             	 obj.setOrder(tokens[0]);
             	 obj.setId(tokens[1]);
             	 obj.setStatus(tokens[2]);
@@ -89,7 +88,6 @@ public class SocketTAXI {
 
 
             Log.d(TAG, "Данные от сервера по ServerPutCmdOrders получены");
-            //return list;
             
         }
         catch(Exception e)

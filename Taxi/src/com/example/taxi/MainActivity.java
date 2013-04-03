@@ -20,6 +20,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.telephony.TelephonyManager;
 import android.util.TypedValue;
@@ -171,9 +172,10 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 	            //String list = mSocket.ServerPutCmdOrders(this.uid,str_address, str_port,str_command);
 	 		    for(clsOrders tmp : list) {
 				//	 System.out.println(tmp.toString());
-					 rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+tmp.getId());
-	       	    //rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+list);
-			      // 
+					 rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+tmp.getId()+"  "
+				+tmp.getStatus()+"  "+tmp.getOrd_date()+"  "+tmp.getOrd_from()+"  "+tmp.getPrice());
+					 Toast.makeText(this, rsltTXT.getText().toString().trim(), Toast.LENGTH_LONG).show();
+
 					 }
 
 	            
@@ -246,9 +248,13 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         title.setGravity(Gravity.LEFT);
         title.setTypeface(Typeface.SERIF, Typeface.BOLD);
+        title.setBackgroundColor(Color.GRAY);
+        title.setTextColor(Color.WHITE);
+        //title.setCompoundDrawables(1, 1, 1, 1);
 
         TableRow.LayoutParams params = new TableRow.LayoutParams();
         params.span = 6;
+
 
         rowTitle.addView(title, params);
 
