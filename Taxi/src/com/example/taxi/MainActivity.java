@@ -41,6 +41,10 @@ import android.widget.Toast;
 public class MainActivity extends Activity /*implements LocationListener*/ {
 	private static final String TAG = "MainActivity";
 	public String uid;
+	public String ServerTaxi;
+	public int ServerTaxiPortGPS;
+	public int ServerTaxiPortCMD;
+	
 	Button btnGPS;
 	Button btnTaxiCmd;
 	TextView rsltTXT;
@@ -59,8 +63,26 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+		sysDictionary dic = new sysDictionary();
+		//try {
+		// dic.setUid(tm.getDeviceId());
+		// uid=tm.getDeviceId();
+		//} catch (Exception e) {
+			dic.setUid("353451047760580");
+			       uid="353451047760580";
+	    //} 
+		ServerTaxi=dic.getServerTaxi();
+		ServerTaxiPortGPS=dic.getServerTaxiPortGPS();
+		ServerTaxiPortCMD=dic.getServerTaxiPortCMD();
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        mLocationListener = new GPSLocationListener(dic); 
+		//setContentView(R.layout.activity_main);
+        setContentView(R.layout.main);
+        cmdOrderlist();
+		/*
 		rsltTXT = (TextView) findViewById(R.id.rsltTXT);
 		btnGPS = (Button) findViewById(R.id.btnGPS);
 		btnTaxiCmd = (Button) findViewById(R.id.btnTaxiCmd);
@@ -69,28 +91,8 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 		editTaxiServer = (EditText) findViewById(R.id.editTaxiServer);
 		editTaxiPort = (EditText) findViewById(R.id.editTaxiPort);
 		editTaxiCmd = (EditText) findViewById(R.id.editTaxiCmd);
+*/
 
-		rsltTXT.setText("Отправляем GPS"+"\n");
-		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-		sysDictionary dic = new sysDictionary();
-		try {
-		 dic.setUid(tm.getDeviceId());
-		 uid=tm.getDeviceId();
-		} catch (Exception e) {
-			dic.setUid("000000000000000");
-			     //uid="353451047760580";
-	    	rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
-
-	    } 
-		
-		
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mLocationListener = new GPSLocationListener(dic); 
-        
-        //rsltTXT = new TextView(this);    
-        //LinearLayout ll= new LinearLayout(this);
-        //ll.addView(rsltTXT);        
-        //setContentView(ll);
 	}
     @Override
     protected void onResume() {
@@ -118,6 +120,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 		return true;
 	}
 	public void onClickGPS(View v) {
+		//cmdOrderlist();
      
 		        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
 		        String strTime = simpleDateFormat.format(new Date());
@@ -145,14 +148,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 		    	rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
 
 		    }
-				TableLayout table = new TableLayout(this);
-				addHead(table);
-				addRowTitle(table);
-				addRow(table, "Ячейка 0","Ячейка 1","Ячейка 1","Ячейка 1","Ячейка 1");
-				addRow(table, "Ячейка 0","Ячейка 1","Ячейка 1","Ячейка 1","Ячейка 1");
-				addRow(table, "Ячейка 0","Ячейка 1","Ячейка 1","Ячейка 1","Ячейка 1");
-				//addRow("Ячейка 0","Ячейка 1");
-		        setContentView(table);
+
 
 	  }
 	public void onClickTaxi(View v) {
@@ -181,13 +177,18 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 	            SocketTAXI mSocket = new SocketTAXI();
 	            List<clsOrders> list = mSocket.ServerPutCmdOrders(this.uid,str_address, str_port,str_command);
 	            //String list = mSocket.ServerPutCmdOrders(this.uid,str_address, str_port,str_command);
+				TableLayout table = new TableLayout(this);
+				addHead(table);
+				addRowTitle(table);
 	 		    for(clsOrders tmp : list) {
 				//	 System.out.println(tmp.toString());
+					addRowOrders(table, tmp.getStatus()+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice());
 					 rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+tmp.getId()+"  "
 				+tmp.getStatus()+"  "+tmp.getOrd_date()+"  "+tmp.getOrd_from()+"  "+tmp.getPrice());
 					 Toast.makeText(this, rsltTXT.getText().toString().trim(), Toast.LENGTH_LONG).show();
 
 					 }
+		        setContentView(table);
 
 	            
 	            
@@ -372,7 +373,44 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         setContentView(table);
 	}
 	
-	public void addRow(TableLayout table, String cell1, String cell2, String cell3, String cell4, String cell5) {
+	public void cmdOrderlist() {
+		 String strcar = null;
+		 String strdriver = null;
+		 try
+	        {
+
+	            SocketTAXI mSocket = new SocketTAXI();
+	            List<clsOrders> list = mSocket.ServerPutCmdOrders(this.uid,ServerTaxi, ServerTaxiPortCMD,"imei:"+uid+":orders_list,quit;");
+	            List<clsDriverInfo> driver = mSocket.ServerPutCmdDriverInfo(this.uid,ServerTaxi, ServerTaxiPortCMD,"imei:"+uid+":driver_info,quit;");
+	            List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(this.uid,ServerTaxi, ServerTaxiPortCMD,"imei:"+uid+":car_info,quit;");
+	            
+				TableLayout table = new TableLayout(this);
+				addHead(table);
+	 		    for(clsCarInfo tmp : car) {
+	 		    	strcar=tmp.getCarName();
+					 }
+	 		    for(clsDriverInfo tmp : driver) {
+	 		    	strdriver=tmp.getDriverName();
+					 }
+	 		    addRowCarDriver(table,strcar,strdriver);
+				addRowTitle(table);
+	 		    for(clsOrders tmp : list) {
+					addRowOrders(table, tmp.getStatus()+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice());
+					 }
+
+		        setContentView(table);
+				//Toast.makeText(this, rsltTXT.getText().toString().trim(), Toast.LENGTH_LONG).show();
+	        }
+	        catch(Exception e)
+	        {
+	        	//System.out.println("init error: "+e);
+	        	 Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+	        	//rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
+	        	}
+	}
+	
+	
+	public void addRowOrders(TableLayout table, String cell1, String cell2, String cell3, String cell4, String cell5) {
 		//TableLayout table = new TableLayout(this);
 		//TableLayout table = (TableLayout) findViewById(R.layout.main);
 		
@@ -422,6 +460,39 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         //setContentView(table);
 	}
 	
+	public void addRowCarDriver(TableLayout table, String cell1, String cell2) {
+		//TableLayout table = new TableLayout(this);
+		//TableLayout table = (TableLayout) findViewById(R.layout.main);
+		
+        table.setStretchAllColumns(true);
+        table.setShrinkAllColumns(true);
+
+        TableRow rowserver = new TableRow(this);
+        rowserver.setGravity(Gravity.CENTER_HORIZONTAL);
+        //TextView empty = new TextView(this);
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams();
+        params.span = 6;
+
+        TextView car = new TextView(this);
+        car.setText(cell1);
+        car.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        //car.setTypeface(Typeface.DEFAULT_BOLD);
+
+        TextView driver = new TextView(this);
+        driver.setText(cell2);
+        driver.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        //driver.setTypeface(Typeface.DEFAULT_BOLD);
+   
+        rowserver.addView(car);
+        rowserver.addView(driver);
+
+        
+        table.addView(rowserver,params);
+
+        //setContentView(table);
+	}
+	
 	public void addRowTitle(TableLayout table) {
 		
         table.setStretchAllColumns(true);
@@ -435,38 +506,43 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 
         TextView order = new TextView(this);
         order.setText("Заказ");
-        order.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+        order.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
         order.setBackgroundColor(Color.BLACK);
         order.setTextColor(Color.WHITE);
+        order.setHeight(30);
         //order.setTypeface(Typeface.DEFAULT_BOLD);
 
         TextView orderdata = new TextView(this);
         orderdata.setText("Время подачи");
-        orderdata.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+        orderdata.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
         orderdata.setBackgroundColor(Color.BLACK);
         orderdata.setTextColor(Color.WHITE);
+        orderdata.setHeight(30);
         //orderdata.setTypeface(Typeface.DEFAULT_BOLD);
         
 
         TextView orderfrom = new TextView(this);
         orderfrom.setText("Адрес подачи");
-        orderfrom.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+        orderfrom.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
         orderfrom.setBackgroundColor(Color.BLACK);
         orderfrom.setTextColor(Color.WHITE);
+        orderfrom.setHeight(30);
         //orderfrom.setTypeface(Typeface.DEFAULT_BOLD);
 
         TextView orderto = new TextView(this);
         orderto.setText("Адрес назначения");
-        orderto.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+        orderto.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
         orderto.setBackgroundColor(Color.BLACK);
         orderto.setTextColor(Color.WHITE);
+        orderto.setHeight(30);
         //orderto.setTypeface(Typeface.DEFAULT_BOLD);
 
         TextView orderprice = new TextView(this);
         orderprice.setText("Сумма");
-        orderprice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+        orderprice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
         orderprice.setBackgroundColor(Color.BLACK);
         orderprice.setTextColor(Color.WHITE);
+        orderprice.setHeight(30);
         //orderprice.setTypeface(Typeface.DEFAULT_BOLD);
         
         rowTitle.addView(order);

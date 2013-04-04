@@ -46,13 +46,12 @@ public class SocketTAXI {
 		    }
 	}
 	
-	public /*String*/ List<clsOrders> ServerPutCmdOrders(String uid,String toServer,int toServerPort, String cmdOrders)
+	public List<clsOrders> ServerPutCmdOrders(String uid,String toServer,int toServerPort, String cmdOrders)
 	{  List<clsOrders> list = new ArrayList<clsOrders>();
-	//String list = "";
+
 		try
         {
-			
-            Socket s = new Socket(toServer, toServerPort);
+			Socket s = new Socket(toServer, toServerPort);
         	String delims = "[|]";
         	String[] tokens ;
 
@@ -64,7 +63,6 @@ public class SocketTAXI {
             StringBuilder responseData = new StringBuilder();
             while((line = in.readLine()) != null) {
                 clsOrders obj = new clsOrders();
-            	//list=list+"\n"+ line;
             	 tokens = line.split(delims);
             	 Log.d(TAG, "line: "+line);
             	 obj.setOrder(tokens[0]);
@@ -80,26 +78,86 @@ public class SocketTAXI {
             	
             	 Log.d(TAG, "obj: "+obj.toString());
             	 list.add(obj);
-           	 	
-            	//System.out.println( line);
-	            //rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+ line);
             } 
-            
-
 
             Log.d(TAG, "Данные от сервера по ServerPutCmdOrders получены");
             
-        }
-        catch(Exception e)
-        {    
+        } catch(Exception e)  {    
         	Log.d(TAG, e.toString());
-        	//System.out.println("init error: "+e);
-        	 //Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-        	//rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
         	}
 		
 		return list;
   }
+	
+	public List<clsDriverInfo> ServerPutCmdDriverInfo(String uid,String toServer,int toServerPort, String cmdOrders)
+	{  List<clsDriverInfo> list = new ArrayList<clsDriverInfo>();
+
+		try
+        {
+			Socket s = new Socket(toServer, toServerPort);
+        	String delims = "[|]";
+        	String[] tokens ;
+
+            String str_command = cmdOrders+"\n";
+            s.getOutputStream().write(str_command.getBytes());
+               
+            String line = null;
+            BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF8"),16384);
+            StringBuilder responseData = new StringBuilder();
+            while((line = in.readLine()) != null) {
+                clsDriverInfo obj = new clsDriverInfo();
+            	 tokens = line.split(delims);
+            	 Log.d(TAG, "line: "+line);
+            	 obj.setDriver(tokens[0]);
+            	 obj.setDriverName(tokens[1]);
+            	
+            	 Log.d(TAG, "obj: "+obj.toString());
+            	 list.add(obj);
+            } 
+
+            Log.d(TAG, "Данные от сервера по ServerPutCmdDriverInfo получены");
+            
+        } catch(Exception e)  {    
+        	Log.d(TAG, e.toString());
+        	}
+		
+		return list;
+  }
+	
+	public List<clsCarInfo> ServerPutCmdCarInfo(String uid,String toServer,int toServerPort, String cmdOrders)
+	{  List<clsCarInfo> list = new ArrayList<clsCarInfo>();
+
+		try
+        {
+			Socket s = new Socket(toServer, toServerPort);
+        	String delims = "[|]";
+        	String[] tokens ;
+
+            String str_command = cmdOrders+"\n";
+            s.getOutputStream().write(str_command.getBytes());
+               
+            String line = null;
+            BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF8"),16384);
+            StringBuilder responseData = new StringBuilder();
+            while((line = in.readLine()) != null) {
+                clsCarInfo obj = new clsCarInfo();
+            	 tokens = line.split(delims);
+            	 Log.d(TAG, "line: "+line);
+            	 obj.setCar(tokens[0]);
+            	 obj.setCarName(tokens[1]);
+            	
+            	 Log.d(TAG, "obj: "+obj.toString());
+            	 list.add(obj);
+            } 
+
+            Log.d(TAG, "Данные от сервера по ServerPutCmdDriverInfo получены");
+            
+        } catch(Exception e)  {    
+        	Log.d(TAG, e.toString());
+        	}
+		
+		return list;
+  }	
 	
 
 }

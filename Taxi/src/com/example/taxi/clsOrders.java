@@ -20,7 +20,7 @@ public class clsOrders {
 		return this.Order;
 	}
 	public void setOrder(String Order) {
-		this.Id = Order;
+		this.Order = Order;
 	}
 	
 	public String getId() {
