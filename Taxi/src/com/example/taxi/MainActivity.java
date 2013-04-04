@@ -25,6 +25,7 @@ import android.graphics.Typeface;
 import android.telephony.TelephonyManager;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -135,14 +136,24 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
   	                in.println(testconnect);
 		            in.close();
 		            clientSocketIn.close();*/
-					SocketTAXI mSocket = new SocketTAXI();
-					mSocket.ServerPutGPS(uid,editGPSServer.getText().toString().trim(),Integer.parseInt(editGPSPort.getText().toString().trim()),ALT,LAT,LGT);
 					
-					subTable();
+					//SocketTAXI mSocket = new SocketTAXI();
+					//mSocket.ServerPutGPS(uid,editGPSServer.getText().toString().trim(),Integer.parseInt(editGPSPort.getText().toString().trim()),ALT,LAT,LGT);
+					
+					//subTable();
 		    }catch (Exception e) {
 		    	rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
 
-		    } 
+		    }
+				TableLayout table = new TableLayout(this);
+				addHead(table);
+				addRowTitle(table);
+				addRow(table, "Ячейка 0","Ячейка 1","Ячейка 1","Ячейка 1","Ячейка 1");
+				addRow(table, "Ячейка 0","Ячейка 1","Ячейка 1","Ячейка 1","Ячейка 1");
+				addRow(table, "Ячейка 0","Ячейка 1","Ячейка 1","Ячейка 1","Ячейка 1");
+				//addRow("Ячейка 0","Ячейка 1");
+		        setContentView(table);
+
 	  }
 	public void onClickTaxi(View v) {
 		rsltTXT.setText("Обрабатываем команду"+"\n");		
@@ -192,37 +203,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 	public void rsltLOG(String valstr) {
 		rsltTXT.setText(valstr);
 	}
-	/*
-    public class MyLocationListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location loc) {
-            loc.getLatitude();
-            loc.getLongitude();
-            String txt = "Текущее местоположение: " + "\nLatitud = "
-                    + loc.getLatitude() + "\nLongitud = " + loc.getLongitude();
-            rsltTXT.setText(txt);
-    		LGT=""+loc.getLatitude();
-    		LAT=""+loc.getLongitude();
-    		ALT=""+loc.getAltitude();
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            Toast.makeText(getApplicationContext(), "Gps выключен",
-                    Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            Toast.makeText(getApplicationContext(), "Gps включен",
-                    Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-    }*/
+	
 	public void subTable()
 	{
 		TableLayout table = new TableLayout(this);
@@ -390,6 +371,143 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 
         setContentView(table);
 	}
+	
+	public void addRow(TableLayout table, String cell1, String cell2, String cell3, String cell4, String cell5) {
+		//TableLayout table = new TableLayout(this);
+		//TableLayout table = (TableLayout) findViewById(R.layout.main);
+		
+        table.setStretchAllColumns(true);
+        table.setShrinkAllColumns(true);
+
+        TableRow rowserver = new TableRow(this);
+        rowserver.setGravity(Gravity.CENTER_HORIZONTAL);
+        //TextView empty = new TextView(this);
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams();
+        params.span = 6;
+
+        TextView order = new TextView(this);
+        order.setText(cell1);
+        order.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        //order.setTypeface(Typeface.DEFAULT_BOLD);
+
+        TextView orderdata = new TextView(this);
+        orderdata.setText(cell2);
+        orderdata.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        //orderdata.setTypeface(Typeface.DEFAULT_BOLD);
+
+        TextView orderfrom = new TextView(this);
+        orderfrom.setText(cell3);
+        orderfrom.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        //orderfrom.setTypeface(Typeface.DEFAULT_BOLD);
+
+        TextView orderto = new TextView(this);
+        orderto.setText(cell4);
+        orderto.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        //orderto.setTypeface(Typeface.DEFAULT_BOLD);
+
+        TextView orderprice = new TextView(this);
+        orderprice.setText(cell5);
+        orderprice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        //orderprice.setTypeface(Typeface.DEFAULT_BOLD);
+        
+        rowserver.addView(order);
+        rowserver.addView(orderdata);
+        rowserver.addView(orderfrom);
+        rowserver.addView(orderto);
+        rowserver.addView(orderprice);
+        
+        table.addView(rowserver,params);
+
+        //setContentView(table);
+	}
+	
+	public void addRowTitle(TableLayout table) {
+		
+        table.setStretchAllColumns(true);
+        table.setShrinkAllColumns(true);
+        
+        TableRow.LayoutParams params = new TableRow.LayoutParams();
+        params.span = 6;
+
+        TableRow rowTitle = new TableRow(this);
+        rowTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        TextView order = new TextView(this);
+        order.setText("Заказ");
+        order.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+        order.setBackgroundColor(Color.BLACK);
+        order.setTextColor(Color.WHITE);
+        //order.setTypeface(Typeface.DEFAULT_BOLD);
+
+        TextView orderdata = new TextView(this);
+        orderdata.setText("Время подачи");
+        orderdata.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+        orderdata.setBackgroundColor(Color.BLACK);
+        orderdata.setTextColor(Color.WHITE);
+        //orderdata.setTypeface(Typeface.DEFAULT_BOLD);
+        
+
+        TextView orderfrom = new TextView(this);
+        orderfrom.setText("Адрес подачи");
+        orderfrom.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+        orderfrom.setBackgroundColor(Color.BLACK);
+        orderfrom.setTextColor(Color.WHITE);
+        //orderfrom.setTypeface(Typeface.DEFAULT_BOLD);
+
+        TextView orderto = new TextView(this);
+        orderto.setText("Адрес назначения");
+        orderto.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+        orderto.setBackgroundColor(Color.BLACK);
+        orderto.setTextColor(Color.WHITE);
+        //orderto.setTypeface(Typeface.DEFAULT_BOLD);
+
+        TextView orderprice = new TextView(this);
+        orderprice.setText("Сумма");
+        orderprice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+        orderprice.setBackgroundColor(Color.BLACK);
+        orderprice.setTextColor(Color.WHITE);
+        //orderprice.setTypeface(Typeface.DEFAULT_BOLD);
+        
+        rowTitle.addView(order);
+        rowTitle.addView(orderdata);
+        rowTitle.addView(orderfrom);
+        rowTitle.addView(orderto);
+        rowTitle.addView(orderprice);
+
+        table.addView(rowTitle,params);
+
+	}
+	
+	public void addHead(TableLayout table) {
+		
+        table.setStretchAllColumns(true);
+        table.setShrinkAllColumns(true);
+
+        TableRow rowTitle = new TableRow(this);
+        rowTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        TextView title = new TextView(this);
+        title.setText("Такси №1");
+
+        title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        title.setGravity(Gravity.LEFT);
+        title.setTypeface(Typeface.SERIF, Typeface.BOLD);
+        title.setBackgroundColor(Color.GRAY);
+        title.setTextColor(Color.WHITE);
+        //title.setCompoundDrawables(1, 1, 1, 1);
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams();
+        params.span = 6;
+
+
+        rowTitle.addView(title, params);
+       // rowTitle.addView(title);
+
+        table.addView(rowTitle);
+        
+	}
+
 
 
 }
