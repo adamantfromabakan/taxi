@@ -41,7 +41,7 @@ public class SocketTAXI {
 		            
 
 		    }catch (Exception e) {
-		    	System.out.println(e.toString());
+		    	Log.d(TAG, e.toString());
 
 		    }
 	}
@@ -64,7 +64,7 @@ public class SocketTAXI {
             while((line = in.readLine()) != null) {
                 clsOrders obj = new clsOrders();
             	 tokens = line.split(delims);
-            	 Log.d(TAG, "line: "+line);
+            	 //Log.d(TAG, "line: "+line);
             	 obj.setOrder(tokens[0]);
             	 obj.setId(tokens[1]);
             	 obj.setStatus(tokens[2]);
@@ -76,7 +76,7 @@ public class SocketTAXI {
             	 obj.setOrd_from(tokens[8]);
             	 obj.setOrd_to(tokens[9]);
             	
-            	 Log.d(TAG, "obj: "+obj.toString());
+            	 //Log.d(TAG, "obj: "+obj.toString());
             	 list.add(obj);
             } 
 
@@ -107,11 +107,11 @@ public class SocketTAXI {
             while((line = in.readLine()) != null) {
                 clsDriverInfo obj = new clsDriverInfo();
             	 tokens = line.split(delims);
-            	 Log.d(TAG, "line: "+line);
+            	 //Log.d(TAG, "line: "+line);
             	 obj.setDriver(tokens[0]);
             	 obj.setDriverName(tokens[1]);
             	
-            	 Log.d(TAG, "obj: "+obj.toString());
+            	 //Log.d(TAG, "obj: "+obj.toString());
             	 list.add(obj);
             } 
 
@@ -142,15 +142,15 @@ public class SocketTAXI {
             while((line = in.readLine()) != null) {
                 clsCarInfo obj = new clsCarInfo();
             	 tokens = line.split(delims);
-            	 Log.d(TAG, "line: "+line);
+            	 //Log.d(TAG, "line: "+line);
             	 obj.setCar(tokens[0]);
             	 obj.setCarName(tokens[1]);
             	
-            	 Log.d(TAG, "obj: "+obj.toString());
+            	 //Log.d(TAG, "obj: "+obj.toString());
             	 list.add(obj);
             } 
 
-            Log.d(TAG, "Данные от сервера по ServerPutCmdDriverInfo получены");
+            Log.d(TAG, "Данные от сервера по ServerPutCmdCarInfo получены");
             
         } catch(Exception e)  {    
         	Log.d(TAG, e.toString());

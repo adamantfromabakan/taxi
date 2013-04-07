@@ -42,8 +42,9 @@ public class GPSLocationListener implements LocationListener {
 		SocketTAXI mSocket = new SocketTAXI();
 		//sysDictionary dic = new sysDictionary();
 		mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
-	    sysLog LGWR = new sysLog();
-	    LGWR.logwriter(dic.loggps, dic.logpath, "imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+loc.getAltitude()+",A,"+loc.getLatitude()+",N,"+loc.getLongitude()+",E,0;");
+	    
+		//sysLog LGWR = new sysLog();
+	    //LGWR.logwriter(dic.loggps, dic.logpath, "imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+loc.getAltitude()+",A,"+loc.getLatitude()+",N,"+loc.getLongitude()+",E,0;");
 	    
     }
 
