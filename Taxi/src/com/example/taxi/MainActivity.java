@@ -402,6 +402,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 	            List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(this.uid,ServerTaxi, ServerTaxiPortCMD,"imei:"+uid+":car_info,quit;");
 	            
 				TableLayout table = new TableLayout(this);
+				table.setBackgroundResource(R.drawable.abakanmap);
 	
 		        table.setStretchAllColumns(true);
 		        table.setShrinkAllColumns(true);
