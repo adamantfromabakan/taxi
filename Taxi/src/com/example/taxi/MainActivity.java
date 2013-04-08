@@ -50,6 +50,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 	public int ServerTaxiPortCMD;
 	public int Measuredwidth = 0;  
 	public int Measuredheight = 0; 
+	public String OrderBusy="0";
 	
 	Button btnGPS;
 	Button btnTaxiCmd;
@@ -391,6 +392,8 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 		        //      Measuredwidth = size.x;
 		        //      Measuredheight = size.y; 
 		        //    }else{
+		              int stat=0;
+		              String statstr="";
 		              Display d = w.getDefaultDisplay(); 
 		              Measuredwidth = d.getWidth(); 
 		              Measuredheight = d.getHeight(); 
@@ -402,7 +405,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 	            List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(this.uid,ServerTaxi, ServerTaxiPortCMD,"imei:"+uid+":car_info,quit;");
 	            
 				TableLayout table = new TableLayout(this);
-				table.setBackgroundResource(R.drawable.abakanmap);
+				//table.setBackgroundResource(R.drawable.abakanmap);
 	
 		        table.setStretchAllColumns(true);
 		        table.setShrinkAllColumns(true);
@@ -417,11 +420,19 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 	 		    addRowCarDriver(table,strcar,strdriver);
 				addRowTitle(table);
 	 		    for(clsOrders tmp : list) {
-					addRowOrders(table, tmp.getStatus()+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus());
+
+	 		    	if (tmp.getStatus().trim().length()<5) {
+	 		    		statstr="Взять";
+	 		        } else {
+	 		        	 statstr="Освободить";
+	 		        	 OrderBusy=tmp.getId().trim();
+	 		        }
+
+					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus());
 					 }
 	 		    //table.setBackgroundDrawable(R.drawable.map);
 		        setContentView(table);
-
+		        Toast.makeText(this, "Занята заявка под номером "+this.OrderBusy , Toast.LENGTH_LONG).show();
 	        
 				//Toast.makeText(this, ""+Measuredwidth , Toast.LENGTH_LONG).show();
 				//Toast.makeText(this, ""+rowTitle.getWidth(), Toast.LENGTH_LONG).show();
@@ -453,13 +464,14 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         //params.gravity = Gravity.CENTER;
         paramsB.setMargins(1, 1, 1, 1);
         paramsB.span = 1;
-        paramsB.height= 60;
+        paramsB.height= 80;
         
-        int nSize=11;
-        int nSizebtn=11;
+        int nSize=18;
+        int nSizebtn=30;
         int nHeight=45;
-        int nHeightbtn=60;
+        int nHeightbtn=80;
         int nGravity=Gravity.CENTER;
+        //String statstr="";
 
         TextView order = new TextView(this);
         order.setText(cell1);
@@ -630,12 +642,12 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         //params.gravity = Gravity.CENTER;
         params.setMargins(1, 1, 1, 1);
         params.span = 2;
-        params.height= 25;
+        params.height= 35;
         params2.setMargins(1, 1, 1, 1);
         params2.span = 3;
-        params2.height= 25;
+        params2.height= 35;
         
-        int nSize=10;
+        int nSize=24;
         int nHeight=45;
         int nGravity=Gravity.CENTER;
 
@@ -682,7 +694,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         rowTitle.setGravity(Gravity.CENTER);
         rowTitle.setBackgroundColor(Color.GRAY);
         
-        int nSize=10;
+        int nSize=18;
         int nHeight=30;
         int nGravity=Gravity.CENTER;
 
@@ -755,9 +767,9 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         //params.gravity = Gravity.CENTER;
         params.setMargins(1, 1, 1, 1);
         params.span = 1;
-        params.height= 55;
+        params.height= 80;
 
-        int nSize=12;
+        int nSize=30;
         int nHeight=75;
         int nGravity=Gravity.CENTER;
         
@@ -836,7 +848,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         rowBtn.addView(btn5,params);
 
         table.addView(rowBtn);
-        Toast.makeText(this, ""+btn3.getHeight() , Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, ""+btn3.getHeight() , Toast.LENGTH_LONG).show();
 
 	}
 	
