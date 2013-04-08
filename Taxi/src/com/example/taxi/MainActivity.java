@@ -467,7 +467,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         paramsB.height= 80;
         
         int nSize=18;
-        int nSizebtn=30;
+        int nSizebtn=20;
         int nHeight=45;
         int nHeightbtn=80;
         int nGravity=Gravity.CENTER;
@@ -538,7 +538,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
             orderfrom.setTextColor(Color.WHITE);
             orderto.setTextColor(Color.WHITE);
             orderprice.setTextColor(Color.WHITE); 	
-            order.setBackgroundColor(Color.RED);
+            order.setBackgroundColor(Color.rgb(139,00,00));
             orderdata.setBackgroundColor(Color.rgb(64,95,237));
             orderfrom.setBackgroundColor(Color.rgb(64,95,237));
             orderto.setBackgroundColor(Color.rgb(64,95,237));
@@ -551,7 +551,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 
             Button Ordersbtn1 = new Button(this);
             Ordersbtn1.setText("Установить время подачи");
-            Ordersbtn1.setBackgroundColor(Color.BLACK);
+            Ordersbtn1.setBackgroundColor(Color.rgb(69,69,69));
             Ordersbtn1.setTextColor(Color.WHITE);
             Ordersbtn1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn1.setGravity(nGravity);
@@ -574,7 +574,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 
             Button Ordersbtn3 = new Button(this);
             Ordersbtn3.setText("Установить время прибытия");
-            Ordersbtn3.setBackgroundColor(Color.BLACK);
+            Ordersbtn3.setBackgroundColor(Color.rgb(69,69,69));
             Ordersbtn3.setTextColor(Color.WHITE);
             Ordersbtn3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn3.setGravity(nGravity);
@@ -614,6 +614,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
             rowOrders.addView(orderprice,params);
             
             table.addView(rowOrders);
+            
             
             rowBtnOrders.addView(Ordersbtn1,paramsB);
             rowBtnOrders.addView(Ordersbtn2,paramsB);
@@ -760,17 +761,17 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 	
 	public void addRowButton(TableLayout table) {
 		
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy ");
         String strTime = simpleDateFormat.format(new Date());
         
         TableRow.LayoutParams params = new TableRow.LayoutParams();
         //params.gravity = Gravity.CENTER;
         params.setMargins(1, 1, 1, 1);
         params.span = 1;
-        params.height= 80;
+        params.height= 60;
 
-        int nSize=30;
-        int nHeight=75;
+        int nSize=22;
+        int nHeight=60;
         int nGravity=Gravity.CENTER;
         
         TableRow rowBtn = new TableRow(this);
@@ -832,7 +833,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         Button btn5 = new Button(this);
         btn5.setText("Выход");
         btn5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
-        btn5.setBackgroundColor(Color.RED);
+        btn5.setBackgroundColor(Color.rgb(139,00,00));
         btn5.setTextColor(Color.WHITE);
         btn5.setGravity(nGravity);
         //btn5.setHeight(nHeight);
