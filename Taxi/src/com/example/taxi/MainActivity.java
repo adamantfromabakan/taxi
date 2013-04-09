@@ -452,6 +452,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         TableRow rowOrders = new TableRow(this);
         rowOrders.setGravity(Gravity.CENTER);
         rowOrders.setBackgroundColor(Color.GRAY);
+        rowOrders.setBackgroundColor(color.);
         //TextView empty = new TextView(this);
 
         TableRow.LayoutParams params = new TableRow.LayoutParams();
