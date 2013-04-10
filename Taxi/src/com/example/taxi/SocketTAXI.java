@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
+import android.widget.Toast;
 
 
 import android.telephony.TelephonyManager;
@@ -17,7 +17,16 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class SocketTAXI {
+	sysDictionary dic;
+	sysLog LGWR;
 	private static final String TAG = "SocketTAXI";
+	
+	
+	public SocketTAXI(sysDictionary dic,sysLog LGWR) {
+    	this.dic=dic;
+    	this.LGWR=LGWR;
+
+	}
 	
 	public void ServerPutGPS(String uid,String toServer,int toServerPort, String ALT, String LAT, String LGT)
 	{
@@ -26,6 +35,7 @@ public class SocketTAXI {
 		        String strTime = simpleDateFormat.format(new Date());
 		        String strconnect = "imei:"+uid+",tracker,"+strTime+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;";
 		        Log.d(TAG, "Строка GPS:"+strconnect);
+		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ strconnect);
 
 				try {
 		            		            
@@ -42,7 +52,7 @@ public class SocketTAXI {
 
 		    }catch (Exception e) {
 		    	Log.d(TAG, e.toString());
-
+		    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - " + TAG + ":ServerPutGPS " + e.toString());
 		    }
 	}
 	
@@ -79,11 +89,13 @@ public class SocketTAXI {
             	 //Log.d(TAG, "obj: "+obj.toString());
             	 list.add(obj);
             } 
-
+            
             Log.d(TAG, "Данные от сервера по ServerPutCmdOrders получены");
+            LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ str_command);
             
         } catch(Exception e)  {    
         	Log.d(TAG, e.toString());
+        	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":ServerPutCmdOrders " + e.toString());
         	}
 		
 		return list;
@@ -116,9 +128,11 @@ public class SocketTAXI {
             } 
 
             Log.d(TAG, "Данные от сервера по ServerPutCmdDriverInfo получены");
+            LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ str_command);
             
         } catch(Exception e)  {    
         	Log.d(TAG, e.toString());
+        	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":ServerPutCmdDriverInfo " + e.toString());
         	}
 		
 		return list;
@@ -151,9 +165,11 @@ public class SocketTAXI {
             } 
 
             Log.d(TAG, "Данные от сервера по ServerPutCmdCarInfo получены");
+            LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ str_command);
             
         } catch(Exception e)  {    
         	Log.d(TAG, e.toString());
+        	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":ServerPutCmdCarInfo " + e.toString());
         	}
 		
 		return list;

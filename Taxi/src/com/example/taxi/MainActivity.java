@@ -19,6 +19,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -31,6 +32,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,9 +44,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivity extends Activity /*implements LocationListener*/ {
+public class MainActivity extends Activity implements OnClickListener/*implements LocationListener*/ {
 	private static final String TAG = "MainActivity";
-	public String uid;
+	//public String uid;
 	public String ServerTaxi;
 	public int ServerTaxiPortGPS;
 	public int ServerTaxiPortCMD;
@@ -65,28 +67,45 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 	String ALT="0000.0000";
     private LocationManager locationManager;
     private LocationListener mLocationListener;	
-	
-	
+    public sysDictionary dic ;
+	public sysLog LGWR;
+	public SocketTAXI mSocket;
 
+
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
+		////LGWR.logwriter(dic.loggps, dic.logpath, dic.getSysdate()+" - "+"imei:"+dic.getUid())+",tracker,"+strTime+",,F,"+loc.getAltitude()+",A,"+loc.getLatitude()+",N,"+loc.getLongitude()+",E,0;");
 		super.onCreate(savedInstanceState);
+		
+		//StrictMode.setVmPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork());
+		if (android.os.Build.VERSION.SDK_INT > 9) {
+			StrictMode.ThreadPolicy policy = 
+			        new StrictMode.ThreadPolicy.Builder().permitAll().build();
+			StrictMode.setThreadPolicy(policy);
+			}
+		
 		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-		sysDictionary dic = new sysDictionary();
+		 dic = new sysDictionary();
+		 mSocket = new SocketTAXI(dic, LGWR);
+		 LGWR = new sysLog();
+		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Starting program Taxi1...");
+		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - android.os.Build.VERSION.SDK_INT:"+android.os.Build.VERSION.SDK_INT);
 		//try {
 		// dic.setUid(tm.getDeviceId());
 		// uid=tm.getDeviceId();
 		//} catch (Exception e) {
 			dic.setUid("353451047760580");
-			       uid="353451047760580";
+		//	       uid="353451047760580";
 	    //} 
 		ServerTaxi=dic.getServerTaxi();
 		ServerTaxiPortGPS=dic.getServerTaxiPortGPS();
 		ServerTaxiPortCMD=dic.getServerTaxiPortCMD();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mLocationListener = new GPSLocationListener(dic); 
-		//setContentView(R.layout.activity_main);
+        mLocationListener = new GPSLocationListener(dic, LGWR, mSocket); 
+
+        //setContentView(R.layout.activity_main);
         //setContentView(R.layout.main);
         cmdOrderlist();
 		/*
@@ -99,7 +118,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 		editTaxiPort = (EditText) findViewById(R.id.editTaxiPort);
 		editTaxiCmd = (EditText) findViewById(R.id.editTaxiCmd);
 */
-
+         LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Interface loaded!");
 	}
     @Override
     protected void onResume() {
@@ -126,12 +145,53 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+	     case 10000000://R.id.btnOk:
+	    	 Toast.makeText(this, ""+"Нажата кнопка 'Текущее время'" , Toast.LENGTH_LONG).show();
+	       break;
+		case 10000001://R.id.btnOk:
+	    	 Toast.makeText(this, ""+"Нажата кнопка 'Обновить заявки'" , Toast.LENGTH_LONG).show();
+	    	 cmdOrderlist();
+	       break;
+	     case 10000002://R.id.btnCancel:
+	    	 Toast.makeText(this, ""+"Нажата кнопка 'Звонить оператору'" , Toast.LENGTH_LONG).show();
+	       break;
+	     case 10000003://R.id.btnCancel:
+	    	 Toast.makeText(this, ""+"Нажата кнопка 'Карта'" , Toast.LENGTH_LONG).show();
+	       break;
+	     case 10000004://R.id.btnCancel:
+	    	 Toast.makeText(this, ""+"Нажата кнопка 'Выход'" , Toast.LENGTH_LONG).show();
+		       break;
+	     case 10000005://R.id.btnCancel:
+	    	 Toast.makeText(this, ""+"Нажата кнопка 'Установить время подачи'" , Toast.LENGTH_LONG).show();
+		       break;
+	     case 10000006://R.id.btnCancel:
+	    	 Toast.makeText(this, ""+"Нажата кнопка 'Установить время отъезда'" , Toast.LENGTH_LONG).show();
+		       break;
+	     case 10000007://R.id.btnCancel:
+	    	 Toast.makeText(this, ""+"Нажата кнопка 'Установит время прибытия'" , Toast.LENGTH_LONG).show();
+		       break;
+	     case 10000008://R.id.btnCancel:
+	    	 Toast.makeText(this, ""+"Нажата кнопка 'Километры'" , Toast.LENGTH_LONG).show();
+		       break;
+	     case 10000009://R.id.btnCancel:
+	    	 Toast.makeText(this, ""+"Нажата кнопка 'Такси прибыло'" , Toast.LENGTH_LONG).show();
+		       break;
+
+
+		}
+		
+	}
+	
 	public void onClickGPS(View v) {
 		//cmdOrderlist();
      
 		        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
 		        String strTime = simpleDateFormat.format(new Date());
-		        String testconnect = "imei:"+uid+",tracker,"+strTime+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;";
+		        String testconnect = "imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;";
 		        rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+testconnect);
 				try {
 		            		            
@@ -153,6 +213,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 					//subTable();
 		    }catch (Exception e) {
 		    	rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
+		    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ e.toString());
 
 		    }
 
@@ -181,8 +242,8 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 		            rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+ line);
 	            } */
 	            rsltTXT.setText("");
-	            SocketTAXI mSocket = new SocketTAXI();
-	            List<clsOrders> list = mSocket.ServerPutCmdOrders(this.uid,str_address, str_port,str_command);
+	            //SocketTAXI mSocket = new SocketTAXI();
+	            List<clsOrders> list = mSocket.ServerPutCmdOrders(dic.getUid(),str_address, str_port,str_command);
 	            //String list = mSocket.ServerPutCmdOrders(this.uid,str_address, str_port,str_command);
 				TableLayout table = new TableLayout(this);
 				addHead(table);
@@ -203,8 +264,9 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 	        catch(Exception e)
 	        {
 	        	//System.out.println("init error: "+e);
-	        	 Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+	        	// Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
 	        	rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
+	        	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ e.toString());
 	        	}
 	  }
 
@@ -397,19 +459,21 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 		              Display d = w.getDefaultDisplay(); 
 		              Measuredwidth = d.getWidth(); 
 		              Measuredheight = d.getHeight(); 
+		              dic.setMsr(Measuredwidth);
+		              //Toast.makeText(this, ""+Measuredwidth , Toast.LENGTH_LONG).show();
 		        //    }
 		              
-	            SocketTAXI mSocket = new SocketTAXI();
-	            List<clsOrders> list = mSocket.ServerPutCmdOrders(this.uid,ServerTaxi, ServerTaxiPortCMD,"imei:"+uid+":orders_list,quit;");
-	            List<clsDriverInfo> driver = mSocket.ServerPutCmdDriverInfo(this.uid,ServerTaxi, ServerTaxiPortCMD,"imei:"+uid+":driver_info,quit;");
-	            List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(this.uid,ServerTaxi, ServerTaxiPortCMD,"imei:"+uid+":car_info,quit;");
+	            SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
+	            List<clsOrders> list = mSocket.ServerPutCmdOrders(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":orders_list,quit;");
+	            List<clsDriverInfo> driver = mSocket.ServerPutCmdDriverInfo(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":driver_info,quit;");
+	            List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":car_info,quit;");
 	            
 				TableLayout table = new TableLayout(this);
 				//table.setBackgroundResource(R.drawable.abakanmap);
 	
 		        table.setStretchAllColumns(true);
 		        table.setShrinkAllColumns(true);
-				//addHead(table);
+				addHead(table);
 				addRowButton(table);
 	 		    for(clsCarInfo tmp : car) {
 	 		    	strcar=tmp.getCarName();
@@ -432,17 +496,14 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 					 }
 	 		    //table.setBackgroundDrawable(R.drawable.map);
 		        setContentView(table);
-		        Toast.makeText(this, "Занята заявка под номером "+this.OrderBusy , Toast.LENGTH_LONG).show();
+		        //Toast.makeText(this, "Занята заявка под номером "+this.OrderBusy , Toast.LENGTH_LONG).show();
 	        
-				//Toast.makeText(this, ""+Measuredwidth , Toast.LENGTH_LONG).show();
-				//Toast.makeText(this, ""+rowTitle.getWidth(), Toast.LENGTH_LONG).show();
-				//Toast.makeText(this, rsltTXT.getText().toString().trim(), Toast.LENGTH_LONG).show();
+				
 	        }
 	        catch(Exception e)
 	        {
-	        	//System.out.println("init error: "+e);
 	        	 Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-	        	//rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
+	        	 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":cmdOrderlist " + e.toString());
 	        	}
 	}
 	
@@ -452,25 +513,42 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         TableRow rowOrders = new TableRow(this);
         rowOrders.setGravity(Gravity.CENTER);
         rowOrders.setBackgroundColor(Color.GRAY);
-        rowOrders.setBackgroundColor(color.);
+      
         //TextView empty = new TextView(this);
 
         TableRow.LayoutParams params = new TableRow.LayoutParams();
         //params.gravity = Gravity.CENTER;
         params.setMargins(1, 1, 1, 1);
-        params.span = 1;
-        params.height= 45;
+        params.span = 4;
+        params.height= dic.RowOrdersHeight;
+        
+        TableRow.LayoutParams paramsAdr = new TableRow.LayoutParams();
+        //paramsAdr.gravity = Gravity.CENTER;
+        paramsAdr.setMargins(1, 1, 1, 1);
+        paramsAdr.span = 5;
+        paramsAdr.height= dic.RowOrdersHeight;
+        
+        TableRow.LayoutParams paramsSum = new TableRow.LayoutParams();
+        //paramsSum.gravity = Gravity.CENTER;
+        paramsSum.setMargins(1, 1, 1, 1);
+        paramsSum.span = 2;
+        paramsSum.height= dic.RowOrdersHeight;
         
         TableRow.LayoutParams paramsB = new TableRow.LayoutParams();
         //params.gravity = Gravity.CENTER;
         paramsB.setMargins(1, 1, 1, 1);
-        paramsB.span = 1;
-        paramsB.height= 80;
+        paramsB.span = 4;
+        paramsB.height= dic.RowOrdersButtonHeight;
         
-        int nSize=18;
-        int nSizebtn=20;
-        int nHeight=45;
-        int nHeightbtn=80;
+        TableRow.LayoutParams paramsFrame = new TableRow.LayoutParams();
+        //params.gravity = Gravity.CENTER;
+        paramsFrame.setMargins(10, 10, 10, 10);
+
+        
+        int nSize=dic.RowOrdersSize;
+        int nSizebtn=dic.RowOrdersButtonSize;
+        int nHeight=dic.RowOrdersHeight;
+        int nHeightbtn=dic.RowOrdersButtonHeight;
         int nGravity=Gravity.CENTER;
         //String statstr="";
 
@@ -528,11 +606,11 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
             
             rowOrders.addView(order,params);
             rowOrders.addView(orderdata,params);
-            rowOrders.addView(orderfrom,params);
-            rowOrders.addView(orderto,params);
-            rowOrders.addView(orderprice,params);
+            rowOrders.addView(orderfrom,paramsAdr);
+            rowOrders.addView(orderto,paramsAdr);
+            rowOrders.addView(orderprice,paramsSum);
             
-            table.addView(rowOrders);
+            table.addView(rowOrders,paramsFrame);
         } else {
             order.setTextColor(Color.WHITE);
             orderdata.setTextColor(Color.WHITE);
@@ -548,7 +626,9 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
             
             TableRow rowBtnOrders = new TableRow(this);
             rowBtnOrders.setGravity(Gravity.CENTER);
-            rowBtnOrders.setBackgroundColor(Color.GRAY);
+            rowBtnOrders.setBackgroundColor(Color.YELLOW);
+            
+            rowOrders.setBackgroundColor(Color.YELLOW);
 
             Button Ordersbtn1 = new Button(this);
             Ordersbtn1.setText("Установить время подачи");
@@ -557,6 +637,8 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
             Ordersbtn1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn1.setGravity(nGravity);
             Ordersbtn1.setPadding(1, 1, 1, 1);
+            Ordersbtn1.setId(10000005);
+            Ordersbtn1.setOnClickListener(this);
             //Ordersbtn1.setHeight(nHeightbtn);
             //Ordersbtn1.setTypeface(Typeface.DEFAULT_BOLD);
             //Ordersbtn1.setWidth(Measuredwidth/5);
@@ -568,6 +650,8 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
             Ordersbtn2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn2.setGravity(nGravity);
             Ordersbtn2.setPadding(1, 1, 1, 1);
+            Ordersbtn2.setId(10000006);
+            Ordersbtn2.setOnClickListener(this);
             //Ordersbtn2.setHeight(nHeightbtn);
             //Ordersbtn2.setTypeface(Typeface.DEFAULT_BOLD);
             //Ordersbtn2.setWidth(Measuredwidth/5);
@@ -580,6 +664,8 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
             Ordersbtn3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn3.setGravity(nGravity);
             Ordersbtn3.setPadding(1, 1, 1, 1);
+            Ordersbtn3.setId(10000007);
+            Ordersbtn3.setOnClickListener(this);
             //Ordersbtn3.setHeight(nHeightbtn);
             //Ordersbtn3.setTypeface(Typeface.DEFAULT_BOLD);
             //Ordersbtn3.setWidth(Measuredwidth/5);
@@ -591,6 +677,8 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
             Ordersbtn4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn4.setGravity(nGravity);
             Ordersbtn4.setPadding(1, 1, 1, 1);
+            Ordersbtn4.setId(10000008);
+            Ordersbtn4.setOnClickListener(this);
             //Ordersbtn4.setHeight(nHeightbtn);
             //Ordersbtn4.setTypeface(Typeface.DEFAULT_BOLD);
             //Ordersbtn4.setWidth(Measuredwidth/5);
@@ -602,6 +690,8 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
             Ordersbtn5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn5.setGravity(nGravity);
             Ordersbtn5.setPadding(1, 1, 1, 1);
+            Ordersbtn5.setId(10000009);
+            Ordersbtn5.setOnClickListener(this);
             //Ordersbtn5.setHeight(nHeightbtn);
             //Ordersbtn5.setTypeface(Typeface.DEFAULT_BOLD);
             //Ordersbtn5.setWidth(Measuredwidth/5);
@@ -610,11 +700,11 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
             
             rowOrders.addView(order,params);
             rowOrders.addView(orderdata,params);
-            rowOrders.addView(orderfrom,params);
-            rowOrders.addView(orderto,params);
-            rowOrders.addView(orderprice,params);
+            rowOrders.addView(orderfrom,paramsAdr);
+            rowOrders.addView(orderto,paramsAdr);
+            rowOrders.addView(orderprice,paramsSum);
             
-            table.addView(rowOrders);
+            table.addView(rowOrders,paramsFrame);
             
             
             rowBtnOrders.addView(Ordersbtn1,paramsB);
@@ -623,7 +713,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
             rowBtnOrders.addView(Ordersbtn4,paramsB);
             rowBtnOrders.addView(Ordersbtn5,paramsB);
 
-            table.addView(rowBtnOrders);
+            table.addView(rowBtnOrders,paramsFrame);
         }
         
 
@@ -643,14 +733,14 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         TableRow.LayoutParams params2 = new TableRow.LayoutParams();
         //params.gravity = Gravity.CENTER;
         params.setMargins(1, 1, 1, 1);
-        params.span = 2;
-        params.height= 35;
+        params.span = 8;
+        params.height= dic.RowCarDriverHeight;
         params2.setMargins(1, 1, 1, 1);
-        params2.span = 3;
-        params2.height= 35;
+        params2.span = 12;
+        params2.height= dic.RowCarDriverHeight;
         
-        int nSize=24;
-        int nHeight=45;
+        int nSize=dic.RowCarDriverSize;
+        int nHeight=dic.RowCarDriverHeight;
         int nGravity=Gravity.CENTER;
 
         TextView car = new TextView(this);
@@ -688,16 +778,27 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         TableRow.LayoutParams params = new TableRow.LayoutParams();
         //params.gravity = Gravity.CENTER;
         params.setMargins(1, 1, 1, 1);
-        params.span = 1;
-        params.height= 25;
+        params.span = 4;
+        params.height= dic.RowTitleHeight;
 
+        TableRow.LayoutParams paramsAdr = new TableRow.LayoutParams();
+        //paramsAdr.gravity = Gravity.CENTER;
+        paramsAdr.setMargins(1, 1, 1, 1);
+        paramsAdr.span = 5;
+        paramsAdr.height= dic.RowTitleHeight;
+        
+        TableRow.LayoutParams paramsSum = new TableRow.LayoutParams();
+        //paramsSum.gravity = Gravity.CENTER;
+        paramsSum.setMargins(1, 1, 1, 1);
+        paramsSum.span = 2;
+        paramsSum.height= dic.RowTitleHeight;
 
         TableRow rowTitle = new TableRow(this);
         rowTitle.setGravity(Gravity.CENTER);
         rowTitle.setBackgroundColor(Color.GRAY);
         
-        int nSize=18;
-        int nHeight=30;
+        int nSize=dic.RowTitleSize;
+        int nHeight=dic.RowTitleHeight;
         int nGravity=Gravity.CENTER;
 
         TextView order = new TextView(this);
@@ -752,9 +853,9 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         
         rowTitle.addView(order,params);
         rowTitle.addView(orderdata,params);
-        rowTitle.addView(orderfrom,params);
-        rowTitle.addView(orderto,params);
-        rowTitle.addView(orderprice,params);
+        rowTitle.addView(orderfrom,paramsAdr);
+        rowTitle.addView(orderto,paramsAdr);
+        rowTitle.addView(orderprice,paramsSum);
 
         table.addView(rowTitle);
 
@@ -762,17 +863,29 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
 	
 	public void addRowButton(TableLayout table) {
 		
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy ");
-        String strTime = simpleDateFormat.format(new Date());
+		//SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy ");
+        //String strTime = simpleDateFormat.format(new Date());
         
         TableRow.LayoutParams params = new TableRow.LayoutParams();
         //params.gravity = Gravity.CENTER;
         params.setMargins(1, 1, 1, 1);
-        params.span = 1;
-        params.height= 60;
+        params.span = 4;
+        params.height= dic.RowButtonHeight;
 
-        int nSize=22;
-        int nHeight=60;
+        TableRow.LayoutParams params3 = new TableRow.LayoutParams();
+        //params.gravity = Gravity.CENTER;
+        params3.setMargins(1, 1, 1, 1);
+        params3.span = 4;
+        params3.height= dic.RowButtonHeight;
+        
+        TableRow.LayoutParams params5 = new TableRow.LayoutParams();
+        //params.gravity = Gravity.CENTER;
+        params5.setMargins(1, 1, 1, 1);
+        params5.span = 5;
+        params5.height= dic.RowButtonHeight;
+        
+        int nSize=dic.RowButtonSize;
+        int nHeight=dic.RowButtonHeight;
         int nGravity=Gravity.CENTER;
         
         TableRow rowBtn = new TableRow(this);
@@ -781,7 +894,7 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
  
 
         Button btn1 = new Button(this);
-        btn1.setText(strTime);
+        btn1.setText(dic.getSysdate());
         btn1.setBackgroundColor(Color.BLACK);
         btn1.setTextColor(Color.WHITE);
         btn1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
@@ -790,11 +903,13 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         //btn1.setTypeface(Typeface.DEFAULT_BOLD);
         //btn1.setWidth(Measuredwidth/5);
         btn1.setPadding(1, 1, 1, 1);
+        btn1.setId(10000000);
+        btn1.setOnClickListener(this);
 
 
 
         Button btn2 = new Button(this);
-        btn2.setText("Обновить заявки");
+        btn2.setText("Обновить\nзаявки");
         btn2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
         btn2.setBackgroundColor(Color.BLACK);
         btn2.setTextColor(Color.WHITE);
@@ -804,11 +919,13 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         //btn2.onClick="cmdOrderlist"
         //btn2.setWidth(Measuredwidth/5);
         btn2.setPadding(1, 1, 1, 1);
+        btn2.setId(10000001);
+        btn2.setOnClickListener(this);
 
         
 
         Button btn3 = new Button(this);
-        btn3.setText("Звонить оператору");
+        btn3.setText("Звонить\nоператору");
         btn3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
         btn3.setBackgroundColor(Color.BLACK);
         btn3.setTextColor(Color.WHITE);
@@ -817,7 +934,8 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         //btn3.setTypeface(Typeface.DEFAULT_BOLD);
         //btn3.setWidth(Measuredwidth/5);
         btn3.setPadding(1, 1, 1, 1);
-
+        btn3.setId(10000002);
+        btn3.setOnClickListener(this);
 
         Button btn4 = new Button(this);
         btn4.setText("Карта");
@@ -829,6 +947,8 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         //btn4.setTypeface(Typeface.DEFAULT_BOLD);
         //btn4.setWidth(Measuredwidth/5);
         btn4.setPadding(1, 1, 1, 1);
+        btn4.setId(10000003);
+        btn4.setOnClickListener(this);        
 
 
         Button btn5 = new Button(this);
@@ -841,6 +961,8 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         //btn5.setTypeface(Typeface.DEFAULT_BOLD);
         //btn5.setWidth(Measuredwidth/5);
         btn5.setPadding(1, 1, 1, 1);
+        btn5.setId(10000004);
+        btn5.setOnClickListener(this);        
 
         
         rowBtn.addView(btn1,params);
@@ -850,37 +972,190 @@ public class MainActivity extends Activity /*implements LocationListener*/ {
         rowBtn.addView(btn5,params);
 
         table.addView(rowBtn);
-        //Toast.makeText(this, ""+btn3.getHeight() , Toast.LENGTH_LONG).show();
 
 	}
 	
 	public void addHead(TableLayout table) {
+        TableRow.LayoutParams params = new TableRow.LayoutParams();
+        //params.setMargins(1, 1, 1, 1);
+        params.span = 1;
+        params.height= 0;
 		
-        TableRow rowTitleHead = new TableRow(this);
-        rowTitleHead.setGravity(Gravity.CENTER_HORIZONTAL);
+        int ngrav=Gravity.CENTER;
+        TableRow rowColHead = new TableRow(this);
+        rowColHead.setGravity(ngrav);
+        //rowColHead.setPadding(1, 1, 1, 1);
+        
         
 
-        TextView title = new TextView(this);
-        title.setText("Такси №1");
+        TextView c1 = new TextView(this);
+        c1.setText("1");
+        c1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c1.setGravity(ngrav);
+        c1.setBackgroundColor(Color.GRAY);
+        c1.setTextColor(Color.WHITE);
 
-        title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-        title.setGravity(Gravity.LEFT);
-        title.setTypeface(Typeface.SERIF, Typeface.BOLD);
-        title.setBackgroundColor(Color.GRAY);
-        title.setTextColor(Color.WHITE);
-        //title.setCompoundDrawables(1, 1, 1, 1);
+        TextView c2 = new TextView(this);
+        c2.setText("2");
+        c2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c2.setGravity(ngrav);
+        c2.setBackgroundColor(Color.GRAY);
+        c2.setTextColor(Color.WHITE);
+        
+        TextView c3 = new TextView(this);
+        c3.setText("3");
+        c3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c3.setGravity(ngrav);
+        c3.setBackgroundColor(Color.GRAY);
+        c3.setTextColor(Color.WHITE);
+        
+        TextView c4 = new TextView(this);
+        c4.setText("4");
+        c4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c4.setGravity(ngrav);
+        c4.setBackgroundColor(Color.GRAY);
+        c4.setTextColor(Color.WHITE);
+        
+        TextView c5 = new TextView(this);
+        c5.setText("5");
+        c5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c5.setGravity(ngrav);
+        c5.setBackgroundColor(Color.GRAY);
+        c5.setTextColor(Color.WHITE);
+        
+        TextView c6 = new TextView(this);
+        c6.setText("6");
+        c6.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c6.setGravity(ngrav);
+        c6.setBackgroundColor(Color.GRAY);
+        c6.setTextColor(Color.WHITE);
+        
+        TextView c7 = new TextView(this);
+        c7.setText("7");
+        c7.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c7.setGravity(ngrav);
+        c7.setBackgroundColor(Color.GRAY);
+        c7.setTextColor(Color.WHITE);
+        
+        TextView c8 = new TextView(this);
+        c8.setText("8");
+        c8.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c8.setGravity(ngrav);
+        c8.setBackgroundColor(Color.GRAY);
+        c8.setTextColor(Color.WHITE);
+        
+        TextView c9 = new TextView(this);
+        c9.setText("9");
+        c9.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c9.setGravity(ngrav);
+        c9.setBackgroundColor(Color.GRAY);
+        c9.setTextColor(Color.WHITE);
+        
+        TextView c10 = new TextView(this);
+        c10.setText("10");
+        c10.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c10.setGravity(ngrav);
+        c10.setBackgroundColor(Color.GRAY);
+        c10.setTextColor(Color.WHITE);
 
-        TableRow.LayoutParams params = new TableRow.LayoutParams();
-        params.span = 5;
+        TextView c11 = new TextView(this);
+        c11.setText("11");
+        c11.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c11.setGravity(ngrav);
+        c11.setBackgroundColor(Color.GRAY);
+        c11.setTextColor(Color.WHITE);
+
+        TextView c12 = new TextView(this);
+        c12.setText("12");
+        c12.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c12.setGravity(ngrav);
+        c12.setBackgroundColor(Color.GRAY);
+        c12.setTextColor(Color.WHITE);
+
+        TextView c13 = new TextView(this);
+        c13.setText("13");
+        c13.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c13.setGravity(ngrav);
+        c13.setBackgroundColor(Color.GRAY);
+        c13.setTextColor(Color.WHITE);
+
+        TextView c14 = new TextView(this);
+        c14.setText("14");
+        c14.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c14.setGravity(ngrav);
+        c14.setBackgroundColor(Color.GRAY);
+        c14.setTextColor(Color.WHITE);
+
+        TextView c15 = new TextView(this);
+        c15.setText("15");
+        c15.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c15.setGravity(ngrav);
+        c15.setBackgroundColor(Color.GRAY);
+        c15.setTextColor(Color.WHITE);
+
+        TextView c16 = new TextView(this);
+        c16.setText("16");
+        c16.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c16.setGravity(ngrav);
+        c16.setBackgroundColor(Color.GRAY);
+        c16.setTextColor(Color.WHITE);
+
+        TextView c17 = new TextView(this);
+        c17.setText("17");
+        c17.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c17.setGravity(ngrav);
+        c17.setBackgroundColor(Color.GRAY);
+        c17.setTextColor(Color.WHITE);
+
+        TextView c18 = new TextView(this);
+        c18.setText("18");
+        c18.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c18.setGravity(ngrav);
+        c18.setBackgroundColor(Color.GRAY);
+        c18.setTextColor(Color.WHITE);
+
+        TextView c19 = new TextView(this);
+        c19.setText("19");
+        c19.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c19.setGravity(ngrav);
+        c19.setBackgroundColor(Color.GRAY);
+        c19.setTextColor(Color.WHITE);
+
+        TextView c20 = new TextView(this);
+        c20.setText("20");
+        c20.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        c20.setGravity(ngrav);
+        c20.setBackgroundColor(Color.GRAY);
+        c20.setTextColor(Color.WHITE);
 
 
-        rowTitleHead.addView(title, params);
-       // rowTitleHead.addView(title);
 
-        table.addView(rowTitleHead);
+        rowColHead.addView(c1,params);
+        rowColHead.addView(c2,params);
+        rowColHead.addView(c3,params);
+        rowColHead.addView(c4,params);
+        rowColHead.addView(c5,params);
+        rowColHead.addView(c6,params);
+        rowColHead.addView(c7,params);
+        rowColHead.addView(c8,params);
+        rowColHead.addView(c9,params);
+        rowColHead.addView(c10,params);
+        rowColHead.addView(c11,params);
+        rowColHead.addView(c12,params);
+        rowColHead.addView(c13,params);
+        rowColHead.addView(c14,params);
+        rowColHead.addView(c15,params);
+        rowColHead.addView(c16,params);
+        rowColHead.addView(c17,params);
+        rowColHead.addView(c18,params);
+        rowColHead.addView(c19,params);
+        rowColHead.addView(c20,params);
+        
+        table.addView(rowColHead);
 
         
 	}
+
 
 
 

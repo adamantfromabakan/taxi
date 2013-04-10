@@ -19,35 +19,43 @@ public class sysLog  {
 	private static final String TAG = "sysLog";
 	private static final int MODE_PRIVATE = 32768;
 	
-	public void logwriter(String file, String path, String strput)
+	public void logwriter (String file, String path, String strput)
 	{   
-		// проверяем доступность SD
-	    /*if (!Environment.getExternalStorageState().equals(
+		
+	    if (!Environment.getExternalStorageState().equals(
 	        Environment.MEDIA_MOUNTED)) {
 	      Log.d(TAG, "SD-карта не доступна: " + Environment.getExternalStorageState());
 	      return;
-	    }*/
-	    // получаем путь к SD
-	    //File sdPath = Environment.getExternalStorageDirectory();
-	    // добавляем свой каталог к пути
-	    //sdPath = new File(sdPath.getAbsolutePath() + "/" + DIR_SD);
-	    File sdPath = new File(path);
-	    // создаем каталог
+	    }
+
+	    File sdPath = Environment.getExternalStorageDirectory();
+	    sdPath = new File(sdPath.getAbsolutePath() + "/" + path);
 	    sdPath.mkdirs();
-	    // формируем объект File, который содержит путь к файлу
 	    File sdFile = new File(sdPath, file);
 	    try {
-	      // открываем поток для записи
-	      BufferedWriter bw = new BufferedWriter(new FileWriter(sdFile));
+	      BufferedWriter bw = new BufferedWriter(new FileWriter(sdFile,true));
 	      //BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(openFileOutput(sdFile, MODE_PRIVATE)));
-	      // пишем данные
 	      bw.write(strput+"\n");
-	      // закрываем поток
+	      bw.close();
+	      Log.d(TAG, "Файл записан на SD: " + sdFile.getAbsolutePath());
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	      Log.d(TAG, e.toString());
+	    }
+		/*
+	    File sdPath = new File(path);
+	    sdPath.mkdirs();
+	    File sdFile = new File(sdPath, file);
+	    try {
+	      BufferedWriter bw = new BufferedWriter(new FileWriter(sdFile));
+	      bw.write(strput+"\n");
 	      bw.close();
 	      Log.d(TAG, "Файл лог записан: " + sdFile.getAbsolutePath());
 	    } catch (IOException e) {
 	      e.printStackTrace();
 	    }
+	    */
+	    
 	}
 
 }
