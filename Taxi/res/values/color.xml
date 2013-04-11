@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <color name="white">#ffffffff</color>
+        <color name="black">#ff000000</color>
+        <color name="PaleTurquoise">#ffAFEEEE</color>
+		<color name="LightCyan">#ffE0FFFF</color>
+		<color name="Azure">#ffF0FFFF</color>
+		<color name="CadetBlue">#ff5F9EA0</color>
+		<color name="PowderBlue">#ffB0E0E6</color>
+		<color name="LightBlue">#ffADD8E6</color>
+		<color name="SkyBlue">#ff87CEEB</color>
+		<color name="LightskyBlue">#ff87CEFA</color>
+		<color name="SteelBlue">#ff4682B4</color>
+		<color name="AliceBlue">#ffF0F8FF</color>
+		<color name="SlateGray">#ff708090</color>
+		<color name="LightSlateGray">#ff778899</color>
+		<color name="LightsteelBlue">#ffB0C4DE</color>
+		<color name="CornflowerBlue">#ff6495ED</color>
+</resources>

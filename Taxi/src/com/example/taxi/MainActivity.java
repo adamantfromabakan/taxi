@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import android.R;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -82,7 +83,7 @@ public class MainActivity extends Activity implements OnClickListener/*implement
 		
 		
 		//StrictMode.setVmPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork());
-		if (android.os.Build.VERSION.SDK_INT > 9) {
+		/*if (android.os.Build.VERSION.SDK_INT > 9) {
 			StrictMode.ThreadPolicy policy = 
 			        new StrictMode.ThreadPolicy.Builder().permitAll().build();
 			StrictMode.setThreadPolicy(policy);
@@ -99,7 +100,7 @@ public class MainActivity extends Activity implements OnClickListener/*implement
         .detectLeakedClosableObjects()
         .penaltyLog()
         .penaltyDeath()
-        .build());
+        .build());*/
 
 		
 		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -158,7 +159,7 @@ public class MainActivity extends Activity implements OnClickListener/*implement
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		//getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 	
@@ -290,7 +291,7 @@ public class MainActivity extends Activity implements OnClickListener/*implement
 		rsltTXT.setText(valstr);
 	}
 	
-	public void subTable()
+	/*public void subTable()
 	{
 		TableLayout table = new TableLayout(this);
 
@@ -456,7 +457,7 @@ public class MainActivity extends Activity implements OnClickListener/*implement
         table.addView(rowConditions);
 
         setContentView(table);
-	}
+	}*/
 	
 	public void cmdOrderlist() {
 		 String strcar = null;
@@ -511,6 +512,7 @@ public class MainActivity extends Activity implements OnClickListener/*implement
 					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus());
 					 }
 	 		    //table.setBackgroundDrawable(R.drawable.map);
+	 		    table.setBackgroundColor(getResources().getColor(com.example.taxi.R.color.CornflowerBlue));
 		        setContentView(table);
 		        //Toast.makeText(this, "Занята заявка под номером "+this.OrderBusy , Toast.LENGTH_LONG).show();
 	        
