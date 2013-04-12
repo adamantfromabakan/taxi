@@ -33,7 +33,7 @@ public class sysLog  {
 	    sdPath.mkdirs();
 	    File sdFile = new File(sdPath, file);
 	    try {
-	      BufferedWriter bw = new BufferedWriter(new FileWriter(sdFile,true));
+	      BufferedWriter bw = new BufferedWriter(new FileWriter(sdFile,true),16*1024);
 	      //BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(openFileOutput(sdFile, MODE_PRIVATE)));
 	      bw.write(strput+"\n");
 	      bw.close();

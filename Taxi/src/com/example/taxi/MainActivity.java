@@ -45,7 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivity extends Activity implements OnClickListener/*implements LocationListener*/ {
+public class MainActivity extends Activity implements OnClickListener  /*implements LocationListener*/ {
 	private static final String TAG = "MainActivity";
 	//public String uid;
 	public String ServerTaxi;
@@ -77,10 +77,12 @@ public class MainActivity extends Activity implements OnClickListener/*implement
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
-		////LGWR.logwriter(dic.loggps, dic.logpath, dic.getSysdate()+" - "+"imei:"+dic.getUid())+",tracker,"+strTime+",,F,"+loc.getAltitude()+",A,"+loc.getLatitude()+",N,"+loc.getLongitude()+",E,0;");
+		
 		super.onCreate(savedInstanceState);
-		
-		
+		//ableLayout table = new TableLayout(this);
+        //setContentView(table);
+        setContentView(com.example.taxi.R.layout.maintaxi);
+
 		
 		//StrictMode.setVmPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork());
 		/*if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -102,7 +104,7 @@ public class MainActivity extends Activity implements OnClickListener/*implement
         .penaltyDeath()
         .build());*/
 
-		
+		try {
 		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		 dic = new sysDictionary();
 		 mSocket = new SocketTAXI(dic, LGWR);
@@ -124,8 +126,13 @@ public class MainActivity extends Activity implements OnClickListener/*implement
 
         //setContentView(R.layout.activity_main);
         //setContentView(R.layout.main);
-        cmdOrderlist();
-		/*
+        
+        //sysThreads myThready = new sysThreads(this,dic,LGWR,mSocket);
+        //myThready.start();	
+        //cmdOrderlist();
+		
+        
+        /*
 		rsltTXT = (TextView) findViewById(R.id.rsltTXT);
 		btnGPS = (Button) findViewById(R.id.btnGPS);
 		btnTaxiCmd = (Button) findViewById(R.id.btnTaxiCmd);
@@ -136,6 +143,12 @@ public class MainActivity extends Activity implements OnClickListener/*implement
 		editTaxiCmd = (EditText) findViewById(R.id.editTaxiCmd);
 */
          LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Interface loaded!");
+         
+		}catch (Exception e) {
+			rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
+			LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ e.toString());
+
+		}
 	}
     @Override
     protected void onResume() {
@@ -156,10 +169,17 @@ public class MainActivity extends Activity implements OnClickListener/*implement
      super.onPause();
     }
     
+    @Override
+    protected void onStart() {
+        //sysThreads myThready = new sysThreads(this,dic,LGWR,mSocket);
+        //myThready.start();	
+     super.onStart();
+    }
+    
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(com.example.taxi.R.menu.main, menu);
 		return true;
 	}
 	
@@ -458,6 +478,12 @@ public class MainActivity extends Activity implements OnClickListener/*implement
 
         setContentView(table);
 	}*/
+	
+	public void onClickStart(View v) {
+		//cmdOrderlist();
+        sysThreads myThready = new sysThreads(this,dic,LGWR,mSocket);
+        myThready.start();
+	  }
 	
 	public void cmdOrderlist() {
 		 String strcar = null;

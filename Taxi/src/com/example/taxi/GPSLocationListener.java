@@ -47,7 +47,7 @@ public class GPSLocationListener implements LocationListener {
 		
 		//SocketTAXI mSocket = new SocketTAXI();
 		//LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ e.toString());
-	    LGWR.logwriter(dic.loggps, dic.logpath, dic.getSysdate()+" - "+"imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+loc.getAltitude()+",A,"+loc.getLatitude()+",N,"+loc.getLongitude()+",E,0;");
+	    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+"imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+loc.getAltitude()+",A,"+loc.getLatitude()+",N,"+loc.getLongitude()+",E,0;");
 		mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
         
 		} catch(Exception e)  {    
@@ -60,7 +60,7 @@ public class GPSLocationListener implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
         //Toast.makeText(getApplicationContext(), "Gps выключен",Toast.LENGTH_LONG).show();
-    	LGWR.logwriter(dic.loggps, dic.logpath, dic.getSysdate()+" - "+"Gps Off!");
+    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+"Gps Off!");
     }
 
 
@@ -68,11 +68,11 @@ public class GPSLocationListener implements LocationListener {
 	@Override
     public void onProviderEnabled(String provider) {
         //Toast.makeText(getApplicationContext(), "Gps включен",Toast.LENGTH_LONG).show();
-		LGWR.logwriter(dic.loggps, dic.logpath, dic.getSysdate()+" - "+"Gps On!");
+		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+"Gps On!");
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
+    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+"Gps status change!");
     }
 }

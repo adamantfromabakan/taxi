@@ -34,7 +34,7 @@ public class SocketTAXI {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
 		        String strTime = simpleDateFormat.format(new Date());
 		        String strconnect = "imei:"+uid+",tracker,"+strTime+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;";
-		        Log.d(TAG, "Строка GPS:"+strconnect);
+		        Log.d(TAG, "GPS:"+strconnect);
 		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ strconnect);
 
 				try {
