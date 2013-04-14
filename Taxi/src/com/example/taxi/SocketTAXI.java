@@ -58,7 +58,7 @@ public class SocketTAXI {
 	
 	public List<clsOrders> ServerPutCmdOrders(String uid,String toServer,int toServerPort, String cmdOrders)
 	{  List<clsOrders> list = new ArrayList<clsOrders>();
-
+	    //LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ uid + " " + toServer);
 		try
         {
 			Socket s = new Socket(toServer, toServerPort);

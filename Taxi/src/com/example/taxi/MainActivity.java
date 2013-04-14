@@ -34,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,43 +72,29 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
     public sysDictionary dic ;
 	public sysLog LGWR;
 	public SocketTAXI mSocket;
-
+	public TableLayout table;
+	public static List<clsOrders> list;
+    public static List<clsDriverInfo> driver;
+    public static List<clsCarInfo> car;
+    public static String Sysdate;
 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+		// Убираем заголовок
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		// Убираем панель уведомлений
+		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		this.setTitle("Такси №1");
 		
 		super.onCreate(savedInstanceState);
-		//ableLayout table = new TableLayout(this);
-        //setContentView(table);
-        setContentView(com.example.taxi.R.layout.maintaxi);
-
-		
-		//StrictMode.setVmPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork());
-		/*if (android.os.Build.VERSION.SDK_INT > 9) {
-			StrictMode.ThreadPolicy policy = 
-			        new StrictMode.ThreadPolicy.Builder().permitAll().build();
-			StrictMode.setThreadPolicy(policy);
-			}
-		
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-        .detectDiskReads()
-        .detectDiskWrites()
-        .detectNetwork()   // or .detectAll() for all detectable problems
-        .penaltyLog()
-        .build());
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-        .detectLeakedSqlLiteObjects()
-        .detectLeakedClosableObjects()
-        .penaltyLog()
-        .penaltyDeath()
-        .build());*/
 
 		try {
+			this.setTitle("Такси №1");
 		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		 dic = new sysDictionary();
 		 mSocket = new SocketTAXI(dic, LGWR);
+		 //this.mSocket=mSocket;
 		 LGWR = new sysLog();
 		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Starting program Taxi1...");
 		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - android.os.Build.VERSION.SDK_INT:"+android.os.Build.VERSION.SDK_INT);
@@ -118,19 +105,27 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 			dic.setUid("353451047760580");
 		//	       uid="353451047760580";
 	    //} 
-		ServerTaxi=dic.getServerTaxi();
-		ServerTaxiPortGPS=dic.getServerTaxiPortGPS();
-		ServerTaxiPortCMD=dic.getServerTaxiPortCMD();
+		
+		//ServerTaxi=dic.getServerTaxi();
+		//ServerTaxiPortGPS=dic.getServerTaxiPortGPS();
+		//ServerTaxiPortCMD=dic.getServerTaxiPortCMD();
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mLocationListener = new GPSLocationListener(dic, LGWR, mSocket); 
-
+            
         //setContentView(R.layout.activity_main);
-        //setContentView(R.layout.main);
         
-        //sysThreads myThready = new sysThreads(this,dic,LGWR,mSocket);
-        //myThready.start();	
-        //cmdOrderlist();
-		
+            	//cmdOrderlist();    	             
+        sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
+        dataThready.start();
+        sysThreads clockThready = new sysThreads(this,dic,LGWR,mSocket,"refreshclock");
+        clockThready.start();
+        try{
+            Thread.sleep(3000);		
+        }catch(InterruptedException e){}
+        
+        cmdOrderlist();  	
+       
         
         /*
 		rsltTXT = (TextView) findViewById(R.id.rsltTXT);
@@ -142,6 +137,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 		editTaxiPort = (EditText) findViewById(R.id.editTaxiPort);
 		editTaxiCmd = (EditText) findViewById(R.id.editTaxiCmd);
 */
+
          LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Interface loaded!");
          
 		}catch (Exception e) {
@@ -171,8 +167,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
     
     @Override
     protected void onStart() {
-        //sysThreads myThready = new sysThreads(this,dic,LGWR,mSocket);
-        //myThready.start();	
+   
+        
      super.onStart();
     }
     
@@ -180,6 +176,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(com.example.taxi.R.menu.main, menu);
+		
 		return true;
 	}
 	
@@ -187,11 +184,19 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	public void onClick(View v) {
 		switch (v.getId()) {
 	     case 10000000://R.id.btnOk:
-	    	 Toast.makeText(this, ""+"Нажата кнопка 'Текущее время'" , Toast.LENGTH_LONG).show();
+	    	 Toast.makeText(this, ""+"Нажата кнопка 'Текущее время':"+this.Sysdate , Toast.LENGTH_LONG).show();
 	       break;
-		case 10000001://R.id.btnOk:
-	    	 Toast.makeText(this, ""+"Нажата кнопка 'Обновить заявки'" , Toast.LENGTH_LONG).show();
-	    	 cmdOrderlist();
+		 case 10000001://R.id.btnOk:
+	    	 //Toast.makeText(this, ""+"Нажата кнопка 'Обновить заявки'" , Toast.LENGTH_LONG).show();
+	    	 //table.removeAllViewsInLayout();
+	    	 //cmdOrderlist();
+		        sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
+		        dataThready.start();
+		        try{
+		            Thread.sleep(3000);		
+		        }catch(InterruptedException e){}
+		        
+		        cmdOrderlist(); 
 	       break;
 	     case 10000002://R.id.btnCancel:
 	    	 Toast.makeText(this, ""+"Нажата кнопка 'Звонить оператору'" , Toast.LENGTH_LONG).show();
@@ -200,7 +205,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	    	 Toast.makeText(this, ""+"Нажата кнопка 'Карта'" , Toast.LENGTH_LONG).show();
 	       break;
 	     case 10000004://R.id.btnCancel:
-	    	 Toast.makeText(this, ""+"Нажата кнопка 'Выход'" , Toast.LENGTH_LONG).show();
+	    	 //Toast.makeText(this, ""+"Нажата кнопка 'Выход'" , Toast.LENGTH_LONG).show();
+	    	 this.finish();
 		       break;
 	     case 10000005://R.id.btnCancel:
 	    	 Toast.makeText(this, ""+"Нажата кнопка 'Установить время подачи'" , Toast.LENGTH_LONG).show();
@@ -480,9 +486,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	}*/
 	
 	public void onClickStart(View v) {
-		//cmdOrderlist();
-        sysThreads myThready = new sysThreads(this,dic,LGWR,mSocket);
-        myThready.start();
+
 	  }
 	
 	public void cmdOrderlist() {
@@ -492,11 +496,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	        {
 		        Point size = new Point();
 		        WindowManager w = getWindowManager();
-		        //if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
-		        //      w.getDefaultDisplay().getSize(size);
-		        //      Measuredwidth = size.x;
-		        //      Measuredheight = size.y; 
-		        //    }else{
 		              int stat=0;
 		              String statstr="";
 		              Display d = w.getDefaultDisplay(); 
@@ -504,29 +503,28 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 		              Measuredheight = d.getHeight(); 
 		              dic.setMsr(Measuredwidth);
 		              //Toast.makeText(this, ""+Measuredwidth , Toast.LENGTH_LONG).show();
-		        //    }
 		              
-	            SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
-	            List<clsOrders> list = mSocket.ServerPutCmdOrders(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":orders_list,quit;");
-	            List<clsDriverInfo> driver = mSocket.ServerPutCmdDriverInfo(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":driver_info,quit;");
-	            List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":car_info,quit;");
+	            //SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
+	            //List<clsOrders> list = mSocket.ServerPutCmdOrders(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":orders_list,quit;");
+	            //List<clsDriverInfo> driver = mSocket.ServerPutCmdDriverInfo(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":driver_info,quit;");
+	            //List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":car_info,quit;");
 	            
 				TableLayout table = new TableLayout(this);
-				//table.setBackgroundResource(R.drawable.abakanmap);
+				table.setBackgroundResource(com.example.taxi.R.drawable.ic_map);
 	
 		        table.setStretchAllColumns(true);
 		        table.setShrinkAllColumns(true);
 				addHead(table);
 				addRowButton(table);
-	 		    for(clsCarInfo tmp : car) {
+	 		    for(clsCarInfo tmp : this.car) {
 	 		    	strcar=tmp.getCarName();
 					 }
-	 		    for(clsDriverInfo tmp : driver) {
+	 		    for(clsDriverInfo tmp : this.driver) {
 	 		    	strdriver=tmp.getDriverName();
 					 }
 	 		    addRowCarDriver(table,strcar,strdriver);
 				addRowTitle(table);
-	 		    for(clsOrders tmp : list) {
+	 		    for(clsOrders tmp : this.list) {
 
 	 		    	if (tmp.getStatus().trim().length()<5) {
 	 		    		statstr="Взять";
@@ -538,7 +536,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus());
 					 }
 	 		    //table.setBackgroundDrawable(R.drawable.map);
-	 		    table.setBackgroundColor(getResources().getColor(com.example.taxi.R.color.CornflowerBlue));
+	 		    //table.setBackgroundColor(getResources().getColor(com.example.taxi.R.color.CornflowerBlue));
 		        setContentView(table);
 		        //Toast.makeText(this, "Занята заявка под номером "+this.OrderBusy , Toast.LENGTH_LONG).show();
 	        

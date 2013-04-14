@@ -103,6 +103,18 @@ CornflowerBlue	#6495ED
 			RowOrdersButtonSize = 9;
 			RowOrdersButtonHeight = 45;
 		break;
+		case 540:
+			RowButtonSize = 9;
+			RowButtonHeight = 40;
+			RowCarDriverSize = 9;
+			RowCarDriverHeight = 25;
+			RowTitleSize = 9;
+			RowTitleHeight = 35;
+			RowOrdersSize = 9;
+			RowOrdersHeight = 40;
+			RowOrdersButtonSize = 9;
+			RowOrdersButtonHeight = 55;
+		break;
 		case 600:
 			RowButtonSize = 18;
 			RowButtonHeight = 60;
@@ -125,6 +137,18 @@ CornflowerBlue	#6495ED
 			RowOrdersSize = 10;
 			RowOrdersHeight = 40;
 			RowOrdersButtonSize = 10;
+			RowOrdersButtonHeight = 45;
+		break;
+		case 960:
+			RowButtonSize = 11;
+			RowButtonHeight = 40;
+			RowCarDriverSize = 11;
+			RowCarDriverHeight = 25;
+			RowTitleSize = 11;
+			RowTitleHeight = 25;
+			RowOrdersSize = 11;
+			RowOrdersHeight = 40;
+			RowOrdersButtonSize = 11;
 			RowOrdersButtonHeight = 45;
 		break;
 		default:
