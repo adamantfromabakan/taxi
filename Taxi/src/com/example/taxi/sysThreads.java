@@ -2,6 +2,9 @@ package com.example.taxi;
 
 import java.util.List;
 
+import android.content.Context;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -17,6 +20,8 @@ public class sysThreads extends Thread implements Runnable  {
 	public List<clsOrders> list;
     public List<clsDriverInfo> driver;
     public List<clsCarInfo> car;
+	public LocationManager locationManager;
+	public LocationListener mLocationListener;	
     public int vl=0; 
 	
     public sysThreads(MainActivity MA, sysDictionary dic,sysLog LGWR,SocketTAXI mSocket, String cmd) {
@@ -63,6 +68,13 @@ public class sysThreads extends Thread implements Runnable  {
     	    	            }catch(InterruptedException e){}
     					} while(true);
     				}
+    				
+    				if (cmd=="gps") {
+
+        				//SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
+        		        //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        		        //mLocationListener = new GPSLocationListener(dic, LGWR, mSocket); 
+        				vl=1;}
 
     				/*}
     				

@@ -38,7 +38,7 @@ public class sysDictionary {
 	public int RowTitleSize = 18;
 	public int RowTitleHeight = 25;
 	public int RowOrdersSize = 18;
-	public int RowOrdersHeight = 45;
+	public int RowOrdersHeight = 70;
 	public int RowOrdersButtonSize = 20;
 	public int RowOrdersButtonHeight = 80;
 	public int msr;
@@ -101,7 +101,7 @@ CornflowerBlue	#6495ED
 			RowOrdersSize = 9;
 			RowOrdersHeight = 40;
 			RowOrdersButtonSize = 9;
-			RowOrdersButtonHeight = 45;
+			RowOrdersButtonHeight = 60;
 		break;
 		case 540:
 			RowButtonSize = 9;
@@ -111,9 +111,9 @@ CornflowerBlue	#6495ED
 			RowTitleSize = 9;
 			RowTitleHeight = 35;
 			RowOrdersSize = 9;
-			RowOrdersHeight = 40;
+			RowOrdersHeight = 50;
 			RowOrdersButtonSize = 9;
-			RowOrdersButtonHeight = 55;
+			RowOrdersButtonHeight = 75;
 		break;
 		case 600:
 			RowButtonSize = 18;
@@ -125,7 +125,7 @@ CornflowerBlue	#6495ED
 			RowOrdersSize = 14;
 			RowOrdersHeight = 55;
 			RowOrdersButtonSize = 16;
-			RowOrdersButtonHeight = 80;
+			RowOrdersButtonHeight = 100;
 		break;
 		case 800:
 			RowButtonSize = 10;
@@ -137,19 +137,19 @@ CornflowerBlue	#6495ED
 			RowOrdersSize = 10;
 			RowOrdersHeight = 40;
 			RowOrdersButtonSize = 10;
-			RowOrdersButtonHeight = 45;
+			RowOrdersButtonHeight = 75;
 		break;
 		case 960:
-			RowButtonSize = 11;
-			RowButtonHeight = 40;
+			RowButtonSize = 12;
+			RowButtonHeight = 50;
 			RowCarDriverSize = 11;
 			RowCarDriverHeight = 25;
 			RowTitleSize = 11;
 			RowTitleHeight = 25;
 			RowOrdersSize = 11;
 			RowOrdersHeight = 40;
-			RowOrdersButtonSize = 11;
-			RowOrdersButtonHeight = 45;
+			RowOrdersButtonSize = 12;
+			RowOrdersButtonHeight = 75;
 		break;
 		default:
 			RowButtonSize = 22;
@@ -159,7 +159,7 @@ CornflowerBlue	#6495ED
 			RowTitleSize = 18;
 			RowTitleHeight = 25;
 			RowOrdersSize = 18;
-			RowOrdersHeight = 45;
+			RowOrdersHeight = 70;
 			RowOrdersButtonSize = 20;
 			RowOrdersButtonHeight = 80;
 		

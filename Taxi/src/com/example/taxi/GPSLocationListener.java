@@ -46,10 +46,19 @@ public class GPSLocationListener implements LocationListener {
 		ALT=""+loc.getAltitude();
 		
 		//SocketTAXI mSocket = new SocketTAXI();
-		//LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ e.toString());
-	    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+"imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+loc.getAltitude()+",A,"+loc.getLatitude()+",N,"+loc.getLongitude()+",E,0;");
-		mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
-        
+
+	    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+loc.getAltitude()+",A,"+loc.getLatitude()+",N,"+loc.getLongitude()+",E,0;");
+		//mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
+		Thread gpsThready = new Thread(new Runnable()
+        {
+            public void run()
+            {
+            	SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
+            	mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
+            }
+        });
+		gpsThready.start();
+		
 		} catch(Exception e)  {    
         	Log.d(TAG, e.toString());
         	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":onLocationChanged " + e.toString());
@@ -60,7 +69,7 @@ public class GPSLocationListener implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
         //Toast.makeText(getApplicationContext(), "Gps выключен",Toast.LENGTH_LONG).show();
-    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+"Gps Off!");
+    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps Off!");
     }
 
 
@@ -68,11 +77,11 @@ public class GPSLocationListener implements LocationListener {
 	@Override
     public void onProviderEnabled(String provider) {
         //Toast.makeText(getApplicationContext(), "Gps включен",Toast.LENGTH_LONG).show();
-		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+"Gps On!");
+		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps On!");
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+"Gps status change!");
+    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps status change!");
     }
 }

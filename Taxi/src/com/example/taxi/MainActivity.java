@@ -67,8 +67,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	String LGT="0000.0000";
 	String LAT="0000.0000";
 	String ALT="0000.0000";
-    private LocationManager locationManager;
-    private LocationListener mLocationListener;	
+	public LocationManager locationManager;
+	public LocationListener mLocationListener;	
     public sysDictionary dic ;
 	public sysLog LGWR;
 	public SocketTAXI mSocket;
@@ -91,20 +91,19 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 
 		try {
 			this.setTitle("Такси №1");
-		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+		 TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		 dic = new sysDictionary();
 		 mSocket = new SocketTAXI(dic, LGWR);
 		 //this.mSocket=mSocket;
 		 LGWR = new sysLog();
 		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Starting program Taxi1...");
 		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - android.os.Build.VERSION.SDK_INT:"+android.os.Build.VERSION.SDK_INT);
-		//try {
-		// dic.setUid(tm.getDeviceId());
-		// uid=tm.getDeviceId();
-		//} catch (Exception e) {
+		try {
+		 //dic.setUid(tm.getDeviceId());
+		} catch (Exception e) {
 			dic.setUid("353451047760580");
-		//	       uid="353451047760580";
-	    //} 
+	    } 
+		dic.setUid("353451047760580");
 		
 		//ServerTaxi=dic.getServerTaxi();
 		//ServerTaxiPortGPS=dic.getServerTaxiPortGPS();
@@ -115,7 +114,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
             
         //setContentView(R.layout.activity_main);
         
-            	//cmdOrderlist();    	             
+	             
         sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
         dataThready.start();
         sysThreads clockThready = new sysThreads(this,dic,LGWR,mSocket,"refreshclock");
@@ -141,8 +140,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
          LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Interface loaded!");
          
 		}catch (Exception e) {
-			rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
-			LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ e.toString());
+			//rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
+			LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":onCreate " + e.toString());
 
 		}
 	}
@@ -184,6 +183,9 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	public void onClick(View v) {
 		switch (v.getId()) {
 	     case 10000000://R.id.btnOk:
+	    	 TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+			 dic = new sysDictionary();
+			 Toast.makeText(this, "Текущий IMEI "+tm.getDeviceId() + ", но мы используем 353451047760580" , Toast.LENGTH_LONG).show();
 	    	 Toast.makeText(this, ""+"Нажата кнопка 'Текущее время':"+this.Sysdate , Toast.LENGTH_LONG).show();
 	       break;
 		 case 10000001://R.id.btnOk:
@@ -256,7 +258,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 					//subTable();
 		    }catch (Exception e) {
 		    	rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
-		    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ e.toString());
+		    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":onClickGPS " + e.toString());
 
 		    }
 
@@ -309,7 +311,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	        	//System.out.println("init error: "+e);
 	        	// Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
 	        	rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
-	        	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ e.toString());
+	        	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":onClickTaxi " + e.toString());
 	        	}
 	  }
 
@@ -510,7 +512,14 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	            //List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":car_info,quit;");
 	            
 				TableLayout table = new TableLayout(this);
-				table.setBackgroundResource(com.example.taxi.R.drawable.ic_map);
+				//Toast.makeText(this, ""+d.getOrientation() , Toast.LENGTH_LONG).show();
+				if (Measuredwidth==1024 || Measuredwidth==800 || Measuredwidth==960) {
+					table.setBackgroundResource(com.example.taxi.R.drawable.map1024552);
+					
+				} else {
+					table.setBackgroundResource(com.example.taxi.R.drawable.map600976);
+				}
+					
 	
 		        table.setStretchAllColumns(true);
 		        table.setShrinkAllColumns(true);
@@ -673,7 +682,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
             rowOrders.setBackgroundColor(Color.YELLOW);
 
             Button Ordersbtn1 = new Button(this);
-            Ordersbtn1.setText("Установить время подачи");
+            Ordersbtn1.setText("Установить\nвремя подачи");
             Ordersbtn1.setBackgroundColor(Color.rgb(69,69,69));
             Ordersbtn1.setTextColor(Color.WHITE);
             Ordersbtn1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
@@ -686,7 +695,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
             //Ordersbtn1.setWidth(Measuredwidth/5);
 
             Button Ordersbtn2 = new Button(this);
-            Ordersbtn2.setText("Установить время отъезда");
+            Ordersbtn2.setText("Установить\nвремя отъезда");
             Ordersbtn2.setBackgroundColor(Color.BLACK);
             Ordersbtn2.setTextColor(Color.WHITE);
             Ordersbtn2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
@@ -700,7 +709,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
             
 
             Button Ordersbtn3 = new Button(this);
-            Ordersbtn3.setText("Установить время прибытия");
+            Ordersbtn3.setText("Установить\nвремя прибытия");
             Ordersbtn3.setBackgroundColor(Color.rgb(69,69,69));
             Ordersbtn3.setTextColor(Color.WHITE);
             Ordersbtn3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
