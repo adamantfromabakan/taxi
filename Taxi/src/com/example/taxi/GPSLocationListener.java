@@ -1,5 +1,7 @@
 package com.example.taxi;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,7 +20,6 @@ public class GPSLocationListener implements LocationListener {
 	SocketTAXI mSocket;
 	private static final String TAG = "GPSLocationListener";
 
-	//TextView rsltTXT;
 	public String LGT="0000.0000";
 	public String LAT="0000.0000";
 	public String ALT="0000.0000";
@@ -44,20 +45,31 @@ public class GPSLocationListener implements LocationListener {
         LAT=""+loc.getLatitude();
 		LGT=""+loc.getLongitude();
 		ALT=""+loc.getAltitude();
-		
+		double tmpLAT = new BigDecimal(Double.parseDouble(LAT)).setScale(4, RoundingMode.UP).doubleValue();
+		double tmpLGT = new BigDecimal(Double.parseDouble(LGT)).setScale(4, RoundingMode.UP).doubleValue();
+		double tmpALT = new BigDecimal(Double.parseDouble(ALT)).setScale(4, RoundingMode.UP).doubleValue();
+        LAT=""+tmpLAT;
+		LGT=""+tmpLGT;
+		ALT=""+tmpALT;
 		//SocketTAXI mSocket = new SocketTAXI();
 
-	    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+loc.getAltitude()+",A,"+loc.getLatitude()+",N,"+loc.getLongitude()+",E,0;");
+		if (LAT!=MainActivity.LAT && LGT!=MainActivity.LGT) {
+		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;");
 		//mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
 		Thread gpsThready = new Thread(new Runnable()
-        {
+        	{
             public void run()
-            {
+            	{
             	SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
             	mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
-            }
-        });
+            	}
+        	});
+		MainActivity.LAT=LAT;
+		MainActivity.LGT=LGT;
+		MainActivity.ALT=ALT;
 		gpsThready.start();
+		
+		}
 		
 		} catch(Exception e)  {    
         	Log.d(TAG, e.toString());
@@ -68,7 +80,6 @@ public class GPSLocationListener implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-        //Toast.makeText(getApplicationContext(), "Gps выключен",Toast.LENGTH_LONG).show();
     	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps Off!");
     }
 
@@ -76,7 +87,6 @@ public class GPSLocationListener implements LocationListener {
 
 	@Override
     public void onProviderEnabled(String provider) {
-        //Toast.makeText(getApplicationContext(), "Gps включен",Toast.LENGTH_LONG).show();
 		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps On!");
     }
 

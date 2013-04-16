@@ -69,12 +69,23 @@ public class sysThreads extends Thread implements Runnable  {
     					} while(true);
     				}
     				
-    				if (cmd=="gps") {
-
-        				//SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
+    				if (cmd=="gps"){
+    					do {
+    						try{
+    							//MainActivity.btn1.setText(dic.getSysdate());
+    							//MainActivity.Sysdate=dic.getSysdate();
+    							//Button btn1 = (Button) MA.findViewById(10000000);
+    							//btn1.setText(dic.getSysdate());
+    							
+    							
+    	    	                Thread.sleep(1000);		
+    	    	            }catch(InterruptedException e){}
+    					} while(true);
+    				} 
+    					//SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
         		        //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         		        //mLocationListener = new GPSLocationListener(dic, LGWR, mSocket); 
-        				vl=1;}
+
 
     				/*}
     				

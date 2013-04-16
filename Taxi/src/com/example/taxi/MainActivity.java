@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.math.RoundingMode;
+import java.math.BigDecimal;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -64,9 +66,9 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	EditText editTaxiServer;
 	EditText editTaxiPort;
 	EditText editTaxiCmd;
-	String LGT="0000.0000";
-	String LAT="0000.0000";
-	String ALT="0000.0000";
+	public static String LGT="0000.0000";
+	public static String LAT="0000.0000";
+	public static String ALT="0000.0000";
 	public LocationManager locationManager;
 	public LocationListener mLocationListener;	
     public sysDictionary dic ;
@@ -111,9 +113,12 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mLocationListener = new GPSLocationListener(dic, LGWR, mSocket); 
-            
+        //Toast.makeText(this, ""+ mLocationListener.toString() , Toast.LENGTH_LONG).show();
+        //mLocationListener.onLocationChanged(location)
+        //LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - GPS:"+mLocationListener.toString());
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
         //setContentView(R.layout.activity_main);
-        
+        //mLocationListener.
 	             
         sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
         dataThready.start();
@@ -201,7 +206,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 		        cmdOrderlist(); 
 	       break;
 	     case 10000002://R.id.btnCancel:
-	    	 Toast.makeText(this, ""+"Нажата кнопка 'Звонить оператору'" , Toast.LENGTH_LONG).show();
+	    	 double tmpDouble = new BigDecimal(Double.parseDouble("91.123456")).setScale(4, RoundingMode.UP).doubleValue();
+	    	 Toast.makeText(this, ""+tmpDouble , Toast.LENGTH_LONG).show();
 	       break;
 	     case 10000003://R.id.btnCancel:
 	    	 Toast.makeText(this, ""+"Нажата кнопка 'Карта'" , Toast.LENGTH_LONG).show();
@@ -956,6 +962,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         btn1.setPadding(1, 1, 1, 1);
         btn1.setId(10000000);
         btn1.setOnClickListener(this);
+        btn1.setHighlightColor(Color.BLUE);
 
 
 
