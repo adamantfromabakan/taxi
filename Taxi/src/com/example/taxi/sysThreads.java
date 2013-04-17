@@ -60,10 +60,13 @@ public class sysThreads extends Thread implements Runnable  {
     						try{
     							//MainActivity.btn1.setText(dic.getSysdate());
     							MainActivity.Sysdate=dic.getSysdate();
+    							
     							//Button btn1 = (Button) MA.findViewById(10000000);
     							//btn1.setText(dic.getSysdate());
-    							
-    							
+    							//Log.d(TAG, btn1.getText().toString());
+    							//((Button) MA.findViewById(10000000)).setText(dic.getSysdate());
+    								//	MA.btn1.setText("");
+    									//
     	    	                Thread.sleep(1000);		
     	    	            }catch(InterruptedException e){}
     					} while(true);

@@ -58,6 +58,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	public int Measuredheight = 0; 
 	public String OrderBusy="0";
 	
+	Button btn1;
+	
 	Button btnGPS;
 	Button btnTaxiCmd;
 	TextView rsltTXT;
@@ -107,18 +109,17 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	    } 
 		dic.setUid("353451047760580");
 		
-		//ServerTaxi=dic.getServerTaxi();
-		//ServerTaxiPortGPS=dic.getServerTaxiPortGPS();
-		//ServerTaxiPortCMD=dic.getServerTaxiPortCMD();
+
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mLocationListener = new GPSLocationListener(dic, LGWR, mSocket); 
         //Toast.makeText(this, ""+ mLocationListener.toString() , Toast.LENGTH_LONG).show();
         //mLocationListener.onLocationChanged(location)
-        //LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - GPS:"+mLocationListener.toString());
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
+
+        
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
         //setContentView(R.layout.activity_main);
-        //mLocationListener.
+
 	             
         sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
         dataThready.start();
@@ -130,7 +131,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         
         cmdOrderlist();  	
        
-        
+        //btn1 = (Button) findViewById(10000000);
         /*
 		rsltTXT = (TextView) findViewById(R.id.rsltTXT);
 		btnGPS = (Button) findViewById(R.id.btnGPS);
@@ -145,7 +146,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
          LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Interface loaded!");
          
 		}catch (Exception e) {
-			//rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+e.toString());
 			LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":onCreate " + e.toString());
 
 		}
@@ -187,16 +187,17 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-	     case 10000000://R.id.btnOk:
-	    	 TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-			 dic = new sysDictionary();
-			 Toast.makeText(this, "Текущий IMEI "+tm.getDeviceId() + ", но мы используем 353451047760580" , Toast.LENGTH_LONG).show();
-	    	 Toast.makeText(this, ""+"Нажата кнопка 'Текущее время':"+this.Sysdate , Toast.LENGTH_LONG).show();
+	     case 10000000:
+	    	 Button btn = (Button) findViewById(10000000);
+	    	 btn.setText(dic.getSysdate());
+	    	 //TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+			 //dic = new sysDictionary();
+			 //Toast.makeText(this, "Текущий IMEI "+tm.getDeviceId() + ", но мы используем 353451047760580" , Toast.LENGTH_LONG).show();
+	    	 //Toast.makeText(this, ""+"Нажата кнопка 'Текущее время':"+this.Sysdate , Toast.LENGTH_LONG).show();
 	       break;
-		 case 10000001://R.id.btnOk:
+		 case 10000001:
 	    	 //Toast.makeText(this, ""+"Нажата кнопка 'Обновить заявки'" , Toast.LENGTH_LONG).show();
-	    	 //table.removeAllViewsInLayout();
-	    	 //cmdOrderlist();
+
 		        sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
 		        dataThready.start();
 		        try{
@@ -962,7 +963,9 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         btn1.setPadding(1, 1, 1, 1);
         btn1.setId(10000000);
         btn1.setOnClickListener(this);
-        btn1.setHighlightColor(Color.BLUE);
+   
+  
+        
 
 
 
@@ -1214,7 +1217,10 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         
 	}
 
-
+public void settime(){
+	 Button btn = (Button) findViewById(10000000);
+	 btn.setText(dic.getSysdate());
+}
 
 
 }
