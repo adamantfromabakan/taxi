@@ -31,9 +31,9 @@ public class SocketTAXI {
 	public void ServerPutGPS(String uid,String toServer,int toServerPort, String ALT, String LAT, String LGT)
 	{
      
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
-		        String strTime = simpleDateFormat.format(new Date());
-		        String strconnect = "imei:"+uid+",tracker,"+strTime+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;";
+				//SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
+		        //String strTime = simpleDateFormat.format(new Date());
+		        String strconnect = "imei:"+uid+",tracker,"+dic.getSysdateGps()+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;";
 		        Log.d(TAG, "GPS:"+strconnect);
 		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + strconnect);
 

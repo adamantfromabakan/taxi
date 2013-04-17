@@ -174,5 +174,10 @@ CornflowerBlue	#6495ED
         String strTime = simpleDateFormat.format(new Date());
         return strTime;
 	}
+	public String getSysdateGps() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
+        String strTime = simpleDateFormat.format(new Date());
+        return strTime;
+	}
 	
 }

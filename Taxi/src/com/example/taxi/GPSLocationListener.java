@@ -34,13 +34,11 @@ public class GPSLocationListener implements LocationListener {
 	@Override
     public void onLocationChanged(Location loc) {
 		try {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
-        String strTime = simpleDateFormat.format(new Date());
+		//SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
+        //String strTime = simpleDateFormat.format(new Date());
         loc.getLatitude();
         loc.getLongitude();
-        String txt = "Текущее местоположение: " + "\nLatitud = "
-                + loc.getLatitude() + "\nLongitud = " + loc.getLongitude() 
-                + "\nAltitud = " + loc.getAltitude();
+        String txt = "Текущее местоположение: "+"\nLatitud = "+loc.getLatitude()+"\nLongitud = "+loc.getLongitude()+"\nAltitud = "+loc.getAltitude();
         Log.d(TAG, txt);
         LAT=""+loc.getLatitude();
 		LGT=""+loc.getLongitude();
@@ -54,20 +52,28 @@ public class GPSLocationListener implements LocationListener {
 		//SocketTAXI mSocket = new SocketTAXI();
 
 		if (LAT!=MainActivity.LAT && LGT!=MainActivity.LGT) {
-		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;");
+		//LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;");
 		//mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
 		Thread gpsThready = new Thread(new Runnable()
         	{
             public void run()
             	{
-            	SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
-            	mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
+            	if (LAT!=MainActivity.LAT && LGT!=MainActivity.LGT) {
+            		SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
+            		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"imei:"+dic.getUid()+",tracker,"+dic.getSysdateGps()+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;");
+            		mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
+            		MainActivity.LAT=LAT;
+            		MainActivity.LGT=LGT;
+            		MainActivity.ALT=ALT;
+            		}
             	}
         	});
+
+		gpsThready.start();
+		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread GPS:"+gpsThready.getId());
 		MainActivity.LAT=LAT;
 		MainActivity.LGT=LGT;
 		MainActivity.ALT=ALT;
-		gpsThready.start();
 		
 		}
 		
