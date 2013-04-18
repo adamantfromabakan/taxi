@@ -105,10 +105,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mLocationListener = new GPSLocationListener(dic, LGWR, mSocket); 
-        //Toast.makeText(this, ""+ mLocationListener.toString() , Toast.LENGTH_LONG).show();
-        //mLocationListener.onLocationChanged(location)
-
-        
+  
         //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
         //setContentView(R.layout.activity_main);
 
@@ -141,6 +138,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 		editTaxiPort = (EditText) findViewById(R.id.editTaxiPort);
 		editTaxiCmd = (EditText) findViewById(R.id.editTaxiCmd);
 */
+        
 
          LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Interface loaded!");
          
