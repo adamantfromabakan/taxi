@@ -1,38 +1,25 @@
 package com.example.taxi;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.math.RoundingMode;
 import java.math.BigDecimal;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import android.R;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.StrictMode;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.Typeface;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,12 +27,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 
 public class MainActivity extends Activity implements OnClickListener  /*implements LocationListener*/ {
@@ -58,7 +44,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	public int Measuredheight = 0; 
 	public String OrderBusy="0";
 	
-	Button btn1;
+	AlertDialog.Builder ad;
+	Context context;
 	
 	Button btnGPS;
 	Button btnTaxiCmd;
@@ -81,7 +68,10 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
     public static List<clsDriverInfo> driver;
     public static List<clsCarInfo> car;
     public static String Sysdate;
-
+    public String strcar = null;
+    public String strdriver = null;
+    public static int flg_refreshdata=0;
+    public static int flg_refreshclock=0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +80,11 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 		// Убираем панель уведомлений
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		this.setTitle("Такси №1");
-		
+		this.flg_refreshdata=0;
+				
 		super.onCreate(savedInstanceState);
-
+        setContentView(com.example.taxi.R.layout.taxi);
+        
 		try {
 			this.setTitle("Такси №1");
 		 TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -123,13 +115,20 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	             
         sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
         dataThready.start();
+        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread DATA:"+dataThready.getId());
+        
         sysThreads clockThready = new sysThreads(this,dic,LGWR,mSocket,"refreshclock");
         clockThready.start();
-        try{
-            Thread.sleep(3000);		
-        }catch(InterruptedException e){}
         
-        cmdOrderlist();  	
+			do {
+				try{
+	                Thread.sleep(1000);		
+	            }catch(InterruptedException e){}
+			} while(this.flg_refreshdata<1);
+			
+        cmdOrderhead();
+        cmdOrderlist();
+        
        
         //btn1 = (Button) findViewById(10000000);
         /*
@@ -152,7 +151,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	}
     @Override
     protected void onResume() {
-        // включаем отслеживание
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
 
         // при использовании сетей типа GSM
@@ -164,7 +162,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 
     @Override
     protected void onPause() {
-     // выключаем отслеживание
      locationManager.removeUpdates(mLocationListener);
      super.onPause();
     }
@@ -188,23 +185,38 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	public void onClick(View v) {
 		switch (v.getId()) {
 	     case 10000000:
-	    	 Button btn = (Button) findViewById(10000000);
+	    	 TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
+	    	 Button btn = (Button) tablehead.findViewById(10000000);
 	    	 btn.setText(dic.getSysdate());
+	    	 
+
 	    	 //TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 			 //dic = new sysDictionary();
 			 //Toast.makeText(this, "Текущий IMEI "+tm.getDeviceId() + ", но мы используем 353451047760580" , Toast.LENGTH_LONG).show();
 	    	 //Toast.makeText(this, ""+"Нажата кнопка 'Текущее время':"+this.Sysdate , Toast.LENGTH_LONG).show();
 	       break;
 		 case 10000001:
-	    	 //Toast.makeText(this, ""+"Нажата кнопка 'Обновить заявки'" , Toast.LENGTH_LONG).show();
+			 	TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);
+			 	table.removeAllViewsInLayout();
 
+			 	
 		        sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
 		        dataThready.start();
-		        try{
-		            Thread.sleep(3000);		
-		        }catch(InterruptedException e){}
+		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread DATA:"+dataThready.getId());
+		        //try{
+		        //    Thread.sleep(3000);		
+		        //}catch(InterruptedException e){}
 		        
-		        cmdOrderlist(); 
+		        
+		        
+				do {
+					try{
+		                Thread.sleep(1000);		
+		            }catch(InterruptedException e){}
+				} while(this.flg_refreshdata<1);
+
+	            cmdOrderlist();
+	        
 	       break;
 	     case 10000002://R.id.btnCancel:
 	    	 double tmpDouble = new BigDecimal(Double.parseDouble("91.123456")).setScale(4, RoundingMode.UP).doubleValue();
@@ -498,9 +510,46 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 
 	  }
 	
+	public void cmdOrderhead() {
+		 try
+	        {
+		        Point size = new Point();
+		        WindowManager w = getWindowManager();
+		              int stat=0;
+		              String statstr="";
+		              Display d = w.getDefaultDisplay(); 
+		              Measuredwidth = d.getWidth(); 
+		              Measuredheight = d.getHeight(); 
+		              dic.setMsr(Measuredwidth);
+		              //Toast.makeText(this, ""+Measuredwidth , Toast.LENGTH_LONG).show();
+		              
+        
+				TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
+		        tablehead.setStretchAllColumns(true);
+		        tablehead.setShrinkAllColumns(true);
+		        
+				addHead(tablehead);
+				addRowButton(tablehead);
+				    for(clsCarInfo tmp : this.car) {
+				    	strcar=tmp.getCarName();
+					 }
+				    for(clsDriverInfo tmp : this.driver) {
+				    	strdriver=tmp.getDriverName();
+					 }
+				addRowCarDriver(tablehead,strcar,strdriver);
+				addRowTitle(tablehead);
+
+	        
+				
+	        }
+	        catch(Exception e)
+	        {
+	        	 Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+	        	 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":cmdOrderlist " + e.toString());
+	        	}
+	}
+	
 	public void cmdOrderlist() {
-		 String strcar = null;
-		 String strdriver = null;
 		 try
 	        {
 		        Point size = new Point();
@@ -518,8 +567,11 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	            //List<clsDriverInfo> driver = mSocket.ServerPutCmdDriverInfo(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":driver_info,quit;");
 	            //List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(dic.getUid(),ServerTaxi, ServerTaxiPortCMD,"imei:"+dic.getUid()+":car_info,quit;");
 	            
-				TableLayout table = new TableLayout(this);
-				//Toast.makeText(this, ""+d.getOrientation() , Toast.LENGTH_LONG).show();
+				//TableLayout table = new TableLayout(this);
+		         
+		        TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);
+
+		        
 				if (Measuredwidth==1024 || Measuredwidth==800 || Measuredwidth==960) {
 					table.setBackgroundResource(com.example.taxi.R.drawable.map1024552);
 					
@@ -531,15 +583,15 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 		        table.setStretchAllColumns(true);
 		        table.setShrinkAllColumns(true);
 				addHead(table);
-				addRowButton(table);
-	 		    for(clsCarInfo tmp : this.car) {
-	 		    	strcar=tmp.getCarName();
-					 }
-	 		    for(clsDriverInfo tmp : this.driver) {
-	 		    	strdriver=tmp.getDriverName();
-					 }
-	 		    addRowCarDriver(table,strcar,strdriver);
-				addRowTitle(table);
+				//addRowButton(table);
+	 		    //for(clsCarInfo tmp : this.car) {
+	 		    //	strcar=tmp.getCarName();
+				//	 }
+	 		    //for(clsDriverInfo tmp : this.driver) {
+	 		    //	strdriver=tmp.getDriverName();
+				//	 }
+	 		    //addRowCarDriver(table,strcar,strdriver);
+				//addRowTitle(table);
 	 		    for(clsOrders tmp : this.list) {
 
 	 		    	if (tmp.getStatus().trim().length()<5) {
@@ -551,10 +603,9 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 
 					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus());
 					 }
-	 		    //table.setBackgroundDrawable(R.drawable.map);
-	 		    //table.setBackgroundColor(getResources().getColor(com.example.taxi.R.color.CornflowerBlue));
-		        setContentView(table);
-		        //Toast.makeText(this, "Занята заявка под номером "+this.OrderBusy , Toast.LENGTH_LONG).show();
+
+		        //setContentView(table);
+
 	        
 				
 	        }
@@ -1216,6 +1267,37 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 
         
 	}
+
+public void addDialog(){
+	context = MainActivity.this;
+	String title = "Выбор есть всегда";
+	String message = "Выбери пищу";
+	String button1String = "Вкусная пища";
+	String button2String = "Здоровая пища";
+	
+	ad = new AlertDialog.Builder(context);
+	ad.setTitle(title);  // заголовок
+	ad.setMessage(message); // сообщение
+	ad.setPositiveButton(button1String, new OnClickListener() {
+		public void onClick(DialogInterface dialog, int arg1) {
+			Toast.makeText(context, "Вы сделали правильный выбор",
+					Toast.LENGTH_LONG).show();
+		}
+	});
+	ad.setNegativeButton(button2String, new OnClickListener() {
+		public void onClick(DialogInterface dialog, int arg1) {
+			Toast.makeText(context, "Возможно вы правы", Toast.LENGTH_LONG)
+					.show();
+		}
+	});
+	ad.setCancelable(true);
+	ad.setOnCancelListener(new OnCancelListener() {
+		public void onCancel(DialogInterface dialog) {
+			Toast.makeText(context, "Вы ничего не выбрали",
+					Toast.LENGTH_LONG).show();
+		}
+	});	
+}
 
 public void settime(){
 	 Button btn = (Button) findViewById(10000000);

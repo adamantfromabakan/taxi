@@ -45,7 +45,9 @@ public final class R {
         public static final int map600976=0x7f020003;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000b;
+        public static final int TaxiHeadLayout=0x7f09000b;
+        public static final int TaxiLayout=0x7f09000c;
+        public static final int action_settings=0x7f09000d;
         public static final int btnGPS=0x7f090007;
         public static final int btnTaxiCmd=0x7f090006;
         public static final int button1=0x7f09000a;
@@ -61,6 +63,7 @@ public final class R {
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int maintaxi=0x7f030001;
+        public static final int taxi=0x7f030002;
     }
     public static final class menu {
         public static final int main=0x7f080000;

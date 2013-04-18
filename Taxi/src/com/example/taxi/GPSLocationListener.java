@@ -23,6 +23,7 @@ public class GPSLocationListener implements LocationListener {
 	public String LGT="0000.0000";
 	public String LAT="0000.0000";
 	public String ALT="0000.0000";
+	public String SPD="0";
 
 	
     public GPSLocationListener(sysDictionary dic,sysLog LGWR,SocketTAXI mSocket) {
@@ -43,6 +44,13 @@ public class GPSLocationListener implements LocationListener {
         LAT=""+loc.getLatitude();
 		LGT=""+loc.getLongitude();
 		ALT=""+loc.getAltitude();
+		if (loc.hasSpeed()) {
+            SPD = ""+ (int) ((loc.getSpeed() * 3600) / 1000); 
+         } else {
+        	SPD = "0";
+        }
+
+		
 		double tmpLAT = new BigDecimal(Double.parseDouble(LAT)).setScale(4, RoundingMode.UP).doubleValue();
 		double tmpLGT = new BigDecimal(Double.parseDouble(LGT)).setScale(4, RoundingMode.UP).doubleValue();
 		double tmpALT = new BigDecimal(Double.parseDouble(ALT)).setScale(4, RoundingMode.UP).doubleValue();
@@ -60,8 +68,8 @@ public class GPSLocationListener implements LocationListener {
             	{
             	if (LAT!=MainActivity.LAT && LGT!=MainActivity.LGT) {
             		SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
-            		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"imei:"+dic.getUid()+",tracker,"+dic.getSysdateGps()+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;");
-            		mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
+            		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"imei:"+dic.getUid()+",tracker,"+dic.getSysdateGps()+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,"+SPD+";");
+            		mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT,SPD);
             		MainActivity.LAT=LAT;
             		MainActivity.LGT=LGT;
             		MainActivity.ALT=ALT;

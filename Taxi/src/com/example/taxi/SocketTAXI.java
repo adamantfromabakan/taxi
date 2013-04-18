@@ -28,12 +28,12 @@ public class SocketTAXI {
 
 	}
 	
-	public void ServerPutGPS(String uid,String toServer,int toServerPort, String ALT, String LAT, String LGT)
+	public void ServerPutGPS(String uid,String toServer,int toServerPort, String ALT, String LAT, String LGT, String SPD)
 	{
      
 				//SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
 		        //String strTime = simpleDateFormat.format(new Date());
-		        String strconnect = "imei:"+uid+",tracker,"+dic.getSysdateGps()+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;";
+		        String strconnect = "imei:"+uid+",tracker,"+dic.getSysdateGps()+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,"+SPD+";";
 		        Log.d(TAG, "GPS:"+strconnect);
 		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + strconnect);
 
@@ -46,6 +46,31 @@ public class SocketTAXI {
 
 		            in = new PrintWriter(clientSocketIn.getOutputStream(), true);
   	                in.println(strconnect);
+		            in.close();
+		            clientSocketIn.close();
+		            
+
+		    }catch (Exception e) {
+		    	Log.d(TAG, e.toString());
+		    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - " + TAG + ":ServerPutGPS " + e.toString());
+		    }
+	}
+	
+	public void ServerPutCMD(String uid,String toServer,int toServerPort, String CMD)
+	{
+   		        String strCMD = "imei:"+uid+":"+CMD;
+		        Log.d(TAG, "CMD:"+strCMD);
+		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + strCMD);
+
+				try {
+		            		            
+		            PrintWriter in = null;
+		            Socket clientSocketIn = null;
+
+		            clientSocketIn = new Socket(toServer, toServerPort);
+
+		            in = new PrintWriter(clientSocketIn.getOutputStream(), true);
+  	                in.println(strCMD);
 		            in.close();
 		            clientSocketIn.close();
 		            
