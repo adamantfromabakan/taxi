@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
@@ -66,6 +67,39 @@ public class sysDialogs extends Activity{
     Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
   }
 }
+/*
+ * 
+ * public void addDialog(){
+	context = MainActivity.this;
+	String title = "Выбор есть всегда";
+	String message = "Выбери пищу";
+	String button1String = "Вкусная пища";
+	String button2String = "Здоровая пища";
+	
+	ad = new AlertDialog.Builder(context);
+	ad.setTitle(title);  // заголовок
+	ad.setMessage(message); // сообщение
+	ad.setPositiveButton(button1String, new OnClickListener() {
+		public void onClick(DialogInterface dialog, int arg1) {
+			Toast.makeText(context, "Вы сделали правильный выбор",
+					Toast.LENGTH_LONG).show();
+		}
+	});
+	ad.setNegativeButton(button2String, new OnClickListener() {
+		public void onClick(DialogInterface dialog, int arg1) {
+			Toast.makeText(context, "Возможно вы правы", Toast.LENGTH_LONG)
+					.show();
+		}
+	});
+	ad.setCancelable(true);
+	ad.setOnCancelListener(new OnCancelListener() {
+		public void onCancel(DialogInterface dialog) {
+			Toast.makeText(context, "Вы ничего не выбрали",
+					Toast.LENGTH_LONG).show();
+		}
+	});	
+}
 
+ * */
 
 
