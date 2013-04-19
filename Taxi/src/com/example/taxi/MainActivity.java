@@ -8,6 +8,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -187,7 +188,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	    	 Button btn = (Button) tablehead.findViewById(10000000);
 	    	 btn.setText(dic.getSysdate());
 	    	 
-
+	    	 sysDialogs DLG = new sysDialogs();
+	    	 DLG.showDialog(1);
 	    	 //TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 			 //dic = new sysDictionary();
 			 //Toast.makeText(this, "Текущий IMEI "+tm.getDeviceId() + ", но мы используем 353451047760580" , Toast.LENGTH_LONG).show();
@@ -1266,7 +1268,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         
 	}
 
-
+  
 public void settime(){
 	 Button btn = (Button) findViewById(10000000);
 	 btn.setText(dic.getSysdate());
