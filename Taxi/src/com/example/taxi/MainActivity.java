@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -23,7 +24,7 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
+//import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -35,9 +36,21 @@ import android.widget.Toast;
 
 
 
-public class MainActivity extends Activity implements OnClickListener  /*implements LocationListener*/ {
+public class MainActivity extends Activity  /*implements LocationListener*/ implements android.view.View.OnClickListener {
 	private static final String TAG = "MainActivity";
-	//public String uid;
+	final int DIALOG_TIME = 1;
+	final int DIALOG_REFRESH = 2;
+	final int DIALOG_CALL = 3;
+	final int DIALOG_MAP = 4;
+	final int DIALOG_EXIT = 5;
+	final int DIALOG_FREE = 6;
+	final int DIALOG_TAKE = 7;
+	final int DIALOG_INSTALL_TIME = 8;
+	final int DIALOG_INSTALL_TIME_OUT = 9;
+	final int DIALOG_INSTALL_TIME_IN = 10;
+	final int DIALOG_TAXI = 10;
+	final int DIALOG_KM = 11;
+
 	public String ServerTaxi;
 	public int ServerTaxiPortGPS;
 	public int ServerTaxiPortCMD;
@@ -73,6 +86,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
     public String strdriver = null;
     public static int flg_refreshdata=0;
     public static int flg_refreshclock=0;
+    Button btn1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +140,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 			
         cmdOrderhead();
         cmdOrderlist();
-        
+
        
         //btn1 = (Button) findViewById(10000000);
         /*
@@ -180,75 +194,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 		return true;
 	}
 	
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-	     case 10000000:
-	    	 TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
-	    	 Button btn = (Button) tablehead.findViewById(10000000);
-	    	 btn.setText(dic.getSysdate());
-	    	 
-	    	 sysDialogs DLG = new sysDialogs();
-	    	 DLG.showDialog(1);
-	    	 //TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-			 //dic = new sysDictionary();
-			 //Toast.makeText(this, "Текущий IMEI "+tm.getDeviceId() + ", но мы используем 353451047760580" , Toast.LENGTH_LONG).show();
-	    	 //Toast.makeText(this, ""+"Нажата кнопка 'Текущее время':"+this.Sysdate , Toast.LENGTH_LONG).show();
-	       break;
-		 case 10000001:
-			 	TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);
-			 	table.removeAllViewsInLayout();
-
-			 	
-		        sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
-		        dataThready.start();
-		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread DATA:"+dataThready.getId());
-		        //try{
-		        //    Thread.sleep(3000);		
-		        //}catch(InterruptedException e){}
-		        
-		        
-		        
-				do {
-					try{
-		                Thread.sleep(1000);		
-		            }catch(InterruptedException e){}
-				} while(this.flg_refreshdata<1);
-
-	            cmdOrderlist();
-	        
-	       break;
-	     case 10000002://R.id.btnCancel:
-	    	 double tmpDouble = new BigDecimal(Double.parseDouble("91.123456")).setScale(4, RoundingMode.UP).doubleValue();
-	    	 Toast.makeText(this, ""+tmpDouble , Toast.LENGTH_LONG).show();
-	       break;
-	     case 10000003://R.id.btnCancel:
-	    	 Toast.makeText(this, ""+"Нажата кнопка 'Карта'" , Toast.LENGTH_LONG).show();
-	       break;
-	     case 10000004://R.id.btnCancel:
-	    	 //Toast.makeText(this, ""+"Нажата кнопка 'Выход'" , Toast.LENGTH_LONG).show();
-	    	 this.finish();
-		       break;
-	     case 10000005://R.id.btnCancel:
-	    	 Toast.makeText(this, ""+"Нажата кнопка 'Установить время подачи'" , Toast.LENGTH_LONG).show();
-		       break;
-	     case 10000006://R.id.btnCancel:
-	    	 Toast.makeText(this, ""+"Нажата кнопка 'Установить время отъезда'" , Toast.LENGTH_LONG).show();
-		       break;
-	     case 10000007://R.id.btnCancel:
-	    	 Toast.makeText(this, ""+"Нажата кнопка 'Установит время прибытия'" , Toast.LENGTH_LONG).show();
-		       break;
-	     case 10000008://R.id.btnCancel:
-	    	 Toast.makeText(this, ""+"Нажата кнопка 'Километры'" , Toast.LENGTH_LONG).show();
-		       break;
-	     case 10000009://R.id.btnCancel:
-	    	 Toast.makeText(this, ""+"Нажата кнопка 'Такси прибыло'" , Toast.LENGTH_LONG).show();
-		       break;
-
-
-		}
-		
-	}
+	
 	
 	public void onClickGPS(View v) {
 		//cmdOrderlist();
@@ -314,7 +260,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 				addRowTitle(table);
 	 		    for(clsOrders tmp : list) {
 				//	 System.out.println(tmp.toString());
-					addRowOrders(table, tmp.getStatus()+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus());
+					addRowOrders(table, tmp.getStatus()+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus(), Integer.parseInt(tmp.getId()));
 					 rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+tmp.getId()+"  "
 				+tmp.getStatus()+"  "+tmp.getOrd_date()+"  "+tmp.getOrd_from()+"  "+tmp.getPrice());
 					 //Toast.makeText(this, rsltTXT.getText().toString().trim(), Toast.LENGTH_LONG).show();
@@ -601,7 +547,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	 		        	 OrderBusy=tmp.getId().trim();
 	 		        }
 
-					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus());
+					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus(), Integer.parseInt(tmp.getId()));
 					 }
 
 		        //setContentView(table);
@@ -617,7 +563,7 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
 	}
 	
 	
-	public void addRowOrders(TableLayout table, String cell1, String cell2, String cell3, String cell4, String cell5, String iffcell) {
+	public void addRowOrders(TableLayout table, String cell1, String cell2, String cell3, String cell4, String cell5, String iffcell, int numOrder) {
 		
         TableRow rowOrders = new TableRow(this);
         rowOrders.setGravity(Gravity.CENTER);
@@ -659,13 +605,14 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         int nHeight=dic.RowOrdersHeight;
         int nHeightbtn=dic.RowOrdersButtonHeight;
         int nGravity=Gravity.CENTER;
-        //String statstr="";
 
-        TextView order = new TextView(this);
+        Button order = new Button(this);
         order.setText(cell1);
         order.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
         order.setGravity(nGravity);
         order.setPadding(1, 1, 1, 1);
+        order.setId(1000000000+numOrder);
+        order.setOnClickListener(this);
         //order.setHeight(nHeight);
         //order.setTypeface(Typeface.DEFAULT_BOLD);
 
@@ -746,11 +693,11 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
             Ordersbtn1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn1.setGravity(nGravity);
             Ordersbtn1.setPadding(1, 1, 1, 1);
-            Ordersbtn1.setId(10000005);
+            Ordersbtn1.setId(1010000000+numOrder);
             Ordersbtn1.setOnClickListener(this);
+            
             //Ordersbtn1.setHeight(nHeightbtn);
             //Ordersbtn1.setTypeface(Typeface.DEFAULT_BOLD);
-            //Ordersbtn1.setWidth(Measuredwidth/5);
 
             Button Ordersbtn2 = new Button(this);
             Ordersbtn2.setText("Установить\nвремя отъезда");
@@ -759,11 +706,11 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
             Ordersbtn2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn2.setGravity(nGravity);
             Ordersbtn2.setPadding(1, 1, 1, 1);
-            Ordersbtn2.setId(10000006);
+            Ordersbtn2.setId(1020000000+numOrder);
             Ordersbtn2.setOnClickListener(this);
+            
             //Ordersbtn2.setHeight(nHeightbtn);
             //Ordersbtn2.setTypeface(Typeface.DEFAULT_BOLD);
-            //Ordersbtn2.setWidth(Measuredwidth/5);
             
 
             Button Ordersbtn3 = new Button(this);
@@ -773,11 +720,11 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
             Ordersbtn3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn3.setGravity(nGravity);
             Ordersbtn3.setPadding(1, 1, 1, 1);
-            Ordersbtn3.setId(10000007);
+            Ordersbtn3.setId(1030000000+numOrder);
             Ordersbtn3.setOnClickListener(this);
+            
             //Ordersbtn3.setHeight(nHeightbtn);
             //Ordersbtn3.setTypeface(Typeface.DEFAULT_BOLD);
-            //Ordersbtn3.setWidth(Measuredwidth/5);
 
             Button Ordersbtn4 = new Button(this);
             Ordersbtn4.setText("Километры");
@@ -786,11 +733,11 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
             Ordersbtn4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn4.setGravity(nGravity);
             Ordersbtn4.setPadding(1, 1, 1, 1);
-            Ordersbtn4.setId(10000008);
+            Ordersbtn4.setId(1040000000+numOrder);
             Ordersbtn4.setOnClickListener(this);
+            
             //Ordersbtn4.setHeight(nHeightbtn);
             //Ordersbtn4.setTypeface(Typeface.DEFAULT_BOLD);
-            //Ordersbtn4.setWidth(Measuredwidth/5);
 
             Button Ordersbtn5 = new Button(this);
             Ordersbtn5.setText("Такси прибыло");
@@ -799,11 +746,11 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
             Ordersbtn5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn5.setGravity(nGravity);
             Ordersbtn5.setPadding(1, 1, 1, 1);
-            Ordersbtn5.setId(10000009);
+            Ordersbtn5.setId(1050000000+numOrder);
             Ordersbtn5.setOnClickListener(this);
+            
             //Ordersbtn5.setHeight(nHeightbtn);
             //Ordersbtn5.setTypeface(Typeface.DEFAULT_BOLD);
-            //Ordersbtn5.setWidth(Measuredwidth/5);
             
 
             
@@ -836,7 +783,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         rowcardriver.setGravity(Gravity.CENTER);
         //rowcardriver.setBackgroundColor(Color.rgb(00, 80, 00));
         rowcardriver.setBackgroundColor(Color.GRAY);
-        //TextView empty = new TextView(this);
 
         TableRow.LayoutParams params = new TableRow.LayoutParams();
         TableRow.LayoutParams params2 = new TableRow.LayoutParams();
@@ -860,7 +806,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         car.setGravity(nGravity);
         car.setPadding(1, 1, 1, 1);
         //car.setTypeface(Typeface.DEFAULT_BOLD);
-        //car.setWidth(Measuredwidth/2);
 
         TextView driver = new TextView(this);
         driver.setText(cell2);
@@ -870,7 +815,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         driver.setGravity(nGravity);
         driver.setPadding(1, 1, 1, 1);
         //driver.setTypeface(Typeface.DEFAULT_BOLD);
-        //driver.setWidth(Measuredwidth/2);
    
         rowcardriver.addView(car,params);
         rowcardriver.addView(driver,params2);
@@ -878,7 +822,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         
         table.addView(rowcardriver);
 
-        //setContentView(table);
 	}
 	
 	public void addRowTitle(TableLayout table) {
@@ -918,7 +861,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         order.setGravity(nGravity);
         //order.setHeight(nHeight);
         //order.setTypeface(Typeface.DEFAULT_BOLD);
-        //order.setWidth(Measuredwidth/5);
 
         TextView orderdata = new TextView(this);
         orderdata.setText("Время подачи");
@@ -928,7 +870,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         orderdata.setGravity(nGravity);
         //orderdata.setHeight(nHeight);
         //orderdata.setTypeface(Typeface.DEFAULT_BOLD);
-        //orderdata.setWidth(Measuredwidth/5);
 
         TextView orderfrom = new TextView(this);
         orderfrom.setText("Адрес подачи");
@@ -938,7 +879,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         orderfrom.setGravity(nGravity);
         //orderfrom.setHeight(nHeight);
         //orderfrom.setTypeface(Typeface.DEFAULT_BOLD);
-        //orderfrom.setWidth(Measuredwidth/5);
 
         TextView orderto = new TextView(this);
         orderto.setText("Адрес назначения");
@@ -948,7 +888,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         orderto.setGravity(nGravity);
         //orderto.setHeight(nHeight);
         //orderto.setTypeface(Typeface.DEFAULT_BOLD);
-        //orderto.setWidth(Measuredwidth/5);
 
         TextView orderprice = new TextView(this);
         orderprice.setText("Сумма");
@@ -958,7 +897,6 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         orderprice.setGravity(nGravity);
         //orderprice.setHeight(nHeight);
         //orderprice.setTypeface(Typeface.DEFAULT_BOLD);
-        //orderprice.setWidth(Measuredwidth/5);
         
         rowTitle.addView(order,params);
         rowTitle.addView(orderdata,params);
@@ -1010,9 +948,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         btn1.setGravity(nGravity);
         //btn1.setHeight(nHeight);
         //btn1.setTypeface(Typeface.DEFAULT_BOLD);
-        //btn1.setWidth(Measuredwidth/5);
         btn1.setPadding(1, 1, 1, 1);
-        btn1.setId(10000000);
+        btn1.setId(1060000000);
         btn1.setOnClickListener(this);
    
   
@@ -1028,10 +965,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         btn2.setGravity(nGravity);
         //btn2.setHeight(nHeight);
         //btn2.setTypeface(Typeface.DEFAULT_BOLD);
-        //btn2.onClick="cmdOrderlist"
-        //btn2.setWidth(Measuredwidth/5);
         btn2.setPadding(1, 1, 1, 1);
-        btn2.setId(10000001);
+        btn2.setId(1070000000);
         btn2.setOnClickListener(this);
 
         
@@ -1044,9 +979,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         btn3.setGravity(nGravity);
         //btn3.setHeight(nHeight);
         //btn3.setTypeface(Typeface.DEFAULT_BOLD);
-        //btn3.setWidth(Measuredwidth/5);
         btn3.setPadding(1, 1, 1, 1);
-        btn3.setId(10000002);
+        btn3.setId(1080000000);
         btn3.setOnClickListener(this);
 
         Button btn4 = new Button(this);
@@ -1057,9 +991,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         btn4.setGravity(nGravity);
         //btn4.setHeight(nHeight);
         //btn4.setTypeface(Typeface.DEFAULT_BOLD);
-        //btn4.setWidth(Measuredwidth/5);
         btn4.setPadding(1, 1, 1, 1);
-        btn4.setId(10000003);
+        btn4.setId(1090000000);
         btn4.setOnClickListener(this);        
 
 
@@ -1071,9 +1004,8 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         btn5.setGravity(nGravity);
         //btn5.setHeight(nHeight);
         //btn5.setTypeface(Typeface.DEFAULT_BOLD);
-        //btn5.setWidth(Measuredwidth/5);
         btn5.setPadding(1, 1, 1, 1);
-        btn5.setId(10000004);
+        btn5.setId(1100000000);
         btn5.setOnClickListener(this);        
 
         
@@ -1268,11 +1200,281 @@ public class MainActivity extends Activity implements OnClickListener  /*impleme
         
 	}
 
-  
-public void settime(){
-	 Button btn = (Button) findViewById(10000000);
+	 
+	protected Dialog onCreateDialog(int id) {
+		if (id == DIALOG_TIME) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_TIME);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrTIME);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrTIME);
+	        return adb.create();
+		}
+		if (id == DIALOG_REFRESH) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_REFRESH);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrREFRESH);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrREFRESH);
+	        return adb.create();
+		}
+		if (id == DIALOG_CALL) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_CALL);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrCALL);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrCALL);
+	        return adb.create();
+		}
+		if (id == DIALOG_MAP) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_MAP);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrMAP);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrMAP);
+	        return adb.create();
+		}
+		if (id == DIALOG_FREE) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_FREE);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrFREE);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrFREE);
+	        return adb.create();
+		}
+		if (id == DIALOG_TAKE) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_TAKE);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrTAKE);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrTAKE);
+	        return adb.create();
+		}
+		if (id == DIALOG_INSTALL_TIME) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_INSTALL_TIME);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrINSTALL_TIME);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrINSTALL_TIME);
+	        return adb.create();
+		}
+		if (id == DIALOG_INSTALL_TIME_OUT) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_INSTALL_TIME_OUT);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrINSTALL_TIME_OUT);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrINSTALL_TIME_OUT);
+	        return adb.create();
+		}
+		if (id == DIALOG_INSTALL_TIME_IN) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_INSTALL_TIME_IN);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrINSTALL_TIME_IN);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrINSTALL_TIME_IN);
+	        return adb.create();
+		}
+		if (id == DIALOG_KM) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_KM);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrKM);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrKM);
+	        return adb.create();
+		}
+		if (id == DIALOG_TAXI) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_TAXI);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrTAXI);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrTAXI);
+	        return adb.create();
+		}
+	    if (id == DIALOG_EXIT) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setMessage(R.string.DIALOG_EXIT);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrlExit);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrlExit);
+	        return adb.create();
+	      }
+	      
+	      return super.onCreateDialog(id);
+	    }
+	    
+OnClickListener lsnrTIME = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	
+	 TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
+	 Button btn = (Button) tablehead.findViewById(10000000);
 	 btn.setText(dic.getSysdate());
-}
+	break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrREFRESH = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrCALL = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrMAP = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrFREE = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrTAKE = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	    break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrINSTALL_TIME = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrINSTALL_TIME_OUT = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrINSTALL_TIME_IN = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrKM = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrTAXI = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrlExit = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	finish();    break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+
+	  
+	@Override
+		public void onClick(View v) {
+		
+		int i = (int) Math.round(v.getId()/10000000);
+		int j = v.getId()-i*10000000;
+		Toast.makeText(this, "Заявка № "+(j) , Toast.LENGTH_LONG).show();
+			switch (i) {
+		     case 106://ВРЕМЯ
+		    	 showDialog(DIALOG_TIME);
+		    	 //TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
+		    	 //Button btn = (Button) tablehead.findViewById(10000000);
+		    	 //btn.setText(dic.getSysdate());
+		    	 
+
+		    	 //TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+				 //dic = new sysDictionary();
+				 //Toast.makeText(this, "Текущий IMEI "+tm.getDeviceId() + ", но мы используем 353451047760580" , Toast.LENGTH_LONG).show();
+		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Текущее время':"+this.Sysdate , Toast.LENGTH_LONG).show();
+		       break;
+			 case 107://ОБНОВИТЬ
+				 showDialog(DIALOG_REFRESH);
+				 	TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);
+				 	table.removeAllViewsInLayout();
+
+				 	
+			        sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
+			        dataThready.start();
+			        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread DATA:"+dataThready.getId());
+			        //try{
+			        //    Thread.sleep(3000);		
+			        //}catch(InterruptedException e){}
+			        
+			        
+			        
+					do {
+						try{
+			                Thread.sleep(1000);		
+			            }catch(InterruptedException e){}
+					} while(this.flg_refreshdata<1);
+
+		            cmdOrderlist();
+		        
+		       break;
+		     case 108://ЗВОНИТЬ ОПЕРАТОРУ
+		    	 showDialog(DIALOG_CALL);
+		       break;
+		     case 109://КАРТА
+		    	 showDialog(DIALOG_MAP);
+		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Карта'" , Toast.LENGTH_LONG).show();
+		       break;
+		     case 110://ВЫХОД
+		    	 showDialog(DIALOG_EXIT);
+			       break;
+		     case 101://УСТАНОВИТЬ ВРЕМЯ ОТДАЧИ
+		    	 showDialog(DIALOG_INSTALL_TIME);
+		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Установить время подачи'" , Toast.LENGTH_LONG).show();
+			       break;
+		     case 102://УСТАНОВИТЬ ВРЕМЯ ОТЪЕЗДА
+		    	 showDialog(DIALOG_INSTALL_TIME_OUT);
+		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Установить время отъезда'" , Toast.LENGTH_LONG).show();
+			       break;
+		     case 103://УСТАНОВИТЬ ВРЕМЯ ПРИБЫТИЯ
+		    	 showDialog(DIALOG_INSTALL_TIME_IN);
+		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Установить время прибытия'" , Toast.LENGTH_LONG).show();
+			       break;
+		     case 104://КИЛОМЕТРЫ
+		    	 showDialog(DIALOG_KM);
+		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Километры'" , Toast.LENGTH_LONG).show();
+			       break;
+		     case 105://ТАКСИ ПРИБЫЛО
+		    	 showDialog(DIALOG_TAXI);
+		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Такси прибыло'" , Toast.LENGTH_LONG).show();
+			       break;
+		     case 100://ВЗЯТЬ ОСВОБОДИТЬ ЗАЯВКУ
+		    	 //showDialog(DIALOG_TAXI);
+		    	 Toast.makeText(this, "Заявка № "+(v.getId()-1000000000) , Toast.LENGTH_LONG).show();
+			       break;
+
+
+			}
+			
+		}
+	
 
 
 }

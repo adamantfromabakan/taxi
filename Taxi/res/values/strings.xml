@@ -10,4 +10,19 @@
 	<string name="no">Нет</string>
 	<string name="cancel">Отмена</string>
 	<string name="saved">Сохранено</string>
+		<string name="DIALOG_TIME">Установить текущее время?</string>
+		<string name="DIALOG_REFRESH">Обновить заявки?</string>
+		<string name="DIALOG_CALL">Звонить оператору?</string>
+		<string name="DIALOG_MAP">Показать карту?</string>
+		<string name="DIALOG_FREE">Освободить заявку?</string>
+		<string name="DIALOG_TAKE">Взять заявку</string>
+		<string name="DIALOG_INSTALL_TIME">Установить время подачи заявки?</string>
+		<string name="DIALOG_INSTALL_TIME_OUT">Установить время отъезда?</string>
+		<string name="DIALOG_INSTALL_TIME_IN">Установить время прибытия?</string>
+		<string name="DIALOG_KM">Посмотреть километры?</string>
+		<string name="DIALOG_TAXI">Установить Такси прибыло?</string>
+	    <string name="DIALOG_EXIT">Завершить работу с программой?</string>
+	    <string name="DIALOG_CANCEL">Отмена</string>
+	    <string name="DIALOG_OK">ОК</string>
+	    <string name="DIALOG_TITLE">..Желаете..</string>
 </resources>
