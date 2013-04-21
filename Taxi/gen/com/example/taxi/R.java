@@ -39,10 +39,15 @@ public final class R {
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
-        public static final int ic_taxi=0x7f020001;
-        public static final int map1024552=0x7f020002;
-        public static final int map600976=0x7f020003;
+        public static final int bluebutton=0x7f020000;
+        public static final int defbutton=0x7f020001;
+        public static final int greenbutton=0x7f020002;
+        public static final int greybutton=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
+        public static final int ic_taxi=0x7f020005;
+        public static final int map1024552=0x7f020006;
+        public static final int map600976=0x7f020007;
+        public static final int redbutton=0x7f020008;
     }
     public static final class id {
         public static final int TaxiHeadLayout=0x7f09000b;

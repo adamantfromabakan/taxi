@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.example.taxi.R.color;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -131,7 +133,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         
         sysThreads clockThready = new sysThreads(this,dic,LGWR,mSocket,"refreshclock");
         clockThready.start();
-        
+       
+        //MainActivity.flg_refreshdata=1;
 			do {
 				try{
 	                Thread.sleep(1000);		
@@ -452,10 +455,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         setContentView(table);
 	}*/
 	
-	public void onClickStart(View v) {
 
-	  }
-	
 	public void cmdOrderhead() {
 		 try
 	        {
@@ -523,6 +523,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 					
 				} else {
 					table.setBackgroundResource(com.example.taxi.R.drawable.map600976);
+					
 				}
 					
 	
@@ -659,6 +660,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             orderfrom.setBackgroundColor(Color.WHITE);
             orderto.setBackgroundColor(Color.WHITE);
             orderprice.setBackgroundColor(Color.WHITE); 
+            order.setBackgroundDrawable(getResources().getDrawable(R.drawable.greenbutton));
             
             rowOrders.addView(order,params);
             rowOrders.addView(orderdata,params);
@@ -678,7 +680,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             orderfrom.setBackgroundColor(Color.rgb(64,95,237));
             orderto.setBackgroundColor(Color.rgb(64,95,237));
             orderprice.setBackgroundColor(Color.rgb(64,95,237));
-            
+            order.setBackgroundDrawable(getResources().getDrawable(R.drawable.redbutton));
             
             TableRow rowBtnOrders = new TableRow(this);
             rowBtnOrders.setGravity(Gravity.CENTER);
@@ -688,13 +690,14 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 
             Button Ordersbtn1 = new Button(this);
             Ordersbtn1.setText("Установить\nвремя подачи");
-            Ordersbtn1.setBackgroundColor(Color.rgb(69,69,69));
+            Ordersbtn1.setBackgroundColor(Color.rgb(69,69,69)); //#454545
             Ordersbtn1.setTextColor(Color.WHITE);
             Ordersbtn1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
             Ordersbtn1.setGravity(nGravity);
             Ordersbtn1.setPadding(1, 1, 1, 1);
             Ordersbtn1.setId(1010000000+numOrder);
             Ordersbtn1.setOnClickListener(this);
+            Ordersbtn1.setBackgroundDrawable(getResources().getDrawable(R.drawable.greybutton));
             
             //Ordersbtn1.setHeight(nHeightbtn);
             //Ordersbtn1.setTypeface(Typeface.DEFAULT_BOLD);
@@ -708,6 +711,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             Ordersbtn2.setPadding(1, 1, 1, 1);
             Ordersbtn2.setId(1020000000+numOrder);
             Ordersbtn2.setOnClickListener(this);
+            Ordersbtn2.setBackgroundDrawable(getResources().getDrawable(R.drawable.defbutton));
             
             //Ordersbtn2.setHeight(nHeightbtn);
             //Ordersbtn2.setTypeface(Typeface.DEFAULT_BOLD);
@@ -722,6 +726,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             Ordersbtn3.setPadding(1, 1, 1, 1);
             Ordersbtn3.setId(1030000000+numOrder);
             Ordersbtn3.setOnClickListener(this);
+            Ordersbtn3.setBackgroundDrawable(getResources().getDrawable(R.drawable.greybutton));
             
             //Ordersbtn3.setHeight(nHeightbtn);
             //Ordersbtn3.setTypeface(Typeface.DEFAULT_BOLD);
@@ -735,6 +740,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             Ordersbtn4.setPadding(1, 1, 1, 1);
             Ordersbtn4.setId(1040000000+numOrder);
             Ordersbtn4.setOnClickListener(this);
+            Ordersbtn4.setBackgroundDrawable(getResources().getDrawable(R.drawable.defbutton));
             
             //Ordersbtn4.setHeight(nHeightbtn);
             //Ordersbtn4.setTypeface(Typeface.DEFAULT_BOLD);
@@ -748,6 +754,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             Ordersbtn5.setPadding(1, 1, 1, 1);
             Ordersbtn5.setId(1050000000+numOrder);
             Ordersbtn5.setOnClickListener(this);
+            Ordersbtn5.setBackgroundDrawable(getResources().getDrawable(R.drawable.greenbutton));
             
             //Ordersbtn5.setHeight(nHeightbtn);
             //Ordersbtn5.setTypeface(Typeface.DEFAULT_BOLD);
@@ -951,6 +958,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         btn1.setPadding(1, 1, 1, 1);
         btn1.setId(1060000000);
         btn1.setOnClickListener(this);
+        btn1.setBackgroundDrawable(getResources().getDrawable(R.drawable.defbutton));
+        //btn1.set
    
   
         
@@ -968,7 +977,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         btn2.setPadding(1, 1, 1, 1);
         btn2.setId(1070000000);
         btn2.setOnClickListener(this);
-
+        btn2.setBackgroundDrawable(getResources().getDrawable(R.drawable.defbutton));
         
 
         Button btn3 = new Button(this);
@@ -982,11 +991,12 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         btn3.setPadding(1, 1, 1, 1);
         btn3.setId(1080000000);
         btn3.setOnClickListener(this);
-
+        btn3.setBackgroundDrawable(getResources().getDrawable(R.drawable.defbutton));
+        
         Button btn4 = new Button(this);
         btn4.setText("Карта");
         btn4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
-        btn4.setBackgroundColor(Color.rgb(64,95,237)); //blue
+        btn4.setBackgroundColor(Color.rgb(64,95,237)); //blue 405FED
         btn4.setTextColor(Color.WHITE);
         btn4.setGravity(nGravity);
         //btn4.setHeight(nHeight);
@@ -994,19 +1004,20 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         btn4.setPadding(1, 1, 1, 1);
         btn4.setId(1090000000);
         btn4.setOnClickListener(this);        
-
+        btn4.setBackgroundDrawable(getResources().getDrawable(R.drawable.bluebutton));
 
         Button btn5 = new Button(this);
         btn5.setText("Выход");
         btn5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
-        btn5.setBackgroundColor(Color.rgb(139,00,00));
+        btn5.setBackgroundColor(Color.rgb(139,00,00)); //8B0000
         btn5.setTextColor(Color.WHITE);
         btn5.setGravity(nGravity);
         //btn5.setHeight(nHeight);
         //btn5.setTypeface(Typeface.DEFAULT_BOLD);
         btn5.setPadding(1, 1, 1, 1);
         btn5.setId(1100000000);
-        btn5.setOnClickListener(this);        
+        btn5.setOnClickListener(this);
+        btn5.setBackgroundDrawable(getResources().getDrawable(R.drawable.redbutton));
 
         
         rowBtn.addView(btn1,params);
@@ -1319,7 +1330,7 @@ public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	
 	 TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
-	 Button btn = (Button) tablehead.findViewById(10000000);
+	 Button btn = (Button) tablehead.findViewById(1060000000);
 	 btn.setText(dic.getSysdate());
 	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
@@ -1339,7 +1350,9 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 OnClickListener lsnrMAP = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_POSITIVE: 	
+	//Toast.makeText(this, "Карта", Toast.LENGTH_LONG).show();
+	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrFREE = new OnClickListener() {
@@ -1397,7 +1410,7 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		
 		int i = (int) Math.round(v.getId()/10000000);
 		int j = v.getId()-i*10000000;
-		Toast.makeText(this, "Заявка № "+(j) , Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, "Заявка № "+(j) , Toast.LENGTH_LONG).show();
 			switch (i) {
 		     case 106://ВРЕМЯ
 		    	 showDialog(DIALOG_TIME);
