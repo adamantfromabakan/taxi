@@ -51,7 +51,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	final int DIALOG_INSTALL_TIME_OUT = 9;
 	final int DIALOG_INSTALL_TIME_IN = 10;
 	final int DIALOG_TAXI = 10;
-	final int DIALOG_KM = 11;
+	final int DIALOG_KM_BEG = 11;
+	final int DIALOG_KM_END = 11;
 
 	public String ServerTaxi;
 	public int ServerTaxiPortGPS;
@@ -88,7 +89,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     public String strdriver = null;
     public static int flg_refreshdata=0;
     public static int flg_refreshclock=0;
-    Button btn1;
+    public static int flg_numorder=0;
+    //Button btn1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -612,7 +614,6 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         order.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
         order.setGravity(nGravity);
         order.setPadding(1, 1, 1, 1);
-        order.setId(1000000000+numOrder);
         order.setOnClickListener(this);
         //order.setHeight(nHeight);
         //order.setTypeface(Typeface.DEFAULT_BOLD);
@@ -656,6 +657,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             orderto.setTextColor(Color.BLACK);
             orderprice.setTextColor(Color.BLACK);
             order.setBackgroundColor(Color.rgb(00, 80, 00));
+            order.setId(1000000000+numOrder);
             orderdata.setBackgroundColor(Color.WHITE);
             orderfrom.setBackgroundColor(Color.WHITE);
             orderto.setBackgroundColor(Color.WHITE);
@@ -676,6 +678,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             orderto.setTextColor(Color.WHITE);
             orderprice.setTextColor(Color.WHITE); 	
             order.setBackgroundColor(Color.rgb(139,00,00));
+            order.setId(-1000000000-numOrder);
             orderdata.setBackgroundColor(Color.rgb(64,95,237));
             orderfrom.setBackgroundColor(Color.rgb(64,95,237));
             orderto.setBackgroundColor(Color.rgb(64,95,237));
@@ -959,13 +962,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         btn1.setId(1060000000);
         btn1.setOnClickListener(this);
         btn1.setBackgroundDrawable(getResources().getDrawable(R.drawable.defbutton));
-        //btn1.set
-   
-  
-        
-
-
-
+ 
         Button btn2 = new Button(this);
         btn2.setText("Обновить\nзаявки");
         btn2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
@@ -978,8 +975,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         btn2.setId(1070000000);
         btn2.setOnClickListener(this);
         btn2.setBackgroundDrawable(getResources().getDrawable(R.drawable.defbutton));
-        
-
+ 
         Button btn3 = new Button(this);
         btn3.setText("Звонить\nоператору");
         btn3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
@@ -1218,8 +1214,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        adb.setTitle(R.string.DIALOG_TITLE);
 	        adb.setMessage(R.string.DIALOG_TIME);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrTIME);
-	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrTIME);
+	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrTIME);
+	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrTIME);
 	        return adb.create();
 		}
 		if (id == DIALOG_REFRESH) {
@@ -1227,8 +1223,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        adb.setTitle(R.string.DIALOG_TITLE);
 	        adb.setMessage(R.string.DIALOG_REFRESH);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrREFRESH);
-	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrREFRESH);
+	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrREFRESH);
+	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrREFRESH);
 	        return adb.create();
 		}
 		if (id == DIALOG_CALL) {
@@ -1236,8 +1232,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        adb.setTitle(R.string.DIALOG_TITLE);
 	        adb.setMessage(R.string.DIALOG_CALL);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrCALL);
-	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrCALL);
+	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrCALL);
+	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrCALL);
 	        return adb.create();
 		}
 		if (id == DIALOG_MAP) {
@@ -1254,8 +1250,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        adb.setTitle(R.string.DIALOG_TITLE);
 	        adb.setMessage(R.string.DIALOG_FREE);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrFREE);
-	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrFREE);
+	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrFREE);
+	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrFREE);
 	        return adb.create();
 		}
 		if (id == DIALOG_TAKE) {
@@ -1263,61 +1259,71 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        adb.setTitle(R.string.DIALOG_TITLE);
 	        adb.setMessage(R.string.DIALOG_TAKE);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrTAKE);
-	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrTAKE);
+	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrTAKE);
+	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrTAKE);
 	        return adb.create();
 		}
 		if (id == DIALOG_INSTALL_TIME) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setTitle("Заявка "+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_INSTALL_TIME);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrINSTALL_TIME);
-	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrINSTALL_TIME);
+	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrINSTALL_TIME);
+	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrINSTALL_TIME);
 	        return adb.create();
 		}
 		if (id == DIALOG_INSTALL_TIME_OUT) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setTitle("Заявка "+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_INSTALL_TIME_OUT);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrINSTALL_TIME_OUT);
-	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrINSTALL_TIME_OUT);
+	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrINSTALL_TIME_OUT);
+	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrINSTALL_TIME_OUT);
 	        return adb.create();
 		}
 		if (id == DIALOG_INSTALL_TIME_IN) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setTitle("Заявка "+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_INSTALL_TIME_IN);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrINSTALL_TIME_IN);
-	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrINSTALL_TIME_IN);
+	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrINSTALL_TIME_IN);
+	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrINSTALL_TIME_IN);
 	        return adb.create();
 		}
-		if (id == DIALOG_KM) {
+		if (id == DIALOG_KM_BEG) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle(R.string.DIALOG_TITLE);
-	        adb.setMessage(R.string.DIALOG_KM);
+	        adb.setTitle("Заявка "+this.flg_numorder);
+	        adb.setMessage(R.string.DIALOG_KM_BEG);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrKM);
-	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrKM);
+	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrKMbeg);
+	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrKMbeg);
+	        return adb.create();
+		}
+		if (id == DIALOG_KM_END) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	        adb.setTitle("Заявка "+this.flg_numorder);
+	        adb.setMessage(R.string.DIALOG_KM_BEG);
+	        adb.setIcon(android.R.drawable.ic_dialog_info);
+	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrKMend);
+	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrKMend);
 	        return adb.create();
 		}
 		if (id == DIALOG_TAXI) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle(R.string.DIALOG_TITLE);
+	        adb.setTitle("Заявка "+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_TAXI);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrTAXI);
-	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrTAXI);
+	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrTAXI);
+	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrTAXI);
 	        return adb.create();
 		}
 	    if (id == DIALOG_EXIT) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
 	        adb.setTitle(R.string.DIALOG_TITLE);
+	        //adb.setInverseBackgroundForced(true);
 	        adb.setMessage(R.string.DIALOG_EXIT);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_OK, lsnrlExit);
+	        adb.setPositiveButton(R.string.DIALOG_EXT, lsnrlExit);
 	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrlExit);
 	        return adb.create();
 	      }
@@ -1385,7 +1391,13 @@ switch (which) {
 case Dialog.BUTTON_POSITIVE: 	     break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
-OnClickListener lsnrKM = new OnClickListener() {
+OnClickListener lsnrKMbeg = new OnClickListener() {
+public void onClick(DialogInterface dialog, int which) {
+switch (which) {
+case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+
+OnClickListener lsnrKMend = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	     break;
@@ -1409,7 +1421,14 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		public void onClick(View v) {
 		
 		int i = (int) Math.round(v.getId()/10000000);
+		//this.flg_numorder = Math.round(Math.abs(v.getId()/10000000));
+		if (v.getId()>0) {
 		int j = v.getId()-i*10000000;
+		this.flg_numorder = j;
+		} else {
+		int j = Math.abs(v.getId()+i*10000000);
+		this.flg_numorder = j;
+		}
 		//Toast.makeText(this, "Заявка № "+(j) , Toast.LENGTH_LONG).show();
 			switch (i) {
 		     case 106://ВРЕМЯ
@@ -1471,7 +1490,7 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Установить время прибытия'" , Toast.LENGTH_LONG).show();
 			       break;
 		     case 104://КИЛОМЕТРЫ
-		    	 showDialog(DIALOG_KM);
+		    	 showDialog(DIALOG_KM_BEG);
 		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Километры'" , Toast.LENGTH_LONG).show();
 			       break;
 		     case 105://ТАКСИ ПРИБЫЛО
@@ -1482,7 +1501,10 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		    	 //showDialog(DIALOG_TAXI);
 		    	 Toast.makeText(this, "Заявка № "+(v.getId()-1000000000) , Toast.LENGTH_LONG).show();
 			       break;
-
+		     case -100://ВЗЯТЬ ОСВОБОДИТЬ ЗАЯВКУ
+		    	 //showDialog(DIALOG_TAXI);
+		    	 Toast.makeText(this, "Заявка № "+(v.getId()+1000000000) , Toast.LENGTH_LONG).show();
+			       break;
 
 			}
 			

@@ -75,20 +75,27 @@ public final class R {
     }
     public static final class string {
         public static final int DIALOG_CALL=0x7f06000b;
-        public static final int DIALOG_CANCEL=0x7f060015;
-        public static final int DIALOG_EXIT=0x7f060014;
+        public static final int DIALOG_CANCEL=0x7f060016;
+        public static final int DIALOG_EXIT=0x7f060015;
+        public static final int DIALOG_EXT=0x7f060018;
         public static final int DIALOG_FREE=0x7f06000d;
+        public static final int DIALOG_INST=0x7f060019;
         public static final int DIALOG_INSTALL_TIME=0x7f06000f;
         public static final int DIALOG_INSTALL_TIME_IN=0x7f060011;
         public static final int DIALOG_INSTALL_TIME_OUT=0x7f060010;
-        public static final int DIALOG_KM=0x7f060012;
+        public static final int DIALOG_KM_BEG=0x7f060012;
+        public static final int DIALOG_KM_END=0x7f060013;
         public static final int DIALOG_MAP=0x7f06000c;
-        public static final int DIALOG_OK=0x7f060016;
+        public static final int DIALOG_NO=0x7f06001d;
+        public static final int DIALOG_OK=0x7f060017;
         public static final int DIALOG_REFRESH=0x7f06000a;
+        public static final int DIALOG_SAVE=0x7f06001a;
         public static final int DIALOG_TAKE=0x7f06000e;
-        public static final int DIALOG_TAXI=0x7f060013;
+        public static final int DIALOG_TAXI=0x7f060014;
         public static final int DIALOG_TIME=0x7f060009;
-        public static final int DIALOG_TITLE=0x7f060017;
+        public static final int DIALOG_TITLE=0x7f06001e;
+        public static final int DIALOG_UPD=0x7f06001b;
+        public static final int DIALOG_YES=0x7f06001c;
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
         public static final int cancel=0x7f060007;
