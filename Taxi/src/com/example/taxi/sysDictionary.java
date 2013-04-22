@@ -12,6 +12,7 @@ public class sysDictionary {
 	public int ServerTaxiPortGPS=35570;
 	public int ServerTaxiPortCMD=35572;
 	public String Uid;
+	public int numorder=0;
 	public String logpath = "/taxi1/logs/";
 	public String loggps = "taxi-log-gps.log";
 	public String logcmd = "taxi-log-cmd.log";
@@ -66,7 +67,13 @@ CornflowerBlue	#6495ED
 	public String getUid() {
 		return Uid;
 	}
-	
+
+	public void setNumOrder(int vl) {
+		numorder=vl;
+	}
+	public int getNumOrder() {
+		return numorder;
+	}
 	public void setServerTaxi(String vl) {
 		ServerTaxi=vl;
 	}

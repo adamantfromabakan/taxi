@@ -21,6 +21,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -50,17 +51,16 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	final int DIALOG_INSTALL_TIME = 8;
 	final int DIALOG_INSTALL_TIME_OUT = 9;
 	final int DIALOG_INSTALL_TIME_IN = 10;
-	final int DIALOG_TAXI = 10;
-	final int DIALOG_KM_BEG = 11;
-	final int DIALOG_KM_END = 11;
+	final int DIALOG_TAXI = 11;
+	final int DIALOG_KM_BEG = 12;
+	final int DIALOG_KM_END = 13;
 
 	public String ServerTaxi;
 	public int ServerTaxiPortGPS;
 	public int ServerTaxiPortCMD;
 	public int Measuredwidth = 0;  
 	public int Measuredheight = 0; 
-	public String OrderBusy="0";
-	
+		
 	AlertDialog.Builder ad;
 	Context context;
 	
@@ -89,7 +89,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     public String strdriver = null;
     public static int flg_refreshdata=0;
     public static int flg_refreshclock=0;
-    public static int flg_numorder=0;
+    public int flg_numorder=0;
     //Button btn1;
 	
 	@Override
@@ -547,7 +547,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	 		    		statstr="Взять";
 	 		        } else {
 	 		        	 statstr="Освободить";
-	 		        	 OrderBusy=tmp.getId().trim();
+	 		        	 //OrderBusy=tmp.getId().trim();
 	 		        }
 
 					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus(), Integer.parseInt(tmp.getId()));
@@ -1310,11 +1310,12 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		}
 		if (id == DIALOG_TAXI) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle("Заявка "+this.flg_numorder);
+	        adb.setTitle("Заявка "+dic.getNumOrder());
 	        adb.setMessage(R.string.DIALOG_TAXI);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
 	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrTAXI);
 	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrTAXI);
+	        LGWR.logwriter(dic.logcom, dic.logpath,"dialog:"+dic.getNumOrder());
 	        return adb.create();
 		}
 	    if (id == DIALOG_EXIT) {
@@ -1419,16 +1420,15 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 	  
 	@Override
 		public void onClick(View v) {
-		
+		this.flg_numorder =0;
 		int i = (int) Math.round(v.getId()/10000000);
-		//this.flg_numorder = Math.round(Math.abs(v.getId()/10000000));
-		if (v.getId()>0) {
+		/*if (v.getId()>0) {
 		int j = v.getId()-i*10000000;
-		this.flg_numorder = j;
+		MainActivity.flg_numorder = v.getId()-i*10000000;
 		} else {
 		int j = Math.abs(v.getId()+i*10000000);
-		this.flg_numorder = j;
-		}
+		MainActivity.flg_numorder = j;
+		}*/
 		//Toast.makeText(this, "Заявка № "+(j) , Toast.LENGTH_LONG).show();
 			switch (i) {
 		     case 106://ВРЕМЯ
@@ -1478,31 +1478,38 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		    	 showDialog(DIALOG_EXIT);
 			       break;
 		     case 101://УСТАНОВИТЬ ВРЕМЯ ОТДАЧИ
+		    	 this.flg_numorder = v.getId()-i*10000000;
 		    	 showDialog(DIALOG_INSTALL_TIME);
 		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Установить время подачи'" , Toast.LENGTH_LONG).show();
 			       break;
 		     case 102://УСТАНОВИТЬ ВРЕМЯ ОТЪЕЗДА
+		    	 this.flg_numorder = v.getId()-i*10000000;
 		    	 showDialog(DIALOG_INSTALL_TIME_OUT);
-		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Установить время отъезда'" , Toast.LENGTH_LONG).show();
+		    	 
+		    	 Toast.makeText(this, ""+v.getId()+" "+i , Toast.LENGTH_LONG).show();
 			       break;
 		     case 103://УСТАНОВИТЬ ВРЕМЯ ПРИБЫТИЯ
+		    	 this.flg_numorder = v.getId()-i*10000000;
 		    	 showDialog(DIALOG_INSTALL_TIME_IN);
 		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Установить время прибытия'" , Toast.LENGTH_LONG).show();
 			       break;
 		     case 104://КИЛОМЕТРЫ
+		    	 this.flg_numorder = v.getId()-i*10000000;
 		    	 showDialog(DIALOG_KM_BEG);
 		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Километры'" , Toast.LENGTH_LONG).show();
 			       break;
 		     case 105://ТАКСИ ПРИБЫЛО
+		    	 dic.setNumOrder(v.getId()-i*10000000);
+		    	 LGWR.logwriter(dic.logcom, dic.logpath,"case 105:"+dic.getNumOrder());
 		    	 showDialog(DIALOG_TAXI);
-		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Такси прибыло'" , Toast.LENGTH_LONG).show();
+		    	 Toast.makeText(this, ""+(v.getId()-i*10000000) , Toast.LENGTH_LONG).show();
 			       break;
-		     case 100://ВЗЯТЬ ОСВОБОДИТЬ ЗАЯВКУ
-		    	 //showDialog(DIALOG_TAXI);
+		     case 100://ВЗЯТЬ  ЗАЯВКУ
+		    	 this.flg_numorder = (v.getId()-1000000000);
 		    	 Toast.makeText(this, "Заявка № "+(v.getId()-1000000000) , Toast.LENGTH_LONG).show();
 			       break;
-		     case -100://ВЗЯТЬ ОСВОБОДИТЬ ЗАЯВКУ
-		    	 //showDialog(DIALOG_TAXI);
+		     case -100:// ОСВОБОДИТЬ ЗАЯВКУ
+		    	 this.flg_numorder = Math.abs((v.getId()-1000000000));
 		    	 Toast.makeText(this, "Заявка № "+(v.getId()+1000000000) , Toast.LENGTH_LONG).show();
 			       break;
 
