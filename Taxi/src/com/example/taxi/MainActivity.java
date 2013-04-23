@@ -31,7 +31,6 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
-//import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -94,7 +93,9 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     public static int flg_refreshdata=0;
     public static int flg_refreshclock=0;
     public static int flg_numorder=0;
-    //Button btn1;
+    public static Date flg_gps_date_beg;
+    public static Date flg_gps_date_end;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -204,6 +205,18 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			            });
     			        }
     			    }).start();
+    			 
+    		     Date currentTime = new Date(); // Текущая дата
+    		     Date anotherTime = new Date();
+    		     anotherTime.setTime(currentTime.getTime() + dic.getGpsPerFresh()); // + 2 часа 30 минут
+    		     long ms;
+    		     if (currentTime.before(anotherTime)) {
+    		     ms = anotherTime.getTime() - currentTime.getTime();
+    		     } else {
+    		     ms = currentTime.getTime() - anotherTime.getTime();
+    		     }
+    		      
+    		     System.out.println(ms);
 
         /*
 		rsltTXT = (TextView) findViewById(R.id.rsltTXT);

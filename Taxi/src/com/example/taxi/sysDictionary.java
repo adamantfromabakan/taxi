@@ -78,10 +78,6 @@ CornflowerBlue	#6495ED
 		return numorder;
 	}
 	
-	public int getPerFreshOrder() {
-		return orderfreshper;
-	}
-	
 	public void setServerTaxi(String vl) {
 		ServerTaxi=vl;
 	}
@@ -193,6 +189,17 @@ CornflowerBlue	#6495ED
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
         String strTime = simpleDateFormat.format(new Date());
         return strTime;
+	}
+	
+	public int getPerFreshOrder() {
+		return orderfreshper;
+	}
+
+	public int getGpsPerFresh() {
+		return gpsperfresh;
+	}
+	public int getGpsIdleFresh() {
+		return gpsidlefresh;
 	}
 	
 }
