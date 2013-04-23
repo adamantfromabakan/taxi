@@ -5,6 +5,8 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.example.taxi.R.color;
 
@@ -20,6 +22,7 @@ import android.graphics.Point;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.TypedValue;
@@ -89,7 +92,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     public String strdriver = null;
     public static int flg_refreshdata=0;
     public static int flg_refreshclock=0;
-    public int flg_numorder=0;
+    public static int flg_numorder=0;
     //Button btn1;
 	
 	@Override
@@ -146,6 +149,26 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         cmdOrderhead();
         cmdOrderlist();
 
+
+    			 TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
+    			 Button btn = (Button) tablehead.findViewById(1060000000);
+    			 btn.setText(dic.getSysdate()); 
+    			 
+    			 Timer myTimer = new Timer(); // Создаем таймер
+    			 final Handler uiHandler = new Handler();
+    			 final Button txtResult = (Button)findViewById(1060000000);
+    			 myTimer.schedule(new TimerTask() { // Определяем задачу
+    			     @Override
+    			     public void run() {
+    			         final String result = dic.getSysdate();
+    			         uiHandler.post(new Runnable() {
+    			             @Override
+    			             public void run() {
+    			                 txtResult.setText(result);
+    			             }
+    			         });
+    			     };
+    			 }, 0L, 1L * 1000);
        
         //btn1 = (Button) findViewById(10000000);
         /*
@@ -1208,7 +1231,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	}
 
 	 
-	protected Dialog onCreateDialog(int id) {
+	public Dialog onCreateDialog(int id) {
 		if (id == DIALOG_TIME) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
 	        adb.setTitle(R.string.DIALOG_TITLE);
@@ -1309,13 +1332,14 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        return adb.create();
 		}
 		if (id == DIALOG_TAXI) {
-	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle("Заявка "+dic.getNumOrder());
+	        AlertDialog.Builder adb = new AlertDialog.Builder(MainActivity.this);
+	        adb.setTitle("Заявка "+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_TAXI);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
 	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrTAXI);
 	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrTAXI);
-	        LGWR.logwriter(dic.logcom, dic.logpath,"dialog:"+dic.getNumOrder());
+	        Log.d(TAG,"dialog:"+this.flg_numorder);
+	        //LGWR.logwriter(dic.logcom, dic.logpath,"dialog:"+dic.getNumOrder());
 	        return adb.create();
 		}
 	    if (id == DIALOG_EXIT) {
@@ -1407,7 +1431,7 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 OnClickListener lsnrTAXI = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_POSITIVE: 	Log.d(TAG,"dialog:"+MainActivity.flg_numorder);     break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrlExit = new OnClickListener() {
@@ -1499,8 +1523,10 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Километры'" , Toast.LENGTH_LONG).show();
 			       break;
 		     case 105://ТАКСИ ПРИБЫЛО
-		    	 dic.setNumOrder(v.getId()-i*10000000);
-		    	 LGWR.logwriter(dic.logcom, dic.logpath,"case 105:"+dic.getNumOrder());
+		    	 this.flg_numorder=v.getId()-i*10000000;
+		    	 //dic.setNumOrder(v.getId()-i*10000000);
+		    	 //LGWR.logwriter(dic.logcom, dic.logpath,"case 105:"+dic.getNumOrder());
+		    	 Log.d(TAG,"case 105:"+this.flg_numorder);
 		    	 showDialog(DIALOG_TAXI);
 		    	 Toast.makeText(this, ""+(v.getId()-i*10000000) , Toast.LENGTH_LONG).show();
 			       break;
