@@ -14,8 +14,8 @@
 		<string name="DIALOG_REFRESH">\nХотите обновить список заявок?\n</string>
 		<string name="DIALOG_CALL">\nСоединить вас с оператором?\n</string>
 		<string name="DIALOG_MAP">\nНаходится в разработке...\n</string>
-		<string name="DIALOG_FREE">Вы действительно хотите освободить заявку?</string>
-		<string name="DIALOG_TAKE">Вы действительно хотите принять заявку?</string>
+		<string name="DIALOG_FREE">\nВы действительно хотите освободить заявку?\n</string>
+		<string name="DIALOG_TAKE">\nВы действительно хотите принять заявку?\n</string>
 		<string name="DIALOG_INSTALL_TIME">Использовать текущее время как время подачи?</string>
 		<string name="DIALOG_INSTALL_TIME_OUT">Использовать текущее время как время отъезда?</string>
 		<string name="DIALOG_INSTALL_TIME_IN">Использовать текущее время как время прибытия?</string>

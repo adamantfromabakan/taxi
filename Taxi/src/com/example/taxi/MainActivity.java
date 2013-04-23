@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
@@ -132,14 +133,14 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         //setContentView(R.layout.activity_main);
 
 	             
-        sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
+        sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata","");
+        //sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdataper","");
         dataThready.start();
         LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread DATA:"+dataThready.getId());
-        
-        sysThreads clockThready = new sysThreads(this,dic,LGWR,mSocket,"refreshclock");
-        clockThready.start();
+
+        //sysThreads clockThready = new sysThreads(this,dic,LGWR,mSocket,"refreshclock");
+        //clockThready.start();
        
-        //MainActivity.flg_refreshdata=1;
 			do {
 				try{
 	                Thread.sleep(1000);		
@@ -149,12 +150,13 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         cmdOrderhead();
         cmdOrderlist();
 
+        
 
-    			 TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
+    			 /*TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
     			 Button btn = (Button) tablehead.findViewById(1060000000);
-    			 btn.setText(dic.getSysdate()); 
+    			 btn.setText(dic.getSysdate()); */
     			 
-    			 Timer myTimer = new Timer(); // —ÓÁ‰‡ÂÏ Ú‡ÈÏÂ
+    			 /*Timer myTimer = new Timer(); // —ÓÁ‰‡ÂÏ Ú‡ÈÏÂ
     			 final Handler uiHandler = new Handler();
     			 final Button txtResult = (Button)findViewById(1060000000);
     			 myTimer.schedule(new TimerTask() { // ŒÔÂ‰ÂÎˇÂÏ Á‡‰‡˜Û
@@ -168,9 +170,41 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			             }
     			         });
     			     };
-    			 }, 0L, 1L * 1000);
+    			 }, 0L, 1L * 1000);*/
        
-        //btn1 = (Button) findViewById(10000000);
+    			 Timer myTimer2 = new Timer(); // —ÓÁ‰‡ÂÏ Ú‡ÈÏÂ
+    			 final Handler uiHandler2 = new Handler();
+    			 myTimer2.schedule(new TimerTask() { // ŒÔÂ‰ÂÎˇÂÏ Á‡‰‡˜Û
+    			     @Override
+    			     public void run() {
+    			         uiHandler2.post(new Runnable() {
+    			             @Override
+    			             public void run() {
+    			             	OrderTask ordTask = new OrderTask(); 
+    			            	ordTask.execute();
+    			             }
+    			         });
+    			     };
+    			 }, 1L * dic.getPerFreshOrder(), 1L * dic.getPerFreshOrder());
+    			 
+    			 new Thread(new Runnable() {
+    			        public void run() {
+    			        	TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
+        			        final Button txtResult = (Button) tablehead.findViewById(1060000000);
+    			        	txtResult.post(new Runnable() {
+    			                public void run() {
+    			                	
+    			                	do {
+    			        				try{
+    			        					txtResult.setText(dic.getSysdate());
+    			        	                Thread.sleep(1000);		
+    			        	            }catch(InterruptedException e){}
+    			        			} while(true);
+    			                }
+    			            });
+    			        }
+    			    }).start();
+
         /*
 		rsltTXT = (TextView) findViewById(R.id.rsltTXT);
 		btnGPS = (Button) findViewById(R.id.btnGPS);
@@ -1360,16 +1394,18 @@ OnClickListener lsnrTIME = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	
-	 TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
-	 Button btn = (Button) tablehead.findViewById(1060000000);
-	 btn.setText(dic.getSysdate());
+	TimeTask tmTask = new TimeTask();
+	tmTask.execute();
 	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrREFRESH = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_POSITIVE: 	
+	OrderTask ordTask = new OrderTask(); 
+	ordTask.execute();
+	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrCALL = new OnClickListener() {
@@ -1382,56 +1418,88 @@ OnClickListener lsnrMAP = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	
-	//Toast.makeText(this, " ‡Ú‡", Toast.LENGTH_LONG).show();
 	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrFREE = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_POSITIVE: 	 
+	
+	OrderTask ordTask = new OrderTask(); 
+	ordTask.execute();
+	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrTAKE = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	    break;
+case Dialog.BUTTON_POSITIVE: 	 
+	
+	OrderTask ordTask = new OrderTask(); 
+	ordTask.execute();
+	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrINSTALL_TIME = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_POSITIVE: 	   
+	
+	OrderTask ordTask = new OrderTask(); 
+	ordTask.execute();
+	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrINSTALL_TIME_OUT = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_POSITIVE: 	   
+	
+	OrderTask ordTask = new OrderTask(); 
+	ordTask.execute();
+	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrINSTALL_TIME_IN = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_POSITIVE: 	  
+	
+	OrderTask ordTask = new OrderTask(); 
+	ordTask.execute();
+	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrKMbeg = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_POSITIVE: 	  
+	
+	OrderTask ordTask = new OrderTask(); 
+	ordTask.execute();
+	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrKMend = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_POSITIVE: 	  
+	
+	OrderTask ordTask = new OrderTask(); 
+	ordTask.execute();
+	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrTAXI = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	Log.d(TAG,"dialog:"+MainActivity.flg_numorder);     break;
+case Dialog.BUTTON_POSITIVE: 	
+	
+	Log.d(TAG,"dialog:"+MainActivity.flg_numorder);
+	OrderTask ordTask = new OrderTask(); 
+	ordTask.execute();
+	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrlExit = new OnClickListener() {
@@ -1469,18 +1537,13 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		       break;
 			 case 107://Œ¡ÕŒ¬»“‹
 				 showDialog(DIALOG_REFRESH);
-				 	TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);
+				/* 	TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);
 				 	table.removeAllViewsInLayout();
 
 				 	
 			        sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata");
 			        dataThready.start();
 			        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread DATA:"+dataThready.getId());
-			        //try{
-			        //    Thread.sleep(3000);		
-			        //}catch(InterruptedException e){}
-			        
-			        
 			        
 					do {
 						try{
@@ -1488,7 +1551,7 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 			            }catch(InterruptedException e){}
 					} while(this.flg_refreshdata<1);
 
-		            cmdOrderlist();
+		            cmdOrderlist();*/
 		        
 		       break;
 		     case 108://«¬ŒÕ»“‹ Œœ≈–¿“Œ–”
@@ -1496,7 +1559,6 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		       break;
 		     case 109:// ¿–“¿
 		    	 showDialog(DIALOG_MAP);
-		    	 //Toast.makeText(this, ""+"Õ‡Ê‡Ú‡ ÍÌÓÔÍ‡ ' ‡Ú‡'" , Toast.LENGTH_LONG).show();
 		       break;
 		     case 110://¬€’Œƒ
 		    	 showDialog(DIALOG_EXIT);
@@ -1504,7 +1566,6 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		     case 101://”—“¿ÕŒ¬»“‹ ¬–≈Ãﬂ Œ“ƒ¿◊»
 		    	 this.flg_numorder = v.getId()-i*10000000;
 		    	 showDialog(DIALOG_INSTALL_TIME);
-		    	 //Toast.makeText(this, ""+"Õ‡Ê‡Ú‡ ÍÌÓÔÍ‡ '”ÒÚ‡ÌÓ‚ËÚ¸ ‚ÂÏˇ ÔÓ‰‡˜Ë'" , Toast.LENGTH_LONG).show();
 			       break;
 		     case 102://”—“¿ÕŒ¬»“‹ ¬–≈Ãﬂ Œ“⁄≈«ƒ¿
 		    	 this.flg_numorder = v.getId()-i*10000000;
@@ -1515,26 +1576,28 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		     case 103://”—“¿ÕŒ¬»“‹ ¬–≈Ãﬂ œ–»¡€“»ﬂ
 		    	 this.flg_numorder = v.getId()-i*10000000;
 		    	 showDialog(DIALOG_INSTALL_TIME_IN);
-		    	 //Toast.makeText(this, ""+"Õ‡Ê‡Ú‡ ÍÌÓÔÍ‡ '”ÒÚ‡ÌÓ‚ËÚ¸ ‚ÂÏˇ ÔË·˚ÚËˇ'" , Toast.LENGTH_LONG).show();
 			       break;
 		     case 104:// »ÀŒÃ≈“–€
 		    	 this.flg_numorder = v.getId()-i*10000000;
 		    	 showDialog(DIALOG_KM_BEG);
-		    	 //Toast.makeText(this, ""+"Õ‡Ê‡Ú‡ ÍÌÓÔÍ‡ ' ËÎÓÏÂÚ˚'" , Toast.LENGTH_LONG).show();
 			       break;
 		     case 105://“¿ —» œ–»¡€ÀŒ
 		    	 this.flg_numorder=v.getId()-i*10000000;
-		    	 //dic.setNumOrder(v.getId()-i*10000000);
-		    	 //LGWR.logwriter(dic.logcom, dic.logpath,"case 105:"+dic.getNumOrder());
 		    	 Log.d(TAG,"case 105:"+this.flg_numorder);
 		    	 showDialog(DIALOG_TAXI);
 		    	 Toast.makeText(this, ""+(v.getId()-i*10000000) , Toast.LENGTH_LONG).show();
 			       break;
 		     case 100://¬«ﬂ“‹  «¿ﬂ¬ ”
+		    		OrderTask ordTask1 = new OrderTask(); 
+		    		ordTask1.execute();
+		    	 //showDialog(DIALOG_TAKE);
 		    	 this.flg_numorder = (v.getId()-1000000000);
 		    	 Toast.makeText(this, "«‡ˇ‚Í‡ π "+(v.getId()-1000000000) , Toast.LENGTH_LONG).show();
 			       break;
 		     case -100:// Œ—¬Œ¡Œƒ»“‹ «¿ﬂ¬ ”
+		    		OrderTask ordTask2 = new OrderTask(); 
+		    		ordTask2.execute();
+		    	 //showDialog(DIALOG_FREE);
 		    	 this.flg_numorder = Math.abs((v.getId()-1000000000));
 		    	 Toast.makeText(this, "«‡ˇ‚Í‡ π "+(v.getId()+1000000000) , Toast.LENGTH_LONG).show();
 			       break;
@@ -1543,6 +1606,66 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 			
 		}
 	
+	 class TimeTask extends AsyncTask<Void, Void, String> {
+	        
+	        @Override
+	        protected String doInBackground(Void... noargs) {
+	            return dic.getSysdate();
+	        }
 
+	        @Override
+	        protected void onPostExecute(String result) {
+	        	final Button txtResult = (Button)findViewById(1060000000);
+	            txtResult.setText(result);
+	        }
+	    }
 
+	 class OrderTask extends AsyncTask<Void, Void, String> {
+	        
+	        @Override
+	        protected String doInBackground(Void... noargs) {
+	            sysThreads dataThready = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"refreshdata","");
+	            dataThready.start();
+	            return dic.getSysdate();
+	        }
+
+	        @Override
+	        protected void onPostExecute(String result) {
+	        	TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);
+			 	table.removeAllViewsInLayout();
+		        
+		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread AsyncTask:OrderTask");
+		        
+				do {
+					try{
+		                Thread.sleep(1000);		
+		            }catch(InterruptedException e){}
+				} while(MainActivity.flg_refreshdata<1);
+
+	            cmdOrderlist();
+	        }
+	    }
+
+	 class OrderFillTask extends AsyncTask<Void, Void, String> {
+	        
+	        @Override
+	        protected String doInBackground(Void... noargs) {
+	        	TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);
+			 	table.removeAllViewsInLayout();
+		        
+		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread AsyncTask:OrderTask");
+				do {
+					try{
+		                Thread.sleep(1000);		
+		            }catch(InterruptedException e){}
+				} while(MainActivity.flg_refreshdata<1);
+	            cmdOrderlist();
+	            return dic.getSysdate();
+	        }
+
+	        @Override
+	        protected void onPostExecute(String result) {
+
+	        }
+	    }	 
 }

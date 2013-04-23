@@ -2,9 +2,12 @@ package com.example.taxi;
 
 import java.util.List;
 
+import com.example.taxi.MainActivity.TimeTask;
+
 import android.content.Context;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -24,7 +27,7 @@ public class sysThreads extends Thread implements Runnable  {
 	public LocationListener mLocationListener;	
     public int vl=0; 
 	
-    public sysThreads(MainActivity MA, sysDictionary dic,sysLog LGWR,SocketTAXI mSocket, String cmd) {
+    public sysThreads(MainActivity MA, sysDictionary dic,sysLog LGWR,SocketTAXI mSocket, String cmd, String log) {
     	this.MA=MA;
     	this.dic=dic;
     	this.LGWR=LGWR;
@@ -57,22 +60,30 @@ public class sysThreads extends Thread implements Runnable  {
     				MainActivity.flg_refreshdata=1;
     				}
     				
-    				if (cmd=="refreshclock") {
+    				if (cmd=="refreshdataper") {
+        				MainActivity.flg_refreshdata=0;
+        				SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
+        				List<clsOrders> list = mSocket.ServerPutCmdOrders(dic.getUid(),dic.getServerTaxi(), dic.getServerTaxiPortCMD(),"imei:"+dic.getUid()+":orders_list,quit;");
+        				List<clsDriverInfo> driver = mSocket.ServerPutCmdDriverInfo(dic.getUid(),dic.getServerTaxi(), dic.getServerTaxiPortCMD(),"imei:"+dic.getUid()+":driver_info,quit;");
+        				List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(dic.getUid(),dic.getServerTaxi(), dic.getServerTaxiPortCMD(),"imei:"+dic.getUid()+":car_info,quit;");
+        				MainActivity.list=list;
+        				MainActivity.driver=driver;
+        				MainActivity.car=car;
+        				vl=1;
+        				MainActivity.flg_refreshdata=1;
+        				try {
+        				Thread.sleep(dic.getPerFreshOrder());
+        				}catch(InterruptedException e){}
+        				}
+    				
+    				if (cmd=="logwrite") {
     					if (MainActivity.flg_refreshclock<1) {
     						MainActivity.flg_refreshclock=1;
     					do {
     						try{
-    					    	// TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
-    					    	// Button btn = (Button) tablehead.findViewById(10000000);
-    					    	// btn.setText(dic.getSysdate());
+
     							MainActivity.Sysdate=dic.getSysdate();
-    							
-    							//Button btn1 = (Button) MA.findViewById(10000000);
-    							//btn1.setText(dic.getSysdate());
-    							//Log.d(TAG, btn1.getText().toString());
-    							//((Button) MA.findViewById(10000000)).setText(dic.getSysdate());
-    								//	MA.btn1.setText("");
-    									//
+    
     	    	                Thread.sleep(1000);		
     	    	            }catch(InterruptedException e){}
     					} while(true);
@@ -92,6 +103,10 @@ public class sysThreads extends Thread implements Runnable  {
     	    	            }catch(InterruptedException e){}
     					} while(true);
     				} 
+    				
+    				if (cmd=="logwrite"){
+
+    				} 
     					//SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
         		        //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         		        //mLocationListener = new GPSLocationListener(dic, LGWR, mSocket); 
@@ -110,4 +125,6 @@ public class sysThreads extends Thread implements Runnable  {
     			return;}
     	} while(true);*/
 	    }
+    
+   
 }

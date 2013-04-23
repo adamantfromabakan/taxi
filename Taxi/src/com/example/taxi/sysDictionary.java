@@ -13,6 +13,9 @@ public class sysDictionary {
 	public int ServerTaxiPortCMD=35572;
 	public String Uid;
 	public int numorder=0;
+	public int orderfreshper=30*1000;
+	public int gpsperfresh=10*1000;
+	public int gpsidlefresh=600*1000;
 	public String logpath = "/taxi1/logs/";
 	public String loggps = "taxi-log-gps.log";
 	public String logcmd = "taxi-log-cmd.log";
@@ -74,6 +77,11 @@ CornflowerBlue	#6495ED
 	public int getNumOrder() {
 		return numorder;
 	}
+	
+	public int getPerFreshOrder() {
+		return orderfreshper;
+	}
+	
 	public void setServerTaxi(String vl) {
 		ServerTaxi=vl;
 	}

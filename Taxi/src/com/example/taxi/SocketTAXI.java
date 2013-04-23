@@ -19,6 +19,7 @@ import android.widget.Toast;
 public class SocketTAXI {
 	sysDictionary dic;
 	sysLog LGWR;
+	
 	private static final String TAG = "SocketTAXI";
 	
 	
@@ -31,10 +32,9 @@ public class SocketTAXI {
 	public void ServerPutGPS(String uid,String toServer,int toServerPort, String ALT, String LAT, String LGT, String SPD)
 	{
      
-				//SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
-		        //String strTime = simpleDateFormat.format(new Date());
+
 		        String strconnect = "imei:"+uid+",tracker,"+dic.getSysdateGps()+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,"+SPD+";";
-		        Log.d(TAG, "GPS:"+strconnect);
+		        //Log.d(TAG, "GPS:"+strconnect);
 		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + strconnect);
 
 				try {
@@ -83,7 +83,6 @@ public class SocketTAXI {
 	
 	public List<clsOrders> ServerPutCmdOrders(String uid,String toServer,int toServerPort, String cmdOrders)
 	{  List<clsOrders> list = new ArrayList<clsOrders>();
-	    //LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ uid + " " + toServer);
 		try
         {
 			Socket s = new Socket(toServer, toServerPort);
@@ -92,7 +91,6 @@ public class SocketTAXI {
 
             String str_command = cmdOrders+"\n";
             s.getOutputStream().write(str_command.getBytes());
-               
             String line = null;
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF8"),16384);
             StringBuilder responseData = new StringBuilder();
@@ -116,7 +114,7 @@ public class SocketTAXI {
             } 
             
             Log.d(TAG, "Данные от сервера по ServerPutCmdOrders получены");
-            LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + cmdOrders);
+			LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + cmdOrders);
             
         } catch(Exception e)  {    
         	Log.d(TAG, e.toString());
