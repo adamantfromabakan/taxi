@@ -20,19 +20,22 @@ public class sysThreads extends Thread implements Runnable  {
 	SocketTAXI mSocket;
 	MainActivity MA;
 	String cmd;
+	String cmdsock;
 	public List<clsOrders> list;
     public List<clsDriverInfo> driver;
     public List<clsCarInfo> car;
 	public LocationManager locationManager;
 	public LocationListener mLocationListener;	
     public int vl=0; 
+    
 	
-    public sysThreads(MainActivity MA, sysDictionary dic,sysLog LGWR,SocketTAXI mSocket, String cmd, String log) {
+    public sysThreads(MainActivity MA, sysDictionary dic,sysLog LGWR,SocketTAXI mSocket, String cmd, String cmdsock) {
     	this.MA=MA;
     	this.dic=dic;
     	this.LGWR=LGWR;
     	this.mSocket=mSocket;
     	this.cmd=cmd;
+    	this.cmdsock=cmdsock;
 	}
     
     public void finish()
@@ -43,10 +46,9 @@ public class sysThreads extends Thread implements Runnable  {
     @Override
 	   public void run()		
 	    {
-    	/*do {
-    		if(!mFinish) {
+
     			try {
-    				if (vl<1) {*/
+
     				if (cmd=="refreshdata") {
     				MainActivity.flg_refreshdata=0;
     				SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
@@ -76,7 +78,7 @@ public class sysThreads extends Thread implements Runnable  {
         				}catch(InterruptedException e){}
         				}
     				
-    				if (cmd=="logwrite") {
+    				if (cmd=="refreshclock") {
     					if (MainActivity.flg_refreshclock<1) {
     						MainActivity.flg_refreshclock=1;
     					do {
@@ -90,40 +92,17 @@ public class sysThreads extends Thread implements Runnable  {
     					}
     				}
     				
-    				if (cmd=="gps"){
-    					do {
-    						try{
-    							//MainActivity.btn1.setText(dic.getSysdate());
-    							//MainActivity.Sysdate=dic.getSysdate();
-    							//Button btn1 = (Button) MA.findViewById(10000000);
-    							//btn1.setText(dic.getSysdate());
-    							
-    							
-    	    	                Thread.sleep(1000);		
-    	    	            }catch(InterruptedException e){}
-    					} while(true);
+    				if (cmd=="cmdsocket"){
+    							SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
+    							mSocket.ServerPutCMD(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortCMD(), cmdsock);
     				} 
     				
-    				if (cmd=="logwrite"){
 
-    				} 
-    					//SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
-        		        //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        		        //mLocationListener = new GPSLocationListener(dic, LGWR, mSocket); 
-
-
-    				/*}
-    				
-    				try{
-    	                Thread.sleep(1000);		
-    	            }catch(InterruptedException e){}
     			} catch (Exception e) {
     				Log.d(TAG, e.toString());
-    				LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - " + TAG + ":run " + e.toString());
+    				LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - " + TAG + ":run sysThreads " + e.toString());
     			}
-    		} else {
-    			return;}
-    	} while(true);*/
+
 	    }
     
    

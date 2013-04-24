@@ -141,7 +141,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 
         //sysThreads clockThready = new sysThreads(this,dic,LGWR,mSocket,"refreshclock");
         //clockThready.start();
-       
+
 			do {
 				try{
 	                Thread.sleep(1000);		
@@ -1327,7 +1327,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		}
 		if (id == DIALOG_INSTALL_TIME) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle("«‡ˇ‚Í‡ "+this.flg_numorder);
+	        adb.setTitle("«‡ˇ‚Í‡ ");//+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_INSTALL_TIME);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
 	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrINSTALL_TIME);
@@ -1336,7 +1336,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		}
 		if (id == DIALOG_INSTALL_TIME_OUT) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle("«‡ˇ‚Í‡ "+this.flg_numorder);
+	        adb.setTitle("«‡ˇ‚Í‡ ");//+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_INSTALL_TIME_OUT);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
 	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrINSTALL_TIME_OUT);
@@ -1345,7 +1345,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		}
 		if (id == DIALOG_INSTALL_TIME_IN) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle("«‡ˇ‚Í‡ "+this.flg_numorder);
+	        adb.setTitle("«‡ˇ‚Í‡ ");//+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_INSTALL_TIME_IN);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
 	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrINSTALL_TIME_IN);
@@ -1354,7 +1354,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		}
 		if (id == DIALOG_KM_BEG) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle("«‡ˇ‚Í‡ "+this.flg_numorder);
+	        adb.setTitle("«‡ˇ‚Í‡ ");//+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_KM_BEG);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
 	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrKMbeg);
@@ -1363,7 +1363,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		}
 		if (id == DIALOG_KM_END) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle("«‡ˇ‚Í‡ "+this.flg_numorder);
+	        adb.setTitle("«‡ˇ‚Í‡ ");//+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_KM_BEG);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
 	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrKMend);
@@ -1372,7 +1372,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		}
 		if (id == DIALOG_TAXI) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(MainActivity.this);
-	        adb.setTitle("«‡ˇ‚Í‡ "+this.flg_numorder);
+	        adb.setTitle("«‡ˇ‚Í‡ ");//+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_TAXI);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
 	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrTAXI);
@@ -1450,7 +1450,10 @@ OnClickListener lsnrINSTALL_TIME = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	   
-	
+    sysThreads cmdThready1 = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"cmdsocket","orders_"+MainActivity.flg_numorder+"_driver_wait;");
+    cmdThready1.start();
+    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready1.getId());
+
 	OrderTask ordTask = new OrderTask(); 
 	ordTask.execute();
 	break;
@@ -1460,7 +1463,10 @@ OnClickListener lsnrINSTALL_TIME_OUT = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	   
-	
+	sysThreads cmdThready1 = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"cmdsocket","orders_"+MainActivity.flg_numorder+"_driver_away;");
+    cmdThready1.start();
+    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready1.getId());
+
 	OrderTask ordTask = new OrderTask(); 
 	ordTask.execute();
 	break;
@@ -1470,7 +1476,10 @@ OnClickListener lsnrINSTALL_TIME_IN = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	  
-	
+	sysThreads cmdThready1 = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"cmdsocket","orders_"+MainActivity.flg_numorder+"_driver_complete;");
+    cmdThready1.start();
+    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready1.getId());
+
 	OrderTask ordTask = new OrderTask(); 
 	ordTask.execute();
 	break;
@@ -1481,8 +1490,8 @@ public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	  
 	
-	OrderTask ordTask = new OrderTask(); 
-	ordTask.execute();
+	//OrderTask ordTask = new OrderTask(); 
+	//ordTask.execute();
 	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
@@ -1491,8 +1500,8 @@ public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	  
 	
-	OrderTask ordTask = new OrderTask(); 
-	ordTask.execute();
+	//OrderTask ordTask = new OrderTask(); 
+	//ordTask.execute();
 	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
@@ -1500,8 +1509,11 @@ OnClickListener lsnrTAXI = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	
-	
-	Log.d(TAG,"dialog:"+MainActivity.flg_numorder);
+	sysThreads cmdThready1 = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"cmdsocket","orders_"+MainActivity.flg_numorder+"_driver_call_auto;");
+    cmdThready1.start();
+    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready1.getId());
+
+	//Log.d(TAG,"dialog:"+MainActivity.flg_numorder);
 	OrderTask ordTask = new OrderTask(); 
 	ordTask.execute();
 	break;
@@ -1576,8 +1588,6 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		     case 102://”—“¿ÕŒ¬»“‹ ¬–≈Ãﬂ Œ“⁄≈«ƒ¿
 		    	 this.flg_numorder = v.getId()-i*10000000;
 		    	 showDialog(DIALOG_INSTALL_TIME_OUT);
-		    	 
-		    	 Toast.makeText(this, ""+v.getId()+" "+i , Toast.LENGTH_LONG).show();
 			       break;
 		     case 103://”—“¿ÕŒ¬»“‹ ¬–≈Ãﬂ œ–»¡€“»ﬂ
 		    	 this.flg_numorder = v.getId()-i*10000000;
@@ -1589,25 +1599,27 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 			       break;
 		     case 105://“¿ —» œ–»¡€ÀŒ
 		    	 this.flg_numorder=v.getId()-i*10000000;
-		    	 Log.d(TAG,"case 105:"+this.flg_numorder);
+		    	 //Log.d(TAG,"case 105:"+this.flg_numorder);
 		    	 showDialog(DIALOG_TAXI);
-		    	 Toast.makeText(this, ""+(v.getId()-i*10000000) , Toast.LENGTH_LONG).show();
 			       break;
 		     case 100://¬«ﬂ“‹  «¿ﬂ¬ ”
+		    	 this.flg_numorder = (v.getId()-1000000000);
+		         sysThreads cmdThready1 = new sysThreads(this,dic,LGWR,mSocket,"cmdsocket","orders_"+this.flg_numorder+"_accept;");
+		         cmdThready1.start();
+		         LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready1.getId());
 		    		OrderTask ordTask1 = new OrderTask(); 
 		    		ordTask1.execute();
 		    	 //showDialog(DIALOG_TAKE);
-		    	 this.flg_numorder = (v.getId()-1000000000);
-		    	 Toast.makeText(this, "«‡ˇ‚Í‡ π "+(v.getId()-1000000000) , Toast.LENGTH_LONG).show();
 			       break;
 		     case -100:// Œ—¬Œ¡Œƒ»“‹ «¿ﬂ¬ ”
-		    		OrderTask ordTask2 = new OrderTask(); 
-		    		ordTask2.execute();
-		    	 //showDialog(DIALOG_FREE);
 		    	 this.flg_numorder = Math.abs((v.getId()-1000000000));
-		    	 Toast.makeText(this, "«‡ˇ‚Í‡ π "+(v.getId()+1000000000) , Toast.LENGTH_LONG).show();
-			       break;
-
+		         //sysThreads cmdThready2 = new sysThreads(this,dic,LGWR,mSocket,"cmdsocket","orders_"+this.flg_numorder+"_accept;");
+		         //cmdThready2.start();
+		         //LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready2.getId());
+		    	 OrderTask ordTask2 = new OrderTask(); 
+		    	 ordTask2.execute();
+		    	 //showDialog(DIALOG_FREE);
+				   break;
 			}
 			
 		}

@@ -35,7 +35,7 @@ public class SocketTAXI {
 
 		        String strconnect = "imei:"+uid+",tracker,"+dic.getSysdateGps()+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,"+SPD+";";
 		        //Log.d(TAG, "GPS:"+strconnect);
-		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + strconnect);
+		        LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + strconnect);
 
 				try {
 		            		            
@@ -52,15 +52,15 @@ public class SocketTAXI {
 
 		    }catch (Exception e) {
 		    	Log.d(TAG, e.toString());
-		    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - " + TAG + ":ServerPutGPS " + e.toString());
+		    	LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - " + TAG + ":ServerPutGPS " + e.toString());
 		    }
 	}
 	
 	public void ServerPutCMD(String uid,String toServer,int toServerPort, String CMD)
 	{
-   		        String strCMD = "imei:"+uid+":"+CMD;
+   		        String strCMD = "imei:"+uid+":"+CMD+"\n";
 		        Log.d(TAG, "CMD:"+strCMD);
-		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + strCMD);
+		        LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + strCMD);
 
 				try {
 		            		            
@@ -77,7 +77,7 @@ public class SocketTAXI {
 
 		    }catch (Exception e) {
 		    	Log.d(TAG, e.toString());
-		    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - " + TAG + ":ServerPutGPS " + e.toString());
+		    	LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - " + TAG + ":ServerPutGPS " + e.toString());
 		    }
 	}
 	
@@ -114,11 +114,11 @@ public class SocketTAXI {
             } 
             
             Log.d(TAG, "Данные от сервера по ServerPutCmdOrders получены");
-			LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + cmdOrders);
+			LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + cmdOrders);
             
         } catch(Exception e)  {    
         	Log.d(TAG, e.toString());
-        	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":ServerPutCmdOrders " + e.toString());
+        	LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ":ServerPutCmdOrders " + e.toString());
         	}
 		
 		return list;
@@ -151,11 +151,11 @@ public class SocketTAXI {
             } 
 
             Log.d(TAG, "Данные от сервера по ServerPutCmdDriverInfo получены");
-            LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + cmdOrders);
+            LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + cmdOrders);
             
         } catch(Exception e)  {    
         	Log.d(TAG, e.toString());
-        	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":ServerPutCmdDriverInfo " + e.toString());
+        	LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ":ServerPutCmdDriverInfo " + e.toString());
         	}
 		
 		return list;
@@ -188,11 +188,11 @@ public class SocketTAXI {
             } 
 
             Log.d(TAG, "Данные от сервера по ServerPutCmdCarInfo получены");
-            LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + cmdOrders);
+            LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + cmdOrders);
             
         } catch(Exception e)  {    
         	Log.d(TAG, e.toString());
-        	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":ServerPutCmdCarInfo " + e.toString());
+        	LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ":ServerPutCmdCarInfo " + e.toString());
         	}
 		
 		return list;
