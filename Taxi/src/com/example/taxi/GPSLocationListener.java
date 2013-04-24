@@ -35,8 +35,7 @@ public class GPSLocationListener implements LocationListener {
 	@Override
     public void onLocationChanged(Location loc) {
 		try {
-		//SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
-        //String strTime = simpleDateFormat.format(new Date());
+		MainActivity.flg_gps_date_end=new Date();
         loc.getLatitude();
         loc.getLongitude();
         String txt = "Текущее местоположение: "+"\nLatitud = "+loc.getLatitude()+"\nLongitud = "+loc.getLongitude()+"\nAltitud = "+loc.getAltitude();
@@ -57,55 +56,58 @@ public class GPSLocationListener implements LocationListener {
         LAT=""+tmpLAT;
 		LGT=""+tmpLGT;
 		ALT=""+tmpALT;
-		//SocketTAXI mSocket = new SocketTAXI();
 
-		if (LAT!=MainActivity.LAT && LGT!=MainActivity.LGT) {
-		//LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"imei:"+dic.getUid()+",tracker,"+strTime+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,0;");
-		//mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT);
 		Thread gpsThready = new Thread(new Runnable()
         	{
             public void run()
             	{
-            	if (LAT!=MainActivity.LAT && LGT!=MainActivity.LGT) {
             		SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
-            		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"imei:"+dic.getUid()+",tracker,"+dic.getSysdateGps()+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,"+SPD+";");
+            		LGWR.logwriter(dic.loggps+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"imei:"+dic.getUid()+",tracker,"+dic.getSysdateGps()+",,F,"+ALT+",A,"+LAT+",N,"+LGT+",E,"+SPD+";");
             		mSocket.ServerPutGPS(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortGPS(),ALT,LAT,LGT,SPD);
-            		MainActivity.LAT=LAT;
-            		MainActivity.LGT=LGT;
-            		MainActivity.ALT=ALT;
-            		}
             	}
         	});
-
-		gpsThready.start();
-		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread GPS:"+gpsThready.getId());
+		
+		long dtdiff=(MainActivity.flg_gps_date_end.getTime()-MainActivity.flg_gps_date_beg.getTime());
+		if (LAT.equals(MainActivity.LAT) && LGT.equals(MainActivity.LGT)) {
+			//System.out.println("idle");
+			if (dtdiff>dic.getGpsIdleFresh()) {
+				gpsThready.start();
+				LGWR.logwriter(dic.loggps+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread GPS:"+gpsThready.getId());
+				MainActivity.flg_gps_date_beg=MainActivity.flg_gps_date_end;
+			}
+			} else {
+			if (dtdiff>dic.getGpsPerFresh()) {
+				gpsThready.start();
+				LGWR.logwriter(dic.loggps+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread GPS:"+gpsThready.getId());
+				MainActivity.flg_gps_date_beg=MainActivity.flg_gps_date_end;
+			}
+		}	
+		//System.out.println( ""+" "+dtdiff+" "+dic.getGpsPerFresh()+" "+LAT.trim()+" "+MainActivity.LAT.trim()+" "+LGT+" "+MainActivity.LGT );
+		//System.out.println( ""+" "+LAT.trim().equals(MainActivity.LAT.trim()));
 		MainActivity.LAT=LAT;
 		MainActivity.LGT=LGT;
 		MainActivity.ALT=ALT;
-		
-		}
-		
 		} catch(Exception e)  {    
         	Log.d(TAG, e.toString());
-        	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":onLocationChanged " + e.toString());
+        	LGWR.logwriter(dic.loggps+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ":onLocationChanged " + e.toString());
         	}
 	    
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps Off!");
+    	LGWR.logwriter(dic.loggps+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps Off!");
     }
 
 
 
 	@Override
     public void onProviderEnabled(String provider) {
-		LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps On!");
+		LGWR.logwriter(dic.loggps+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps On!");
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-    	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps status change!");
+    	LGWR.logwriter(dic.loggps+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps status change!");
     }
 }

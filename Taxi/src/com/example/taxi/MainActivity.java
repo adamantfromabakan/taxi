@@ -206,6 +206,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			        }
     			    }).start();
     			 
+    			 flg_gps_date_beg=new Date();
+    			 flg_gps_date_end=new Date();
     		     Date currentTime = new Date(); // Текущая дата
     		     Date anotherTime = new Date();
     		     anotherTime.setTime(currentTime.getTime() + dic.getGpsPerFresh()); // + 2 часа 30 минут

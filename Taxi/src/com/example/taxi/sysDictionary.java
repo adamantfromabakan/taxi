@@ -17,7 +17,9 @@ public class sysDictionary {
 	public int gpsperfresh=10*1000;
 	public int gpsidlefresh=600*1000;
 	public String logpath = "/taxi1/logs/";
-	public String loggps = "taxi-log-gps.log";
+	public String logtype = ".log";
+	public String loggps = "taxi-log-gps";
+	public String logsock = "taxi-log-sock";
 	public String logcmd = "taxi-log-cmd.log";
 	public String logcom = "taxi-log-common.log";
 	public String logerr = "taxi-log-error.log";
@@ -187,6 +189,12 @@ CornflowerBlue	#6495ED
 	}
 	public String getSysdateGps() {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddHHmm");
+        String strTime = simpleDateFormat.format(new Date());
+        return strTime;
+	}
+	
+	public String getSysdateLog() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         String strTime = simpleDateFormat.format(new Date());
         return strTime;
 	}
