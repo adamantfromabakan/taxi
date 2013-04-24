@@ -157,7 +157,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			 Button btn = (Button) tablehead.findViewById(1060000000);
     			 btn.setText(dic.getSysdate()); */
     			 
-    			 /*Timer myTimer = new Timer(); // Создаем таймер
+    			 Timer myTimer = new Timer(); // Создаем таймер
     			 final Handler uiHandler = new Handler();
     			 final Button txtResult = (Button)findViewById(1060000000);
     			 myTimer.schedule(new TimerTask() { // Определяем задачу
@@ -171,7 +171,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			             }
     			         });
     			     };
-    			 }, 0L, 1L * 1000);*/
+    			 }, 0L, 1L * 1000);
        
     			 Timer myTimer2 = new Timer(); // Создаем таймер
     			 final Handler uiHandler2 = new Handler();
@@ -188,7 +188,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			     };
     			 }, 1L * dic.getPerFreshOrder(), 1L * dic.getPerFreshOrder());
     			 
-    			 new Thread(new Runnable() {
+    			 /*new Thread(new Runnable() {
     			        public void run() {
     			        	TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
         			        final Button txtResult = (Button) tablehead.findViewById(1060000000);
@@ -204,21 +204,11 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			                }
     			            });
     			        }
-    			    }).start();
+    			    }).start();*/
     			 
     			 flg_gps_date_beg=new Date();
     			 flg_gps_date_end=new Date();
-    		     Date currentTime = new Date(); // Текущая дата
-    		     Date anotherTime = new Date();
-    		     anotherTime.setTime(currentTime.getTime() + dic.getGpsPerFresh()); // + 2 часа 30 минут
-    		     long ms;
-    		     if (currentTime.before(anotherTime)) {
-    		     ms = anotherTime.getTime() - currentTime.getTime();
-    		     } else {
-    		     ms = currentTime.getTime() - anotherTime.getTime();
-    		     }
-    		      
-    		     System.out.println(ms);
+
 
         /*
 		rsltTXT = (TextView) findViewById(R.id.rsltTXT);
@@ -1539,7 +1529,8 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		//Toast.makeText(this, "Заявка № "+(j) , Toast.LENGTH_LONG).show();
 			switch (i) {
 		     case 106://ВРЕМЯ
-		    	 showDialog(DIALOG_TIME);
+		    	 //showDialog(DIALOG_TIME);
+		    	 
 		    	 //TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
 		    	 //Button btn = (Button) tablehead.findViewById(10000000);
 		    	 //btn.setText(dic.getSysdate());

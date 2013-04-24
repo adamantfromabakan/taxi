@@ -108,6 +108,6 @@ public class GPSLocationListener implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-    	LGWR.logwriter(dic.loggps+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps status change!");
+    	//LGWR.logwriter(dic.loggps+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"Gps status change!");
     }
 }
