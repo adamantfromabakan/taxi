@@ -62,7 +62,7 @@ public class SocketTAXI {
 		        Log.d(TAG, "CMD:"+strCMD);
 		        LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." + strCMD);
 
-				try {
+			try {
 		            		            
 		            PrintWriter in = null;
 		            Socket clientSocketIn = null;
@@ -77,7 +77,7 @@ public class SocketTAXI {
 
 		    }catch (Exception e) {
 		    	Log.d(TAG, e.toString());
-		    	LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - " + TAG + ":ServerPutGPS " + e.toString());
+		    	LGWR.logwriter(dic.logsock+"-"+dic.getSysdateLog()+dic.logtype, dic.logpath, dic.getSysdate()+" - " + TAG + ":ServerPutCMD " + e.toString());
 		    }
 	}
 	
