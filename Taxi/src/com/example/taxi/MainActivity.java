@@ -17,6 +17,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
+import android.content.Intent.ShortcutIconResource;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.LocationListener;
@@ -98,10 +101,14 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     public static int flg_threads=0;
     public static Date flg_gps_date_beg;
     public static Date flg_gps_date_end;
-
+    public static int flg_icon=0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		if (this.flg_icon<1) { 
+			this.flg_icon=1;
+			addshortcut();
+		}
 		// Убираем заголовок
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// Убираем панель уведомлений
@@ -262,17 +269,22 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     
     @Override
     protected void onDestroy() {
-    final int pid = android.os.Process.myPid();
-    android.os.Process.killProcess(pid);
+    //final int pid = android.os.Process.myPid();
+    //android.os.Process.killProcess(pid);
     super.onDestroy();
     } 
     
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(com.example.taxi.R.menu.main, menu);
-		
-		return true;
+		//getMenuInflater().inflate(com.example.taxi.R.menu.main, menu);
+	     // menu.add("menu1");
+	     // menu.add("menu2");
+	     // menu.add("menu3");
+	     // menu.add("menu4");
+	      
+	      return super.onCreateOptionsMenu(menu);
+		//return true;
 	}
 	
 	
@@ -786,7 +798,11 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             rowOrders.setBackgroundColor(Color.YELLOW);
 
             Button Ordersbtn1 = new Button(this);
-            Ordersbtn1.setText("Подача\n"+cell6);
+            if (cell6.trim().length()<1) {
+            	Ordersbtn1.setText("Установить время подачи"); 
+            } else {
+            Ordersbtn1.setText("Подача\n"+cell6); 
+            }
             Ordersbtn1.setBackgroundColor(Color.rgb(69,69,69)); //#454545
             Ordersbtn1.setTextColor(Color.WHITE);
             Ordersbtn1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
@@ -800,7 +816,11 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             //Ordersbtn1.setTypeface(Typeface.DEFAULT_BOLD);
 
             Button Ordersbtn2 = new Button(this);
+            if (cell7.trim().length()<1) {
+            	Ordersbtn2.setText("Установить время отъезда");
+            } else {
             Ordersbtn2.setText("Отъезд\n"+cell7);
+            }
             Ordersbtn2.setBackgroundColor(Color.BLACK);
             Ordersbtn2.setTextColor(Color.WHITE);
             Ordersbtn2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
@@ -815,7 +835,11 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             
 
             Button Ordersbtn3 = new Button(this);
+            if (cell8.trim().length()<1) {
+            	Ordersbtn3.setText("Установить время прибытия");	
+            } else {
             Ordersbtn3.setText("Прибытие\n"+cell8);
+            }
             Ordersbtn3.setBackgroundColor(Color.rgb(69,69,69));
             Ordersbtn3.setTextColor(Color.WHITE);
             Ordersbtn3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
@@ -829,7 +853,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             //Ordersbtn3.setTypeface(Typeface.DEFAULT_BOLD);
 
             Button Ordersbtn4 = new Button(this);
-            Ordersbtn4.setText("Километры");
+            Ordersbtn4.setText("Путь\nкм.");
             Ordersbtn4.setBackgroundColor(Color.BLACK);
             Ordersbtn4.setTextColor(Color.WHITE);
             Ordersbtn4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
@@ -843,7 +867,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             //Ordersbtn4.setTypeface(Typeface.DEFAULT_BOLD);
 
             Button Ordersbtn5 = new Button(this);
-            Ordersbtn5.setText("Такси прибыло");
+            Ordersbtn5.setText("Такси\nприбыло");
             Ordersbtn5.setBackgroundColor(Color.rgb(00, 80, 00));
             Ordersbtn5.setTextColor(Color.WHITE);
             Ordersbtn5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
@@ -870,8 +894,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             rowBtnOrders.addView(Ordersbtn1,paramsB5);
             rowBtnOrders.addView(Ordersbtn2,paramsB5);
             rowBtnOrders.addView(Ordersbtn3,paramsB5);
-            rowBtnOrders.addView(Ordersbtn4,paramsB3);
-            rowBtnOrders.addView(Ordersbtn5,paramsB2);
+            rowBtnOrders.addView(Ordersbtn4,paramsB2);
+            rowBtnOrders.addView(Ordersbtn5,paramsB3);
 
             table.addView(rowBtnOrders,paramsFrame);
         }
@@ -1301,7 +1325,24 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         
 	}
 
-	 
+	public void addshortcut(){
+		Intent shortcutIntent = new Intent();
+		ShortcutIconResource icon = Intent.ShortcutIconResource.fromContext(this, R.drawable.ic_taxi);
+
+		shortcutIntent.setClassName("com.example.taxi", ".MainActivity");
+		shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		shortcutIntent.addCategory(Intent.ACTION_PICK_ACTIVITY);
+		Intent intentSC = new Intent();
+		intentSC.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+		intentSC.putExtra(Intent.EXTRA_SHORTCUT_NAME, "Такси №1");
+		//intentSC.putExtra(Intent.EXTRA_SHORTCUT_ICON,icon);
+		intentSC.putExtra(Intent.EXTRA_SHORTCUT_ICON,BitmapFactory.decodeFile("ic_taxi.png"));
+		intentSC.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+		sendBroadcast(intentSC);
+
+	}
+	
 	public Dialog onCreateDialog(int id) {
 		if (id == DIALOG_TIME) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -1570,8 +1611,11 @@ OnClickListener lsnrlExit = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 
+	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Closing program Taxi1...");
 	MainActivity.myTimer.purge();
 	MainActivity.myTimer2.purge();
+    final int pid = android.os.Process.myPid();
+    android.os.Process.killProcess(pid);
 	finish();    break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
@@ -1690,7 +1734,7 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 	        
 	        @Override
 	        protected String doInBackground(Void... noargs) {
-	            sysThreads dataThready = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"refreshdata","");
+	            sysThreads dataThready = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"refreshdataper","");
 	            dataThready.start();
 	            return dic.getSysdate();
 	        }

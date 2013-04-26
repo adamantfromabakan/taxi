@@ -66,11 +66,11 @@ public class sysThreads extends Thread implements Runnable  {
         				MainActivity.flg_refreshdata=0;
         				SocketTAXI mSocket = new SocketTAXI(dic, LGWR);
         				List<clsOrders> list = mSocket.ServerPutCmdOrders(dic.getUid(),dic.getServerTaxi(), dic.getServerTaxiPortCMD(),"imei:"+dic.getUid()+":orders_list,quit;");
-        				List<clsDriverInfo> driver = mSocket.ServerPutCmdDriverInfo(dic.getUid(),dic.getServerTaxi(), dic.getServerTaxiPortCMD(),"imei:"+dic.getUid()+":driver_info,quit;");
-        				List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(dic.getUid(),dic.getServerTaxi(), dic.getServerTaxiPortCMD(),"imei:"+dic.getUid()+":car_info,quit;");
+        				//List<clsDriverInfo> driver = mSocket.ServerPutCmdDriverInfo(dic.getUid(),dic.getServerTaxi(), dic.getServerTaxiPortCMD(),"imei:"+dic.getUid()+":driver_info,quit;");
+        				//List<clsCarInfo> car = mSocket.ServerPutCmdCarInfo(dic.getUid(),dic.getServerTaxi(), dic.getServerTaxiPortCMD(),"imei:"+dic.getUid()+":car_info,quit;");
         				MainActivity.list=list;
-        				MainActivity.driver=driver;
-        				MainActivity.car=car;
+        				//MainActivity.driver=driver;
+        				//MainActivity.car=car;
         				vl=1;
         				MainActivity.flg_refreshdata=1;
         				try {
