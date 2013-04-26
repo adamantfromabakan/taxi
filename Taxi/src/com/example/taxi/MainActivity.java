@@ -107,7 +107,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	protected void onCreate(Bundle savedInstanceState) {
 		if (this.flg_icon<1) { 
 			this.flg_icon=1;
-			addshortcut();
+			//addshortcut();
 		}
 		// Убираем заголовок
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
