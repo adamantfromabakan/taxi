@@ -90,9 +90,12 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     public static String Sysdate;
     public String strcar = null;
     public String strdriver = null;
+    public static Timer myTimer;
+    public static Timer myTimer2;
     public static int flg_refreshdata=0;
     public static int flg_refreshclock=0;
     public static int flg_numorder=0;
+    public static int flg_threads=0;
     public static Date flg_gps_date_beg;
     public static Date flg_gps_date_end;
 
@@ -133,10 +136,12 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
         //setContentView(R.layout.activity_main);
 
-	             
+        //if this.flg_threads==0
         sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata","");
         //sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdataper","");
         dataThready.start();
+        
+        
         LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread DATA:"+dataThready.getId());
 
         //sysThreads clockThready = new sysThreads(this,dic,LGWR,mSocket,"refreshclock");
@@ -157,7 +162,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			 Button btn = (Button) tablehead.findViewById(1060000000);
     			 btn.setText(dic.getSysdate()); */
     			 
-    			 Timer myTimer = new Timer(); // Создаем таймер
+    			 //Timer myTimer = new Timer(); // Создаем таймер
+        		 myTimer = new Timer(); // Создаем таймер
     			 final Handler uiHandler = new Handler();
     			 final Button txtResult = (Button)findViewById(1060000000);
     			 myTimer.schedule(new TimerTask() { // Определяем задачу
@@ -172,10 +178,11 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			         });
     			     };
     			 }, 0L, 1L * 1000);
+
        
-    			 Timer myTimer2 = new Timer(); // Создаем таймер
+    			 myTimer2 = new Timer();  
     			 final Handler uiHandler2 = new Handler();
-    			 myTimer2.schedule(new TimerTask() { // Определяем задачу
+    			 myTimer2.schedule(new TimerTask() { 
     			     @Override
     			     public void run() {
     			         uiHandler2.post(new Runnable() {
@@ -225,7 +232,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
          LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Interface loaded!");
          
 		}catch (Exception e) {
-			LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":onCreate " + e.toString());
+		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":onCreate " + e.toString());
 
 		}
 	}
@@ -252,6 +259,13 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         
      super.onStart();
     }
+    
+    @Override
+    protected void onDestroy() {
+    final int pid = android.os.Process.myPid();
+    android.os.Process.killProcess(pid);
+    super.onDestroy();
+    } 
     
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -327,7 +341,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 				addRowTitle(table);
 	 		    for(clsOrders tmp : list) {
 				//	 System.out.println(tmp.toString());
-					addRowOrders(table, tmp.getStatus()+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus(), Integer.parseInt(tmp.getId()));
+					addRowOrders(table, tmp.getStatus()+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getOrd_date_beg(), tmp.getOrd_date_out(), tmp.getOrd_date_end(), tmp.getStatus(), Integer.parseInt(tmp.getId()));
 					 rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+tmp.getId()+"  "
 				+tmp.getStatus()+"  "+tmp.getOrd_date()+"  "+tmp.getOrd_from()+"  "+tmp.getPrice());
 					 //Toast.makeText(this, rsltTXT.getText().toString().trim(), Toast.LENGTH_LONG).show();
@@ -612,7 +626,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	 		        	 //OrderBusy=tmp.getId().trim();
 	 		        }
 
-					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getStatus(), Integer.parseInt(tmp.getId()));
+					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(), tmp.getOrd_date_beg(), tmp.getOrd_date_out(),tmp.getOrd_date_end(), tmp.getStatus(), Integer.parseInt(tmp.getId()));
 					 }
 
 		        //setContentView(table);
@@ -628,7 +642,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	}
 	
 	
-	public void addRowOrders(TableLayout table, String cell1, String cell2, String cell3, String cell4, String cell5, String iffcell, int numOrder) {
+	public void addRowOrders(TableLayout table, String cell1, String cell2, String cell3, String cell4, String cell5, String cell6, String cell7, String cell8, String iffcell, int numOrder) {
 		
         TableRow rowOrders = new TableRow(this);
         rowOrders.setGravity(Gravity.CENTER);
@@ -659,6 +673,24 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         paramsB.setMargins(1, 1, 1, 1);
         paramsB.span = 4;
         paramsB.height= dic.RowOrdersButtonHeight;
+
+        TableRow.LayoutParams paramsB5 = new TableRow.LayoutParams();
+        //params.gravity = Gravity.CENTER;
+        paramsB5.setMargins(1, 1, 1, 1);
+        paramsB5.span = 5;
+        paramsB5.height= dic.RowOrdersButtonHeight;
+
+        TableRow.LayoutParams paramsB3 = new TableRow.LayoutParams();
+        //params.gravity = Gravity.CENTER;
+        paramsB3.setMargins(1, 1, 1, 1);
+        paramsB3.span = 3;
+        paramsB3.height= dic.RowOrdersButtonHeight;
+
+        TableRow.LayoutParams paramsB2 = new TableRow.LayoutParams();
+        //params.gravity = Gravity.CENTER;
+        paramsB2.setMargins(1, 1, 1, 1);
+        paramsB2.span = 2;
+        paramsB2.height= dic.RowOrdersButtonHeight;
         
         TableRow.LayoutParams paramsFrame = new TableRow.LayoutParams();
         //params.gravity = Gravity.CENTER;
@@ -754,7 +786,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             rowOrders.setBackgroundColor(Color.YELLOW);
 
             Button Ordersbtn1 = new Button(this);
-            Ordersbtn1.setText("Установить\nвремя подачи");
+            Ordersbtn1.setText("Подача\n"+cell6);
             Ordersbtn1.setBackgroundColor(Color.rgb(69,69,69)); //#454545
             Ordersbtn1.setTextColor(Color.WHITE);
             Ordersbtn1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
@@ -768,7 +800,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             //Ordersbtn1.setTypeface(Typeface.DEFAULT_BOLD);
 
             Button Ordersbtn2 = new Button(this);
-            Ordersbtn2.setText("Установить\nвремя отъезда");
+            Ordersbtn2.setText("Отъезд\n"+cell7);
             Ordersbtn2.setBackgroundColor(Color.BLACK);
             Ordersbtn2.setTextColor(Color.WHITE);
             Ordersbtn2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
@@ -783,7 +815,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             
 
             Button Ordersbtn3 = new Button(this);
-            Ordersbtn3.setText("Установить\nвремя прибытия");
+            Ordersbtn3.setText("Прибытие\n"+cell8);
             Ordersbtn3.setBackgroundColor(Color.rgb(69,69,69));
             Ordersbtn3.setTextColor(Color.WHITE);
             Ordersbtn3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);
@@ -835,11 +867,11 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             table.addView(rowOrders,paramsFrame);
             
             
-            rowBtnOrders.addView(Ordersbtn1,paramsB);
-            rowBtnOrders.addView(Ordersbtn2,paramsB);
-            rowBtnOrders.addView(Ordersbtn3,paramsB);
-            rowBtnOrders.addView(Ordersbtn4,paramsB);
-            rowBtnOrders.addView(Ordersbtn5,paramsB);
+            rowBtnOrders.addView(Ordersbtn1,paramsB5);
+            rowBtnOrders.addView(Ordersbtn2,paramsB5);
+            rowBtnOrders.addView(Ordersbtn3,paramsB5);
+            rowBtnOrders.addView(Ordersbtn4,paramsB3);
+            rowBtnOrders.addView(Ordersbtn5,paramsB2);
 
             table.addView(rowBtnOrders,paramsFrame);
         }
@@ -1416,7 +1448,15 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 OnClickListener lsnrCALL = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	     break;
+case Dialog.BUTTON_POSITIVE: 	
+    sysThreads cmdThready1 = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"cmdsocket","driver_call_operator,quit;");
+    cmdThready1.start();
+    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready1.getId());
+	
+	OrderTask ordTask = new OrderTask(); 
+	ordTask.execute();
+	
+	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrMAP = new OnClickListener() {
@@ -1430,6 +1470,10 @@ OnClickListener lsnrFREE = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	 
+    sysThreads cmdThready2 = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"cmdsocket","orders_"+MainActivity.flg_numorder+"_free,quit;");
+    cmdThready2.start();
+	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready2.getId());
+
 	
 	OrderTask ordTask = new OrderTask(); 
 	ordTask.execute();
@@ -1440,6 +1484,9 @@ OnClickListener lsnrTAKE = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	 
+    sysThreads cmdThready1 = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"cmdsocket","orders_"+MainActivity.flg_numorder+"_accept,quit;");
+    cmdThready1.start();
+    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready1.getId());
 	
 	OrderTask ordTask = new OrderTask(); 
 	ordTask.execute();
@@ -1522,7 +1569,10 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 OnClickListener lsnrlExit = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
-case Dialog.BUTTON_POSITIVE: 	finish();    break;
+case Dialog.BUTTON_POSITIVE: 
+	MainActivity.myTimer.purge();
+	MainActivity.myTimer2.purge();
+	finish();    break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 
@@ -1543,15 +1593,6 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		     case 106://ВРЕМЯ
 		    	 //showDialog(DIALOG_TIME);
 		    	 
-		    	 //TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
-		    	 //Button btn = (Button) tablehead.findViewById(10000000);
-		    	 //btn.setText(dic.getSysdate());
-		    	 
-
-		    	 //TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-				 //dic = new sysDictionary();
-				 //Toast.makeText(this, "Текущий IMEI "+tm.getDeviceId() + ", но мы используем 353451047760580" , Toast.LENGTH_LONG).show();
-		    	 //Toast.makeText(this, ""+"Нажата кнопка 'Текущее время':"+this.Sysdate , Toast.LENGTH_LONG).show();
 		       break;
 			 case 107://ОБНОВИТЬ
 				 showDialog(DIALOG_REFRESH);
@@ -1604,27 +1645,28 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 			       break;
 		     case 100://ВЗЯТЬ  ЗАЯВКУ
 		    	 this.flg_numorder = (v.getId()-1000000000);
-		         sysThreads cmdThready1 = new sysThreads(this,dic,LGWR,mSocket,"cmdsocket","orders_"+this.flg_numorder+"_accept,quit;");
-		         cmdThready1.start();
-		         //String cmdsock1="orders_"+this.flg_numorder+"_accept,quit;";
-		         //SocketTAXI mSocket1 = new SocketTAXI(dic, LGWR);
-				 //mSocket1.ServerPutCMD(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortCMD(), cmdsock1);
-		         LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready1.getId());
-		    		OrderTask ordTask1 = new OrderTask(); 
-		    		ordTask1.execute();
-		    	 //showDialog(DIALOG_TAKE);
-			       break;
+		         //sysThreads cmdThready1 = new sysThreads(this,dic,LGWR,mSocket,"cmdsocket","orders_"+this.flg_numorder+"_accept,quit;");
+		         //cmdThready1.start();
+		         ////String cmdsock1="orders_"+this.flg_numorder+"_accept,quit;";
+		         ////SocketTAXI mSocket1 = new SocketTAXI(dic, LGWR);
+				 ////mSocket1.ServerPutCMD(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortCMD(), cmdsock1);
+		         //LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready1.getId());
+		    	 //OrderTask ordTask1 = new OrderTask(); 
+		    	 //ordTask1.execute();
+		    	 showDialog(DIALOG_TAKE);
+		    	 break;
+		    	 
 		     case -100:// ОСВОБОДИТЬ ЗАЯВКУ
 		    	 this.flg_numorder = Math.abs((v.getId()+1000000000));
-		         sysThreads cmdThready2 = new sysThreads(this,dic,LGWR,mSocket,"cmdsocket","orders_"+this.flg_numorder+"_free,quit;");
-		         cmdThready2.start();
-		         //String cmdsock2="orders_"+this.flg_numorder+"_accept,quit;";
-		         //SocketTAXI mSocket2 = new SocketTAXI(dic, LGWR);
-				 //mSocket2.ServerPutCMD(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortCMD(), cmdsock2);		         
-		         LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready2.getId());
-		    	 OrderTask ordTask2 = new OrderTask(); 
-		    	 ordTask2.execute();
-		    	 //showDialog(DIALOG_FREE);
+		         //sysThreads cmdThready2 = new sysThreads(this,dic,LGWR,mSocket,"cmdsocket","orders_"+this.flg_numorder+"_free,quit;");
+		         //cmdThready2.start();
+		         ////String cmdsock2="orders_"+this.flg_numorder+"_accept,quit;";
+		         ////SocketTAXI mSocket2 = new SocketTAXI(dic, LGWR);
+				 ////mSocket2.ServerPutCMD(dic.getUid(),dic.getServerTaxi(),dic.getServerTaxiPortCMD(), cmdsock2);		         
+		         //LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready2.getId());
+		    	 //OrderTask ordTask2 = new OrderTask(); 
+		    	 //ordTask2.execute();
+		    	 showDialog(DIALOG_FREE);
 				   break;
 			}
 			
