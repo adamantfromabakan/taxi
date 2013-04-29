@@ -22,6 +22,8 @@
 		<string name="DIALOG_KM_BEG">Начать подсчёт километров?</string>
 		<string name="DIALOG_KM_END">Окончить подсчёт километров?</string>
 		<string name="DIALOG_TAXI">Сообщить клиенту, что таки прибыло?</string>
+		<string name="DIALOG_TAXI_CALL">Звонком</string>
+		<string name="DIALOG_TAXI_SMS">SMS</string>
 	    <string name="DIALOG_EXIT">\nЗавершить работу с программой?\n</string>
 	    <string name="DIALOG_CANCEL">Отмена</string>
 	    <string name="DIALOG_OK">ОК</string>

@@ -95,6 +95,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     public String strdriver = null;
     public static Timer myTimer;
     public static Timer myTimer2;
+    public static Timer myTimer3;
+    public static int flg_interfacecrt=0;
     public static int flg_refreshdata=0;
     public static int flg_refreshclock=0;
     public static int flg_numorder=0;
@@ -105,10 +107,12 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		// добавляем ярлык
 		if (this.flg_icon<1) { 
 			this.flg_icon=1;
 			//addshortcut();
 		}
+		
 		// Убираем заголовок
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// Убираем панель уведомлений
@@ -153,15 +157,24 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 
         //sysThreads clockThready = new sysThreads(this,dic,LGWR,mSocket,"refreshclock");
         //clockThready.start();
-
+        
+        //
+        /*
 			do {
 				try{
 	                Thread.sleep(1000);		
 	            }catch(InterruptedException e){}
 			} while(this.flg_refreshdata<1);
-			
-        cmdOrderhead();
-        cmdOrderlist();
+			*/
+        
+        //cmdOrderlist();
+        if (MainActivity.flg_interfacecrt<1) {
+            cmdOrderheadNull();
+            cmdOrderlistNull();
+        } else {
+        	cmdOrderhead();
+        	cmdOrderlist();
+        }
 
         
 
@@ -170,9 +183,11 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			 btn.setText(dic.getSysdate()); */
     			 
     			 //Timer myTimer = new Timer(); // Создаем таймер
+      //  if (this.flg_threads<1) {
+       // 	this.flg_threads=1;
         		 myTimer = new Timer(); // Создаем таймер
     			 final Handler uiHandler = new Handler();
-    			 final Button txtResult = (Button)findViewById(1060000000);
+    			 myTimer.purge();
     			 myTimer.schedule(new TimerTask() { // Определяем задачу
     			     @Override
     			     public void run() {
@@ -180,15 +195,21 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			         uiHandler.post(new Runnable() {
     			             @Override
     			             public void run() {
-    			                 txtResult.setText(result);
+    			            	 //TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
+    			            	 //Button txtResult = (Button) tablehead.findViewById(1060000000);
+    			                 //txtResult.setText(result);
+    			            	 
+    			            	 TimeTask tmTask = new TimeTask(); 
+    			            	 tmTask.execute();
     			             }
     			         });
     			     };
     			 }, 0L, 1L * 1000);
 
        
-    			 myTimer2 = new Timer();  
+        		 myTimer2 = new Timer();   			   
     			 final Handler uiHandler2 = new Handler();
+    			 myTimer2.purge();
     			 myTimer2.schedule(new TimerTask() { 
     			     @Override
     			     public void run() {
@@ -202,6 +223,25 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			     };
     			 }, 1L * dic.getPerFreshOrder(), 1L * dic.getPerFreshOrder());
     			 
+          
+        
+         myTimer3 = new Timer();	   
+		 final Handler uiHandler3 = new Handler();
+		 myTimer3.purge();
+		 myTimer3.schedule(new TimerTask() { 
+		     @Override
+		     public void run() {
+		         uiHandler3.post(new Runnable() {
+		             @Override
+		             public void run() {
+			            	 OrderFillTask ordFillTask = new OrderFillTask(); 
+		            	 ordFillTask.execute();
+		             }
+		         });
+		     };
+		 }, 0L, 1L * 1000);
+		 
+       // } 
     			 /*new Thread(new Runnable() {
     			        public void run() {
     			        	TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
@@ -223,18 +263,6 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			 flg_gps_date_beg=new Date();
     			 flg_gps_date_end=new Date();
 
-
-        /*
-		rsltTXT = (TextView) findViewById(R.id.rsltTXT);
-		btnGPS = (Button) findViewById(R.id.btnGPS);
-		btnTaxiCmd = (Button) findViewById(R.id.btnTaxiCmd);
-		editGPSServer = (EditText) findViewById(R.id.editGPSServer);
-		editGPSPort = (EditText) findViewById(R.id.editGPSPort);
-		editTaxiServer = (EditText) findViewById(R.id.editTaxiServer);
-		editTaxiPort = (EditText) findViewById(R.id.editTaxiPort);
-		editTaxiCmd = (EditText) findViewById(R.id.editTaxiCmd);
-*/
-        
 
          LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Interface loaded!");
          
@@ -271,6 +299,12 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     protected void onDestroy() {
     //final int pid = android.os.Process.myPid();
     //android.os.Process.killProcess(pid);
+    	myTimer.cancel();
+    	myTimer2.cancel();
+    	myTimer3.cancel();
+    	myTimer.purge();
+    	myTimer2.purge();
+    	myTimer3.purge();
     super.onDestroy();
     } 
     
@@ -585,6 +619,78 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        	}
 	}
 	
+	public void cmdOrderheadNull() {
+		 try
+	        {
+		        Point size = new Point();
+		        WindowManager w = getWindowManager();
+		              int stat=0;
+		              String statstr="";
+		              Display d = w.getDefaultDisplay(); 
+		              Measuredwidth = d.getWidth(); 
+		              Measuredheight = d.getHeight(); 
+		              dic.setMsr(Measuredwidth);
+		              //Toast.makeText(this, ""+Measuredwidth , Toast.LENGTH_LONG).show();
+		              
+       
+				TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
+		        tablehead.setStretchAllColumns(true);
+		        tablehead.setShrinkAllColumns(true);
+		        
+				addHead(tablehead);
+				addRowButton(tablehead);
+				addRowCarDriver(tablehead,"---","---");
+				addRowTitle(tablehead);
+
+	        
+				
+	        }
+	        catch(Exception e)
+	        {
+	        	 Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+	        	 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":cmdOrderlist " + e.toString());
+	        	}
+	}
+	
+	public void cmdOrderheadUpd() {
+		 try
+	        {
+		        Point size = new Point();
+		        WindowManager w = getWindowManager();
+		              int stat=0;
+		              String statstr="";
+		              Display d = w.getDefaultDisplay(); 
+		              Measuredwidth = d.getWidth(); 
+		              Measuredheight = d.getHeight(); 
+		              dic.setMsr(Measuredwidth);
+		              //Toast.makeText(this, ""+Measuredwidth , Toast.LENGTH_LONG).show();
+		              
+       
+				TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
+		        tablehead.setStretchAllColumns(true);
+		        tablehead.setShrinkAllColumns(true);
+		        tablehead.removeView(findViewById(11111111));
+		        tablehead.removeView(findViewById(11111112));
+				
+				    for(clsCarInfo tmp : this.car) {
+				    	strcar=tmp.getCarName();
+					 }
+				    for(clsDriverInfo tmp : this.driver) {
+				    	strdriver=tmp.getDriverName();
+					 }
+				addRowCarDriver(tablehead,strcar,strdriver);
+				addRowTitle(tablehead);
+
+	        
+				
+	        }
+	        catch(Exception e)
+	        {
+	        	 Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+	        	 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":cmdOrderlist " + e.toString());
+	        	}
+	}
+	
 	public void cmdOrderlist() {
 		 try
 	        {
@@ -653,6 +759,99 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        	}
 	}
 	
+	public void cmdOrderlistNull() {
+		 try
+	        {
+		        Point size = new Point();
+		        WindowManager w = getWindowManager();
+		              int stat=0;
+		              String statstr="";
+		              Display d = w.getDefaultDisplay(); 
+		              Measuredwidth = d.getWidth(); 
+		              Measuredheight = d.getHeight(); 
+		              dic.setMsr(Measuredwidth);
+		         
+		        TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);
+
+		        
+				if (Measuredwidth==1024 || Measuredwidth==800 || Measuredwidth==960) {
+					table.setBackgroundResource(com.example.taxi.R.drawable.map1024552);
+					
+				} else {
+					table.setBackgroundResource(com.example.taxi.R.drawable.map600976);
+					
+				}
+					
+	
+		        table.setStretchAllColumns(true);
+		        table.setShrinkAllColumns(true);
+				addHead(table);
+
+/////////////////
+				TableRow rowOrders = new TableRow(this);
+		        rowOrders.setGravity(Gravity.CENTER);
+		        rowOrders.setBackgroundColor(Color.GRAY);
+		      
+
+		        TableRow.LayoutParams params4 = new TableRow.LayoutParams();
+		        //params.gravity = Gravity.CENTER;
+		        params4.setMargins(1, 1, 1, 1);
+		        params4.span = 4;
+		        params4.height= dic.RowOrdersHeight;
+		        
+		        TableRow.LayoutParams params16 = new TableRow.LayoutParams();
+		        //params.gravity = Gravity.CENTER;
+		        params16.setMargins(1, 1, 1, 1);
+		        params16.span = 16;
+		        params16.height= dic.RowOrdersHeight;
+		        
+		        TableRow.LayoutParams paramsFrame = new TableRow.LayoutParams();
+		        //params.gravity = Gravity.CENTER;
+		        paramsFrame.setMargins(10, 10, 10, 10);
+
+		        
+		        int nSize=dic.RowOrdersSize;
+		        int nSizebtn=dic.RowOrdersButtonSize;
+		        int nHeight=dic.RowOrdersHeight;
+		        int nHeightbtn=dic.RowOrdersButtonHeight;
+		        int nGravity=Gravity.CENTER;
+
+		        Button order = new Button(this);
+		        order.setText("---");
+		        order.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
+		        order.setGravity(nGravity);
+		        order.setPadding(1, 1, 1, 1);
+		        order.setOnClickListener(this);
+
+
+		        TextView orderdata = new TextView(this);
+		        orderdata.setText("Ожидается загрузка заявок,\n в случае отсутвия данных обратитесь к поставщику Интернет");
+		        orderdata.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSize);
+		        orderdata.setGravity(nGravity);
+		        orderdata.setPadding(1, 1, 1, 1);
+		        
+
+		            order.setTextColor(Color.WHITE);
+		            orderdata.setTextColor(Color.BLACK);
+		            order.setBackgroundColor(Color.rgb(00, 80, 00));
+		            orderdata.setBackgroundColor(Color.WHITE);
+		            order.setBackgroundDrawable(getResources().getDrawable(R.drawable.greenbutton));
+		            
+		            rowOrders.addView(order,params4);
+		            rowOrders.addView(orderdata,params16);
+		            table.addView(rowOrders,paramsFrame);
+				
+				
+/////////////////				
+	        
+				
+	        }
+	        catch(Exception e)
+	        {
+	        	 Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+	        	 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ":cmdOrderlist " + e.toString());
+	        	}
+	}
 	
 	public void addRowOrders(TableLayout table, String cell1, String cell2, String cell3, String cell4, String cell5, String cell6, String cell7, String cell8, String iffcell, int numOrder) {
 		
@@ -911,6 +1110,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         rowcardriver.setGravity(Gravity.CENTER);
         //rowcardriver.setBackgroundColor(Color.rgb(00, 80, 00));
         rowcardriver.setBackgroundColor(Color.GRAY);
+        rowcardriver.setId(11111111);
 
         TableRow.LayoutParams params = new TableRow.LayoutParams();
         TableRow.LayoutParams params2 = new TableRow.LayoutParams();
@@ -952,7 +1152,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 
 	}
 	
-	public void addRowTitle(TableLayout table) {
+		public void addRowTitle(TableLayout table) {
 		
      
         TableRow.LayoutParams params = new TableRow.LayoutParams();
@@ -976,6 +1176,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         TableRow rowTitle = new TableRow(this);
         rowTitle.setGravity(Gravity.CENTER);
         rowTitle.setBackgroundColor(Color.GRAY);
+        rowTitle.setId(11111112);
         
         int nSize=dic.RowTitleSize;
         int nHeight=dic.RowTitleHeight;
@@ -1448,9 +1649,10 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        adb.setTitle("Заявка ");//+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_TAXI);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrTAXI);
-	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrTAXI);
-	        Log.d(TAG,"dialog:"+this.flg_numorder);
+	        adb.setPositiveButton(R.string.DIALOG_TAXI_CALL, lsnrTAXI);
+	        adb.setNeutralButton(R.string.DIALOG_TAXI_SMS, lsnrTAXI);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrTAXI);
+	        //Log.d(TAG,"dialog:"+this.flg_numorder);
 	        //LGWR.logwriter(dic.logcom, dic.logpath,"dialog:"+dic.getNumOrder());
 	        return adb.create();
 		}
@@ -1602,8 +1804,17 @@ case Dialog.BUTTON_POSITIVE:
     LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready1.getId());
 
 	//Log.d(TAG,"dialog:"+MainActivity.flg_numorder);
-	OrderTask ordTask = new OrderTask(); 
-	ordTask.execute();
+	OrderTask ordTask1 = new OrderTask(); 
+	ordTask1.execute();
+	break;
+case Dialog.BUTTON_NEUTRAL:
+	sysThreads cmdThready2 = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"cmdsocket","orders_"+MainActivity.flg_numorder+"_sms_client,quit;");
+    cmdThready2.start();
+    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready2.getId());
+
+	//Log.d(TAG,"dialog:"+MainActivity.flg_numorder);
+	OrderTask ordTask2 = new OrderTask(); 
+	ordTask2.execute();
 	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
@@ -1614,6 +1825,7 @@ case Dialog.BUTTON_POSITIVE:
 	LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Closing program Taxi1...");
 	MainActivity.myTimer.purge();
 	MainActivity.myTimer2.purge();
+	MainActivity.myTimer3.purge();
     final int pid = android.os.Process.myPid();
     android.os.Process.killProcess(pid);
 	finish();    break;
@@ -1636,7 +1848,7 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 			switch (i) {
 		     case 106://ВРЕМЯ
 		    	 //showDialog(DIALOG_TIME);
-		    	 
+		    	 //MainActivity.myTimer.purge();
 		       break;
 			 case 107://ОБНОВИТЬ
 				 showDialog(DIALOG_REFRESH);
@@ -1725,8 +1937,9 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 	        @Override
 	        protected void onPostExecute(String result) {
-	        	final Button txtResult = (Button)findViewById(1060000000);
-	            txtResult.setText(result);
+           	 	TableLayout tablehead = (TableLayout)findViewById(com.example.taxi.R.id.TaxiHeadLayout);
+           	 	Button txtResult = (Button) tablehead.findViewById(1060000000);
+                txtResult.setText(result);
 	        }
 	    }
 
@@ -1742,8 +1955,7 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 	        @Override
 	        protected void onPostExecute(String result) {
 	        	TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);
-			 	table.removeAllViewsInLayout();
-		        
+	        	
 		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread AsyncTask:OrderTask");
 		        
 				do {
@@ -1751,7 +1963,7 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 		                Thread.sleep(1000);		
 		            }catch(InterruptedException e){}
 				} while(MainActivity.flg_refreshdata<1);
-
+			 	table.removeAllViewsInLayout();
 	            cmdOrderlist();
 	        }
 	    }
@@ -1760,22 +1972,22 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 	        
 	        @Override
 	        protected String doInBackground(Void... noargs) {
-	        	TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);
-			 	table.removeAllViewsInLayout();
-		        
-		        LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread AsyncTask:OrderTask");
-				do {
-					try{
-		                Thread.sleep(1000);		
-		            }catch(InterruptedException e){}
-				} while(MainActivity.flg_refreshdata<1);
-	            cmdOrderlist();
-	            return dic.getSysdate();
+
+	            return MainActivity.flg_refreshdata+"";
 	        }
 
 	        @Override
 	        protected void onPostExecute(String result) {
-
+	        	if (MainActivity.flg_interfacecrt<1) {
+	        		if (MainActivity.flg_refreshdata>0) {
+	        			TableLayout table = (TableLayout)findViewById(com.example.taxi.R.id.TaxiLayout);	        		
+	        			table.removeAllViewsInLayout();
+	        			cmdOrderheadUpd();
+	        			cmdOrderlist();
+	        			MainActivity.flg_interfacecrt=1;
+	            //	MainActivity.myTimer3.purge();
+	        		}
+	        	}	
 	        }
 	    }	 
 }
