@@ -107,7 +107,11 @@ public class SocketTAXI {
             	 obj.setOrd_date_end(tokens[6]);
             	 obj.setPrice(tokens[7]);
             	 obj.setOrd_from(tokens[8]);
+            	 if (tokens.length<10) {
+            	 obj.setOrd_to("");            		 
+            	 } else {
             	 obj.setOrd_to(tokens[9]);
+            	 }
             	
             	 //Log.d(TAG, "obj: "+obj.toString());
             	 list.add(obj);

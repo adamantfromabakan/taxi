@@ -743,7 +743,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	 		        	 statstr="Освободить";
 	 		        	 //OrderBusy=tmp.getId().trim();
 	 		        }
-
+	 		    	//System.out.println(tmp.getOrd_to()+"");
 					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(), tmp.getOrd_date_beg(), tmp.getOrd_date_out(),tmp.getOrd_date_end(), tmp.getStatus(), Integer.parseInt(tmp.getId()));
 					 }
 
@@ -1985,6 +1985,7 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 	        			cmdOrderheadUpd();
 	        			cmdOrderlist();
 	        			MainActivity.flg_interfacecrt=1;
+	        			LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread AsyncTask:OrderFillTask");
 	            //	MainActivity.myTimer3.purge();
 	        		}
 	        	}	
