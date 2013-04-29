@@ -107,15 +107,13 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// добавляем ярлык
+
 		if (this.flg_icon<1) { 
 			this.flg_icon=1;
 			//addshortcut();
 		}
 		
-		// Убираем заголовок
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		// Убираем панель уведомлений
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		this.setTitle("Такси №1");
 		this.flg_refreshdata=0;
@@ -128,7 +126,6 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		 TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		 dic = new sysDictionary();
 		 mSocket = new SocketTAXI(dic, LGWR);
-		 //this.mSocket=mSocket;
 		 LGWR = new sysLog();
 		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Starting program Taxi1...");
 		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - android.os.Build.VERSION.SDK_INT:"+android.os.Build.VERSION.SDK_INT);
@@ -147,9 +144,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
         //setContentView(R.layout.activity_main);
 
-        //if this.flg_threads==0
         sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata","");
-        //sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdataper","");
         dataThready.start();
         
         
@@ -158,7 +153,6 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         //sysThreads clockThready = new sysThreads(this,dic,LGWR,mSocket,"refreshclock");
         //clockThready.start();
         
-        //
         /*
 			do {
 				try{
@@ -182,9 +176,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			 Button btn = (Button) tablehead.findViewById(1060000000);
     			 btn.setText(dic.getSysdate()); */
     			 
-    			 //Timer myTimer = new Timer(); // Создаем таймер
-      //  if (this.flg_threads<1) {
-       // 	this.flg_threads=1;
+
         		 myTimer = new Timer(); // Создаем таймер
     			 final Handler uiHandler = new Handler();
     			 myTimer.purge();
