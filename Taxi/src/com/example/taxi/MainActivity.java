@@ -380,7 +380,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 				addRowTitle(table);
 	 		    for(clsOrders tmp : list) {
 				//	 System.out.println(tmp.toString());
-					addRowOrders(table, tmp.getStatus()+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getOrd_date_beg(), tmp.getOrd_date_out(), tmp.getOrd_date_end(), tmp.getStatus(), Integer.parseInt(tmp.getId()));
+					addRowOrders(table, tmp.getStatus()+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(),tmp.getOrd_date_beg(), tmp.getOrd_date_out(), tmp.getOrd_date_end(), tmp.getOrd_km(), tmp.getStatus(), Integer.parseInt(tmp.getId()));
 					 rsltTXT.setText(rsltTXT.getText().toString().trim()+"\n"+tmp.getId()+"  "
 				+tmp.getStatus()+"  "+tmp.getOrd_date()+"  "+tmp.getOrd_from()+"  "+tmp.getPrice());
 					 //Toast.makeText(this, rsltTXT.getText().toString().trim(), Toast.LENGTH_LONG).show();
@@ -737,7 +737,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	 		        	 //OrderBusy=tmp.getId().trim();
 	 		        }
 	 		    	//System.out.println(tmp.getOrd_to()+"");
-					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(), tmp.getOrd_date_beg(), tmp.getOrd_date_out(),tmp.getOrd_date_end(), tmp.getStatus(), Integer.parseInt(tmp.getId()));
+					addRowOrders(table, statstr+" "+tmp.getId(),tmp.getOrd_date(),tmp.getOrd_from(),tmp.getOrd_to(),tmp.getPrice(), tmp.getOrd_date_beg(), tmp.getOrd_date_out(),tmp.getOrd_date_end(), tmp.getOrd_km(), tmp.getStatus(), Integer.parseInt(tmp.getId()));
 					 }
 
 		        //setContentView(table);
@@ -846,7 +846,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        	}
 	}
 	
-	public void addRowOrders(TableLayout table, String cell1, String cell2, String cell3, String cell4, String cell5, String cell6, String cell7, String cell8, String iffcell, int numOrder) {
+	public void addRowOrders(TableLayout table, String cell1, String cell2, String cell3, String cell4, String cell5, String cell6, String cell7, String cell8, String cell9, String iffcell, int numOrder) {
 		
         TableRow rowOrders = new TableRow(this);
         rowOrders.setGravity(Gravity.CENTER);
@@ -1045,7 +1045,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
             //Ordersbtn3.setTypeface(Typeface.DEFAULT_BOLD);
 
             Button Ordersbtn4 = new Button(this);
-            Ordersbtn4.setText("Ïóòü\nêì.");
+            Ordersbtn4.setText("Ïóòü\n "+cell9+"êì.");
             Ordersbtn4.setBackgroundColor(Color.BLACK);
             Ordersbtn4.setTextColor(Color.WHITE);
             Ordersbtn4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, nSizebtn);

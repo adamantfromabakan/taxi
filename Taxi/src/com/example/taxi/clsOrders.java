@@ -8,6 +8,7 @@ public class clsOrders {
 	private String Ord_date_beg;
 	private String Ord_date_out;
 	private String Ord_date_end;
+	private String Ord_km;
 	private String Price;
 	private String Ord_from;
 	private String Ord_to;
@@ -65,6 +66,13 @@ public class clsOrders {
 		this.Ord_date_end = Ord_date_end;
 	}
 
+	public String getOrd_km() {
+		return this.Ord_km;
+	}
+	public void setOrd_km(String Ord_km) {
+		this.Ord_km = Ord_km;
+	}	
+	
 	public String getPrice() {
 		return this.Price;
 	}
