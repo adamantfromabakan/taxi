@@ -60,7 +60,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	final int DIALOG_TAXI = 11;
 	final int DIALOG_KM_BEG = 12;
 	final int DIALOG_KM_END = 13;
-
+	final int DIALOG_KM = 14;
+	
 	public String ServerTaxi;
 	public int ServerTaxiPortGPS;
 	public int ServerTaxiPortCMD;
@@ -1618,24 +1619,17 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrINSTALL_TIME_IN);
 	        return adb.create();
 		}
-		if (id == DIALOG_KM_BEG) {
+		if (id == DIALOG_KM) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
 	        adb.setTitle("«‡ˇ‚Í‡ ");//+this.flg_numorder);
 	        adb.setMessage(R.string.DIALOG_KM_BEG);
 	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrKMbeg);
-	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrKMbeg);
+	        adb.setPositiveButton(R.string.DIALOG_KM_BEG, lsnrKM);
+	        adb.setNeutralButton(R.string.DIALOG_KM_END, lsnrKM);
+	        adb.setNegativeButton(R.string.DIALOG_CANCEL, lsnrKM);
 	        return adb.create();
 		}
-		if (id == DIALOG_KM_END) {
-	        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	        adb.setTitle("«‡ˇ‚Í‡ ");//+this.flg_numorder);
-	        adb.setMessage(R.string.DIALOG_KM_BEG);
-	        adb.setIcon(android.R.drawable.ic_dialog_info);
-	        adb.setPositiveButton(R.string.DIALOG_YES, lsnrKMend);
-	        adb.setNegativeButton(R.string.DIALOG_NO, lsnrKMend);
-	        return adb.create();
-		}
+
 		if (id == DIALOG_TAXI) {
 	        AlertDialog.Builder adb = new AlertDialog.Builder(MainActivity.this);
 	        adb.setTitle("«‡ˇ‚Í‡ ");//+this.flg_numorder);
@@ -1767,24 +1761,29 @@ case Dialog.BUTTON_POSITIVE:
 	break;
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
-OnClickListener lsnrKMbeg = new OnClickListener() {
+OnClickListener lsnrKM = new OnClickListener() {
 public void onClick(DialogInterface dialog, int which) {
 switch (which) {
 case Dialog.BUTTON_POSITIVE: 	  
-	
-	//OrderTask ordTask = new OrderTask(); 
-	//ordTask.execute();
-	break;
-case Dialog.BUTTON_NEGATIVE:  break;    }  } };
+	sysThreads cmdThready1 = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"cmdsocket","orders_"+MainActivity.flg_numorder+"_km_start,quit;");
+    cmdThready1.start();
+    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready1.getId());
 
-OnClickListener lsnrKMend = new OnClickListener() {
-public void onClick(DialogInterface dialog, int which) {
-switch (which) {
-case Dialog.BUTTON_POSITIVE: 	  
-	
-	//OrderTask ordTask = new OrderTask(); 
-	//ordTask.execute();
+	//Log.d(TAG,"dialog:"+MainActivity.flg_numorder);
+	OrderTask ordTask1 = new OrderTask(); 
+	ordTask1.execute();
 	break;
+	
+case Dialog.BUTTON_NEUTRAL:
+	sysThreads cmdThready2 = new sysThreads(MainActivity.this,dic,LGWR,mSocket,"cmdsocket","orders_"+MainActivity.flg_numorder+"_km_stop,quit;");
+    cmdThready2.start();
+    LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - "+ TAG + ".." +"initialized thread CMD:"+cmdThready2.getId());
+
+	//Log.d(TAG,"dialog:"+MainActivity.flg_numorder);
+	OrderTask ordTask2 = new OrderTask(); 
+	ordTask2.execute();
+	break;
+	
 case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 
 OnClickListener lsnrTAXI = new OnClickListener() {
@@ -1884,7 +1883,7 @@ case Dialog.BUTTON_NEGATIVE:  break;    }  } };
 			       break;
 		     case 104:// »ÀŒÃ≈“–€
 		    	 this.flg_numorder = v.getId()-i*10000000;
-		    	 showDialog(DIALOG_KM_BEG);
+		    	 showDialog(DIALOG_KM);
 			       break;
 		     case 105://“¿ —» œ–»¡€ÀŒ
 		    	 this.flg_numorder=v.getId()-i*10000000;

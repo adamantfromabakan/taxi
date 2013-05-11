@@ -19,8 +19,8 @@
 		<string name="DIALOG_INSTALL_TIME">Использовать текущее время как время подачи?</string>
 		<string name="DIALOG_INSTALL_TIME_OUT">Использовать текущее время как время отъезда?</string>
 		<string name="DIALOG_INSTALL_TIME_IN">Использовать текущее время как время прибытия?</string>
-		<string name="DIALOG_KM_BEG">Начать подсчёт километров?</string>
-		<string name="DIALOG_KM_END">Окончить подсчёт километров?</string>
+		<string name="DIALOG_KM_BEG">Начать подсчёт</string>
+		<string name="DIALOG_KM_END">Закончить подсчёт</string>
 		<string name="DIALOG_TAXI">Сообщить клиенту, что таки прибыло?</string>
 		<string name="DIALOG_TAXI_CALL">Звонком</string>
 		<string name="DIALOG_TAXI_SMS">SMS</string>
