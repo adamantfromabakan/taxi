@@ -8,14 +8,42 @@ import android.graphics.Color;
 import android.telephony.TelephonyManager;
 
 public class sysDictionary {
+	
 	public String ServerTaxi="90.189.119.84";
 	public int ServerTaxiPortGPS=35570;
 	public int ServerTaxiPortCMD=35572;
-	public String Uid;
-	public int numorder=0;
-	public int orderfreshper=30*1000;
+	public String DefaultIMEI="353451047760580";
+	public int InternalIMEI=0;
+	public int orderfreshper=20*1000;
 	public int gpsperfresh=10*1000;
 	public int gpsidlefresh=600*1000;
+	public String OrderBySave="/mnt/sdcard2,/mnt/sdcard";
+	public int AutoAnsIPATS=0;
+	public int AutoGotoOrders=0;
+	public String ServerIPATSIP="90.189.119.84";
+	public int ServerIPATSPort=14570;
+	public String ServerIPATSLogin="201";
+	public String ServerIPATSPassword="q1kdid93";
+	public String ServerIPATSname1="Оператор";
+	public String ServerIPATSnumber1="101";
+	public String ServerIPATSname2="Оператор";
+	public String ServerIPATSnumber2="102";
+	public String ServerIPATSname3="";
+	public String ServerIPATSnumber3="";
+	public String ServerIPATSname4="";
+	public String ServerIPATSnumber4="";
+	public String ServerIPATSname5="";
+	public String ServerIPATSnumber5="";
+	public String ServerIPATSname6="Шеф";
+	public String ServerIPATSnumber6="83904122222";
+	public String RingFile="Ringln.wav";
+	public String OpenStreetMapsUpdate="https://data.gis-lab.info/osm_dump/lates/RU-KK.osm.pbf";
+	
+	
+
+	public String Uid;
+	public int numorder=0;
+	public String confpath = "/taxi1/conf/";
 	public String logpath = "/taxi1/logs/";
 	public String logtype = ".log";
 	public String loggps = "taxi-log-gps";

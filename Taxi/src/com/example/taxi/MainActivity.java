@@ -87,6 +87,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     public sysDictionary dic ;
 	public sysLog LGWR;
 	public SocketTAXI mSocket;
+	public sysConfig sysConf;
 	public TableLayout table;
 	public static List<clsOrders> list;
     public static List<clsDriverInfo> driver;
@@ -109,6 +110,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
+
+		
 		if (this.flg_icon<1) { 
 			this.flg_icon=1;
 			//addshortcut();
@@ -127,6 +130,8 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		 TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		 dic = new sysDictionary();
 		 mSocket = new SocketTAXI(dic, LGWR);
+		 sysConf = new sysConfig(dic);	
+		 sysConf.writeConfig();
 		 LGWR = new sysLog();
 		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Starting program Taxi1...");
 		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - android.os.Build.VERSION.SDK_INT:"+android.os.Build.VERSION.SDK_INT);

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 public class sysLog  {
 	private static final String TAG = "sysLog";
-	private static final int MODE_PRIVATE = 32768;
+	//private static final int MODE_PRIVATE = 32768;
 	
 	public void logwriter (String file, String path, String strput)
 	{   
