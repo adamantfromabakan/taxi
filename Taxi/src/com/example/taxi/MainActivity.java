@@ -138,9 +138,9 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		try {
 		 //dic.setUid(tm.getDeviceId());
 		} catch (Exception e) {
-			dic.setUid("353451047760580");
+			dic.setUid("354473050898478");
 	    } 
-		dic.setUid("353451047760580");
+		dic.setUid("354473050898478");
 		
 
 

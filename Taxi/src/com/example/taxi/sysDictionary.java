@@ -12,7 +12,7 @@ public class sysDictionary {
 	public String ServerTaxi="90.189.119.84";
 	public int ServerTaxiPortGPS=35570;
 	public int ServerTaxiPortCMD=35572;
-	public String DefaultIMEI="353451047760580";
+	public String DefaultIMEI="354473050898478";
 	public int InternalIMEI=0;
 	public int orderfreshper=20*1000;
 	public int gpsperfresh=10*1000;
