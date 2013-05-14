@@ -138,9 +138,9 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		try {
 		 //dic.setUid(tm.getDeviceId());
 		} catch (Exception e) {
-			dic.setUid("354473050898478");
+			dic.setUid(dic.getDefaultIMEI());
 	    } 
-		dic.setUid("354473050898478");
+		dic.setUid(dic.getDefaultIMEI());
 		
 
 
@@ -219,7 +219,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     			             }
     			         });
     			     };
-    			 }, 1L * dic.getPerFreshOrder(), 1L * dic.getPerFreshOrder());
+    			 }, 1L * dic.getOrderFreshPer(), 1L * dic.getOrderFreshPer());
     			 
           
         

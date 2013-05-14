@@ -129,6 +129,188 @@ CornflowerBlue	#6495ED
 		return ServerTaxiPortCMD;
 	}
 	
+	public void setDefaultIMEI(String vl) {
+		DefaultIMEI=vl;
+	}
+	public String getDefaultIMEI() {
+		return DefaultIMEI;
+	}
+	
+	public void setInternalIMEI(int vl) {
+		InternalIMEI=vl;
+	}
+	public int getInternalIMEI() {
+		return InternalIMEI;
+	}
+	
+	public void setOrderFreshPer(int vl) {
+		orderfreshper=vl;
+	}
+	public int getOrderFreshPer() {
+		return orderfreshper;
+	}
+
+	public void setGpsPerFresh(int vl) {
+		gpsperfresh=vl;
+	}
+	public int getGpsPerFresh() {
+		return gpsperfresh;
+	}
+	
+	public void setGpsIdleFresh(int vl) {
+		gpsidlefresh=vl;
+	}
+	public int getGpsIdleFresh() {
+		return gpsidlefresh;
+	}
+	
+	public void setOrderBySave(String vl) {
+		OrderBySave=vl;
+	}
+	public String getOrderBySave() {
+		return OrderBySave;
+	}
+	
+	public void setAutoAnsIPATS(int vl) {
+		AutoAnsIPATS=vl;
+	}
+	public int getAutoAnsIPATS() {
+		return AutoAnsIPATS;
+	}
+
+	public void setAutoGotoOrders(int vl) {
+		AutoGotoOrders=vl;
+	}
+	public int getAutoGotoOrders() {
+		return AutoGotoOrders;
+	}
+	
+	public void setServerIPATSIP(String vl) {
+		ServerIPATSIP=vl;
+	}
+	public String getServerIPATSIP() {
+		return ServerIPATSIP;
+	}
+	
+	public void setServerIPATSPort(int vl) {
+		ServerIPATSPort=vl;
+	}
+	public int getServerIPATSPort() {
+		return ServerIPATSPort;
+	}
+
+	public void setServerIPATSLogin(String vl) {
+		ServerIPATSLogin=vl;
+	}
+	public String getServerIPATSLogin() {
+		return ServerIPATSLogin;
+	}
+
+	public void setServerIPATSPassword(String vl) {
+		ServerIPATSPassword=vl;
+	}
+	public String getServerIPATSPassword() {
+		return ServerIPATSPassword;
+	}
+
+	public void setServerIPATSname1(String vl) {
+		ServerIPATSname1=vl;
+	}
+	public String getServerIPATSname1() {
+		return ServerIPATSname1;
+	}
+
+	public void setServerIPATSname2(String vl) {
+		ServerIPATSname2=vl;
+	}
+	public String getServerIPATSname2() {
+		return ServerIPATSname2;
+	}
+	
+	public void setServerIPATSname3(String vl) {
+		ServerIPATSname3=vl;
+	}
+	public String getServerIPATSname3() {
+		return ServerIPATSname3;
+	}
+	
+	public void setServerIPATSname4(String vl) {
+		ServerIPATSname4=vl;
+	}
+	public String getServerIPATSname4() {
+		return ServerIPATSname4;
+	}
+	
+	public void setServerIPATSname5(String vl) {
+		ServerIPATSname5=vl;
+	}
+	public String getServerIPATSname5() {
+		return ServerIPATSname5;
+	}
+	
+	public void setServerIPATSname6(String vl) {
+		ServerIPATSname6=vl;
+	}
+	public String getServerIPATSname6() {
+		return ServerIPATSname6;
+	}
+	
+	public void serServerIPATSnumber1(String vl) {
+		ServerIPATSnumber1=vl;
+	}
+	public String getServerIPATSnumber1() {
+		return ServerIPATSnumber1;
+	}
+	
+	public void setServerIPATSnumber2(String vl) {
+		ServerIPATSnumber2=vl;
+	}
+	public String getServerIPATSnumber2() {
+		return ServerIPATSnumber2;
+	}
+	
+	public void setServerIPATSnumber3(String vl) {
+		ServerIPATSnumber3=vl;
+	}
+	public String getServerIPATSnumber3() {
+		return ServerIPATSnumber3;
+	}
+	
+	public void setServerIPATSnumber4(String vl) {
+		ServerIPATSnumber4=vl;
+	}
+	public String getServerIPATSnumber4() {
+		return ServerIPATSnumber4;
+	}
+	
+	public void setServerIPATSnumber5(String vl) {
+		ServerIPATSnumber5=vl;
+	}
+	public String getServerIPATSnumber5() {
+		return ServerIPATSnumber5;
+	}
+	
+	public void setServerIPATSnumber6(String vl) {
+		ServerIPATSnumber6=vl;
+	}
+	public String getServerIPATSnumber6() {
+		return ServerIPATSnumber6;
+	}
+
+	public void setRingFile(String vl) {
+		RingFile=vl;
+	}
+	public String getRingFile() {
+		return RingFile;
+	}
+	
+	public void setOpenStreetMapsUpdate(String vl) {
+		OpenStreetMapsUpdate=vl;
+	}
+	public String getOpenStreetMapsUpdate() {
+		return OpenStreetMapsUpdate;
+	}
+	
 	public void setMsr(int vl) {
 		msr=vl;
 		switch (vl) {
@@ -227,15 +409,6 @@ CornflowerBlue	#6495ED
         return strTime;
 	}
 	
-	public int getPerFreshOrder() {
-		return orderfreshper;
-	}
 
-	public int getGpsPerFresh() {
-		return gpsperfresh;
-	}
-	public int getGpsIdleFresh() {
-		return gpsidlefresh;
-	}
 	
 }

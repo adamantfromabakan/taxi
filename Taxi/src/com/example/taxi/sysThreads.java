@@ -74,7 +74,7 @@ public class sysThreads extends Thread implements Runnable  {
         				vl=1;
         				MainActivity.flg_refreshdata=1;
         				try {
-        				Thread.sleep(dic.getPerFreshOrder());
+        				Thread.sleep(dic.getOrderFreshPer());
         				}catch(InterruptedException e){}
         				}
     				

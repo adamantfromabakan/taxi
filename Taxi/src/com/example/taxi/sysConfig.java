@@ -11,7 +11,7 @@ import java.util.Vector;
 
 import android.os.Environment;
 
-public class sysConfig extends Properties implements java.io.Serializable   {
+public class sysConfig extends Properties /*implements java.io.Serializable*/   {
 	private static final String TAG = "sysConfig";
 	sysDictionary dic;
 	
@@ -19,7 +19,7 @@ public class sysConfig extends Properties implements java.io.Serializable   {
     	this.dic=dic;
 	}
 
-	  @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	  public synchronized Enumeration keys() {
 	     Enumeration keysEnum = super.keys();
 	     Vector keyList = new Vector();
@@ -32,7 +32,7 @@ public class sysConfig extends Properties implements java.io.Serializable   {
 	  
 	public void writeConfig()
 	{
-		sysConfig prop = new sysConfig(this.dic);
+		SortedProperties prop = new SortedProperties();
 
 	    //File sdPath = Environment.getExternalStorageDirectory();
 	    //sdPath = new File(sdPath.getAbsolutePath() + "/" + "/taxi1/conf/");
@@ -42,40 +42,44 @@ public class sysConfig extends Properties implements java.io.Serializable   {
 	    
     	try {
     		String fileName = sdPath+"/"+"config.properties";
-    		prop.put("ServerTaxi", dic.ServerTaxi);
-    		prop.put("ServerTaxiPortGPS", dic.ServerTaxiPortGPS+"");
-    		prop.put("ServerTaxiPortCMD", dic.ServerTaxiPortCMD+"");
-    		prop.put("DefaultIMEI", dic.DefaultIMEI);
-    		prop.put("InternalIMEI", dic.InternalIMEI+"");
-    		prop.put("orderfreshper", dic.orderfreshper+"");
-    		prop.put("gpsperfresh", dic.gpsperfresh+"");
-    		prop.put("gpsidlefresh", dic.gpsidlefresh+"");
-    		prop.put("OrderBySave", dic.OrderBySave+"");
-    		prop.put("AutoAnsIPATS", dic.AutoAnsIPATS+"");
-    		prop.put("AutoGotoOrders", dic.AutoGotoOrders+"");
-    		prop.put("ServerIPATS.IP", dic.ServerIPATSIP);
-    		prop.put("ServerIPATS.Port", dic.ServerIPATSPort+"");
-    		prop.put("ServerIPATS.Login", dic.ServerIPATSLogin);
-    		prop.put("ServerIPATS.Password", dic.ServerIPATSPassword);
-    		prop.put("ServerIPATS.name1", dic.ServerIPATSname1);
-    		prop.put("ServerIPATS.number1", dic.ServerIPATSnumber1);
-    		prop.put("ServerIPATS.name2", dic.ServerIPATSname2);
-    		prop.put("ServerIPATS.number2", dic.ServerIPATSnumber2);
-    		prop.put("ServerIPATS.name3", dic.ServerIPATSname3);
-    		prop.put("ServerIPATS.number3", dic.ServerIPATSnumber3);
-    		prop.put("ServerIPATS.name4", dic.ServerIPATSname4);
-    		prop.put("ServerIPATS.number4", dic.ServerIPATSnumber4);
-    		prop.put("ServerIPATS.name5", dic.ServerIPATSname5);
-    		prop.put("ServerIPATS.number5", dic.ServerIPATSnumber5);
-    		prop.put("ServerIPATS.name6", dic.ServerIPATSname6);
-    		prop.put("ServerIPATS.number6", dic.ServerIPATSnumber6);
-    		prop.put("RingFile", dic.RingFile);
-    		prop.put("OpenStreetMaps.Update", dic.OpenStreetMapsUpdate);
- 		
- 
-
+    		prop.put("ServerTaxi", dic.getServerTaxi());
+    		prop.put("ServerTaxiPortGPS", dic.getServerTaxiPortGPS()+"");
+    		prop.put("ServerTaxiPortCMD", dic.getServerTaxiPortCMD()+"");
+    		prop.put("DefaultIMEI", dic.getDefaultIMEI());
+    		prop.put("InternalIMEI", dic.getInternalIMEI()+"");
+    		prop.put("orderfreshper", dic.getOrderFreshPer()+"");
+    		prop.put("gpsperfresh", dic.getGpsPerFresh()+"");
+    		prop.put("gpsidlefresh", dic.getGpsIdleFresh()+"");
+    		prop.put("OrderBySave", dic.getOrderBySave()+"");
+    		prop.put("AutoAnsIPATS", dic.getAutoAnsIPATS()+"");
+    		prop.put("AutoGotoOrders", dic.getAutoGotoOrders()+"");
+    		prop.put("ServerIPATS.IP", dic.getServerIPATSIP());
+    		prop.put("ServerIPATS.Port", dic.getServerIPATSPort()+"");
+    		prop.put("ServerIPATS.Login", dic.getServerIPATSLogin());
+    		prop.put("ServerIPATS.Password", dic.getServerIPATSPassword());
+    		prop.put("ServerIPATS.name1", dic.getServerIPATSname1());
+    		prop.put("ServerIPATS.number1", dic.getServerIPATSnumber1());
+    		prop.put("ServerIPATS.name2", dic.getServerIPATSname2());
+    		prop.put("ServerIPATS.number2", dic.getServerIPATSnumber2());
+    		prop.put("ServerIPATS.name3", dic.getServerIPATSname3());
+    		prop.put("ServerIPATS.number3", dic.getServerIPATSnumber3());
+    		prop.put("ServerIPATS.name4", dic.getServerIPATSname4());
+    		prop.put("ServerIPATS.number4", dic.getServerIPATSnumber4());
+    		prop.put("ServerIPATS.name5", dic.getServerIPATSname5());
+    		prop.put("ServerIPATS.number5", dic.getServerIPATSnumber5());
+    		prop.put("ServerIPATS.name6", dic.getServerIPATSname6());
+    		prop.put("ServerIPATS.number6", dic.getServerIPATSnumber6());
+    		prop.put("RingFile", dic.getRingFile());
+    		prop.put("OpenStreetMaps.Update", dic.getOpenStreetMapsUpdate());
     		prop.store(new FileOutputStream(fileName), "config file Taxi App");
  
+    		sysConfig sp = new sysConfig(this.dic);
+    	    sp.put("B", "value B");
+    	    sp.put("C", "value C");
+    	    sp.put("A", "value A");
+    	    sp.put("D", "value D");
+    	    FileOutputStream fos = new FileOutputStream("/mnt/sdcard/taxi1/conf/sp.props");
+    	    sp.store(fos, "sorted props");
     	} catch (IOException ex) {
     		ex.printStackTrace();
         }
@@ -100,3 +104,16 @@ public class sysConfig extends Properties implements java.io.Serializable   {
 	}
 	
 }
+
+class SortedProperties extends Properties {
+	  public Enumeration keys() {
+	     Enumeration keysEnum = super.keys();
+	     Vector<String> keyList = new Vector<String>();
+	     while(keysEnum.hasMoreElements()){
+	       keyList.add((String)keysEnum.nextElement());
+	     }
+	     Collections.sort(keyList);
+	     return keyList.elements();
+	  }
+	  
+	}
