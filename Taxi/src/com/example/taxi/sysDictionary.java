@@ -255,7 +255,7 @@ CornflowerBlue	#6495ED
 		return ServerIPATSname6;
 	}
 	
-	public void serServerIPATSnumber1(String vl) {
+	public void setServerIPATSnumber1(String vl) {
 		ServerIPATSnumber1=vl;
 	}
 	public String getServerIPATSnumber1() {

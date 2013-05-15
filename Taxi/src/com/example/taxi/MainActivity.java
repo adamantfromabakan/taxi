@@ -33,6 +33,7 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -147,7 +148,6 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mLocationListener = new GPSLocationListener(dic, LGWR, mSocket); 
   
-        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
         //setContentView(R.layout.activity_main);
 
         sysThreads dataThready = new sysThreads(this,dic,LGWR,mSocket,"refreshdata","");
@@ -310,16 +310,47 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		//getMenuInflater().inflate(com.example.taxi.R.menu.main, menu);
-	     // menu.add("menu1");
-	     // menu.add("menu2");
-	     // menu.add("menu3");
-	     // menu.add("menu4");
+	      menu.add("О программе");
+	      menu.add("Параметры");
+	      menu.add("Звонить");
+	      menu.add("Карта");
 	      
 	      return super.onCreateOptionsMenu(menu);
 		//return true;
 	}
 	
-	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+		int s=0;
+      Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
+      if (item.getTitle()=="О программе") {s=1;}
+      if (item.getTitle()=="Параметры") {s=2;}
+      if (item.getTitle()=="Звонить") {s=3;}
+      if (item.getTitle()=="Карта") {s=4;}
+
+		switch (s) {
+	     case 1: 
+	    	 Toast.makeText(this, "Такси №1\n1.0\n\n- управления заявками такси\n- карта\n- IP-телефония\n\nCopyright © 2013 Kargin Alexandr. All rights reserved.", Toast.LENGTH_LONG).show();
+	    	   break;
+	     case 2: 
+	 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			this.setTitle("Такси №1");
+			
+			TableLayout params = (TableLayout)findViewById(com.example.taxi.R.layout.params);
+	        setContentView(params);
+	        
+		       break;
+	     case 3: 
+	    	 
+		       break;
+	     case 4: 
+	    	 
+		       break;
+		       
+		}
+      return super.onOptionsItemSelected(item);
+    }
 	
 	public void onClickGPS(View v) {
 		//cmdOrderlist();

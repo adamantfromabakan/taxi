@@ -85,22 +85,52 @@ public class sysConfig extends Properties /*implements java.io.Serializable*/   
         }
 	}
 	
-	public void readConfig()
+	public sysDictionary readConfig()
 	{
 		Properties prop = new Properties();
 		 
     	try {
-    		String fileName = "config.properties";
+        	File sdPath = new File("/mnt/sdcard/taxi1/conf");
+    		String fileName = sdPath+"/"+"config.properties";
     		prop.load(new FileInputStream(fileName));
  
                //get the property value and print it out
-            System.out.println(prop.getProperty("database"));
-    		System.out.println(prop.getProperty("dbuser"));
-    		System.out.println(prop.getProperty("dbpassword"));
- 
+
+    		dic.setServerTaxi(prop.getProperty("ServerTaxi"));
+    		dic.setServerTaxiPortGPS(Integer.parseInt(prop.getProperty("ServerTaxiPortGPS")));
+    		dic.setServerTaxiPortCMD(Integer.parseInt(prop.getProperty("ServerTaxiPortCMD")));
+    		dic.setDefaultIMEI(prop.getProperty("DefaultIMEI"));
+    		dic.setInternalIMEI(Integer.parseInt(prop.getProperty("InternalIMEI")));
+    		dic.setOrderFreshPer(Integer.parseInt(prop.getProperty("orderfreshper")));
+    		dic.setGpsPerFresh(Integer.parseInt(prop.getProperty("gpsperfresh")));
+    		dic.setGpsIdleFresh(Integer.parseInt(prop.getProperty("gpsidlefresh")));
+    		dic.setOrderBySave(prop.getProperty("OrderBySave"));
+    		dic.setAutoAnsIPATS(Integer.parseInt(prop.getProperty("AutoAnsIPATS")));
+    		dic.setAutoGotoOrders(Integer.parseInt(prop.getProperty("AutoGotoOrders")));
+    		dic.setServerIPATSIP(prop.getProperty("ServerIPATS.IP"));
+    		dic.setServerIPATSPort(Integer.parseInt(prop.getProperty("ServerIPATS.Port")));
+    		dic.setServerIPATSLogin(prop.getProperty("ServerIPATS.Login"));
+    		dic.setServerIPATSPassword(prop.getProperty("ServerIPATS.Password"));
+    		dic.setServerIPATSname1(prop.getProperty("ServerIPATS.name1"));
+    		dic.setServerIPATSnumber1(prop.getProperty("ServerIPATS.number1"));
+    		dic.setServerIPATSname2(prop.getProperty("ServerIPATS.name2"));
+    		dic.setServerIPATSnumber2(prop.getProperty("ServerIPATS.number2"));
+    		dic.setServerIPATSname3(prop.getProperty("ServerIPATS.name3"));
+    		dic.setServerIPATSnumber3(prop.getProperty("ServerIPATS.number3"));
+    		dic.setServerIPATSname4(prop.getProperty("ServerIPATS.name4"));
+    		dic.setServerIPATSnumber4(prop.getProperty("ServerIPATS.number4"));
+    		dic.setServerIPATSname5(prop.getProperty("ServerIPATS.name5"));
+    		dic.setServerIPATSnumber5(prop.getProperty("ServerIPATS.number5"));
+    		dic.setServerIPATSname6(prop.getProperty("ServerIPATS.name6"));
+    		dic.setServerIPATSnumber6(prop.getProperty("ServerIPATS.number6"));
+    		dic.setRingFile(prop.getProperty("RingFile"));
+    		dic.setOpenStreetMapsUpdate(prop.getProperty("OpenStreetMaps.Update"));
+
+            //return dic;
     	} catch (IOException ex) {
     		ex.printStackTrace();
-        }		
+        }
+		return dic;		
 	}
 	
 }

@@ -50,12 +50,12 @@ public final class R {
         public static final int redbutton=0x7f020008;
     }
     public static final class id {
+        public static final int LinearLayout1=0x7f09000a;
         public static final int TaxiHeadLayout=0x7f09000b;
         public static final int TaxiLayout=0x7f09000c;
         public static final int action_settings=0x7f09000d;
         public static final int btnGPS=0x7f090007;
         public static final int btnTaxiCmd=0x7f090006;
-        public static final int button1=0x7f09000a;
         public static final int editGPSPort=0x7f090002;
         public static final int editGPSServer=0x7f090001;
         public static final int editTaxiCmd=0x7f090004;
@@ -67,7 +67,7 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int maintaxi=0x7f030001;
+        public static final int params=0x7f030001;
         public static final int taxi=0x7f030002;
     }
     public static final class menu {
