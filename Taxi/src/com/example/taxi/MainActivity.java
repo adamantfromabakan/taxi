@@ -48,6 +48,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity  /*implements LocationListener*/ implements android.view.View.OnClickListener {
 	private static final String TAG = "MainActivity";
+	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 	final int DIALOG_TIME = 1;
 	final int DIALOG_REFRESH = 2;
 	final int DIALOG_CALL = 3;
@@ -333,12 +334,17 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	    	 Toast.makeText(this, "Такси №1\n1.0\n\n- управления заявками такси\n- карта\n- IP-телефония\n\nCopyright © 2013 Kargin Alexandr. All rights reserved.", Toast.LENGTH_LONG).show();
 	    	   break;
 	     case 2: 
-	 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	 		/*this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			this.setTitle("Такси №1");
 			
 			TableLayout params = (TableLayout)findViewById(com.example.taxi.R.layout.params);
-	        setContentView(params);
+	        setContentView(params);*/
+	    	    Intent intent = new Intent(this, ParamsActivity.class);
+	    	    EditText editText = (EditText) findViewById(R.id.editGPSPort);
+	    	    String message = editText.getText().toString();
+	    	    intent.putExtra(EXTRA_MESSAGE, message);
+	    	    startActivity(intent);
 	        
 		       break;
 	     case 3: 
