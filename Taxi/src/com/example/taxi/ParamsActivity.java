@@ -1,25 +1,35 @@
+/**
+ * 
+ */
 package com.example.taxi;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+/**
+ * @author ADAMANT-HOME
+ *
+ */
 public class ParamsActivity extends Activity {
+	sysDictionary dic;
+	sysLog LGWR;
+	
+	public ParamsActivity(sysDictionary dic,sysLog LGWR) {
+    	this.dic=dic;
+    	this.LGWR=LGWR;
 
-    @SuppressLint("NewApi")
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.params);
+	}
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+        setContentView(com.example.taxi.R.layout.params);
 
-        // Make sure we're running on Honeycomb or higher to use ActionBar APIs
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     @Override
@@ -31,4 +41,55 @@ public class ParamsActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
+	@Override
+	public void onStart() {
+		super.onStart();
+		// TODO Auto-generated method stub
+
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
+	@Override
+	public void onResume() {
+		super.onResume();
+		// TODO Auto-generated method stub
+
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
+	@Override
+	public void onPause() {
+		super.onPause();
+		// TODO Auto-generated method stub
+
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStop()
+	 */
+	@Override
+	public void onStop() {
+		super.onStop();
+		// TODO Auto-generated method stub
+
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		// TODO Auto-generated method stub
+
+	}
+
 }

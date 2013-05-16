@@ -3,6 +3,143 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     android:orientation="horizontal" >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+                 <TextView
+                     android:id="@+id/textView1"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text=" IP Сервера &quot;Такси&quot;: "
+                     android:textColor="@color/white"
+                     android:textSize="9sp" />
+
+                 <EditText
+                     android:id="@+id/editText1"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:background="@color/white"
+                     android:ems="10"
+                     android:gravity="center_vertical|center_horizontal"
+                     android:text="90.189.109.184"
+                     android:textColor="@color/black"
+                     android:textSize="9sp" >
+
+                     <requestFocus />
+                 </EditText>
+                 <TextView
+                     android:id="@+id/textView2"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text=" Порт: "
+                     android:textColor="@color/white"
+                     android:textSize="9sp" />
+
+                 <EditText
+                     android:id="@+id/editText2"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:background="@color/white"
+                     android:ems="10"
+                     android:gravity="center_vertical|center_horizontal"
+                     android:text="33572"
+                     android:textColor="@color/black"
+                     android:textSize="9sp" >
+
+                     <requestFocus />
+                 </EditText>
+                                  <TextView
+                     android:id="@+id/textView3"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text=" Порт GPS: "
+                     android:textColor="@color/white"
+                     android:textSize="9sp" />
+
+                 <EditText
+                     android:id="@+id/editText3"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:background="@color/white"
+                     android:ems="10"
+                     android:gravity="center_vertical|center_horizontal"
+                     android:text="33570"
+                     android:textColor="@color/black"
+                     android:textSize="9sp" >
+
+                     <requestFocus />
+                 </EditText>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+                                  <TextView
+                     android:id="@+id/textView4"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text=" IMEI: "
+                     android:textColor="@color/white"
+                     android:textSize="9sp" />
+
+                 <EditText
+                     android:id="@+id/editText4"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:background="@color/white"
+                     android:ems="10"
+                     android:gravity="center_vertical|center_horizontal"
+                     android:text="354473050898478"
+                     android:textColor="@color/black"
+                     android:textSize="9sp" >
+
+                     <requestFocus />
+                 </EditText>
+
+                 <CheckBox
+                     android:id="@+id/checkBox1"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:background="@color/black"
+                     android:checked="false"
+                     android:text="(Использовать встроенный)"
+                     android:textColor="@color/white"
+                     android:textColorLink="@color/white"
+                     android:textSize="9sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+
+
+        </TableRow>
+
+        <ExpandableListView
+            android:id="@+id/expandableListView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ExpandableListView>
+
+    </TableLayout>
 
 </LinearLayout>
