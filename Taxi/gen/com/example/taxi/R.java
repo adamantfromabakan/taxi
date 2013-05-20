@@ -8,12 +8,6 @@
 package com.example.taxi;
 
 public final class R {
-    public static final class array {
-        public static final int pref_example_list_titles=0x7f080000;
-        public static final int pref_example_list_values=0x7f080001;
-        public static final int pref_sync_frequency_titles=0x7f080002;
-        public static final int pref_sync_frequency_values=0x7f080003;
-    }
     public static final class attr {
     }
     public static final class color {
@@ -56,32 +50,32 @@ public final class R {
         public static final int redbutton=0x7f020008;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f0b000a;
-        public static final int TaxiHeadLayout=0x7f0b0017;
-        public static final int TaxiLayout=0x7f0b0018;
-        public static final int action_settings=0x7f0b0019;
-        public static final int btnGPS=0x7f0b0007;
-        public static final int btnTaxiCmd=0x7f0b0006;
-        public static final int checkBox1=0x7f0b0013;
-        public static final int editGPSPort=0x7f0b0002;
-        public static final int editGPSServer=0x7f0b0001;
-        public static final int editTaxiCmd=0x7f0b0004;
-        public static final int editTaxiPort=0x7f0b0003;
-        public static final int editTaxiServer=0x7f0b0005;
-        public static final int editText1=0x7f0b000c;
-        public static final int editText2=0x7f0b000d;
-        public static final int editText3=0x7f0b000f;
-        public static final int editText4=0x7f0b0012;
-        public static final int expandableListView1=0x7f0b0016;
-        public static final int rsltTXT=0x7f0b0009;
-        public static final int tableRow1=0x7f0b000b;
-        public static final int tableRow2=0x7f0b0010;
-        public static final int tableRow3=0x7f0b0014;
-        public static final int tableRow4=0x7f0b0015;
-        public static final int textView1=0x7f0b0000;
-        public static final int textView2=0x7f0b0008;
-        public static final int textView3=0x7f0b000e;
-        public static final int textView4=0x7f0b0011;
+        public static final int LinearLayout1=0x7f0a000a;
+        public static final int TaxiHeadLayout=0x7f0a0017;
+        public static final int TaxiLayout=0x7f0a0018;
+        public static final int action_settings=0x7f0a0019;
+        public static final int btnGPS=0x7f0a0007;
+        public static final int btnTaxiCmd=0x7f0a0006;
+        public static final int checkBox1=0x7f0a0013;
+        public static final int editGPSPort=0x7f0a0002;
+        public static final int editGPSServer=0x7f0a0001;
+        public static final int editTaxiCmd=0x7f0a0004;
+        public static final int editTaxiPort=0x7f0a0003;
+        public static final int editTaxiServer=0x7f0a0005;
+        public static final int editText1=0x7f0a000c;
+        public static final int editText2=0x7f0a000d;
+        public static final int editText3=0x7f0a000f;
+        public static final int editText4=0x7f0a0012;
+        public static final int expandableListView1=0x7f0a0016;
+        public static final int rsltTXT=0x7f0a0009;
+        public static final int tableRow1=0x7f0a000b;
+        public static final int tableRow2=0x7f0a0010;
+        public static final int tableRow3=0x7f0a0014;
+        public static final int tableRow4=0x7f0a0015;
+        public static final int textView1=0x7f0a0000;
+        public static final int textView2=0x7f0a0008;
+        public static final int textView3=0x7f0a000e;
+        public static final int textView4=0x7f0a0011;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -89,7 +83,7 @@ public final class R {
         public static final int taxi=0x7f030002;
     }
     public static final class menu {
-        public static final int main=0x7f0a0000;
+        public static final int main=0x7f090000;
     }
     public static final class string {
         public static final int DIALOG_CALL=0x7f07000b;
@@ -116,38 +110,16 @@ public final class R {
         public static final int DIALOG_TITLE=0x7f070020;
         public static final int DIALOG_UPD=0x7f07001d;
         public static final int DIALOG_YES=0x7f07001e;
-        public static final int action_settings=0x7f070001;
         public static final int app_name=0x7f070000;
+        public static final int app_settings=0x7f070001;
         public static final int cancel=0x7f070007;
         public static final int exit=0x7f070003;
         public static final int hello_world=0x7f070002;
         public static final int hints_summary=0x7f070024;
         public static final int hints_title=0x7f070023;
         public static final int no=0x7f070006;
-        public static final int pref_default_display_name=0x7f07002a;
-        public static final int pref_description_social_recommendations=0x7f070028;
-        /**  Example settings for Data & Sync 
-         */
-        public static final int pref_header_data_sync=0x7f07002c;
-        /**  Strings related to Settings 
- Example General settings 
-         */
-        public static final int pref_header_general=0x7f070026;
-        /**  Example settings for Notifications 
-         */
-        public static final int pref_header_notifications=0x7f07002f;
-        public static final int pref_ringtone_silent=0x7f070032;
-        public static final int pref_title_add_friends_to_messages=0x7f07002b;
-        public static final int pref_title_display_name=0x7f070029;
-        public static final int pref_title_new_message_notifications=0x7f070030;
-        public static final int pref_title_ringtone=0x7f070031;
-        public static final int pref_title_social_recommendations=0x7f070027;
-        public static final int pref_title_sync_frequency=0x7f07002d;
-        public static final int pref_title_system_sync_settings=0x7f07002e;
-        public static final int pref_title_vibrate=0x7f070033;
         public static final int save_data=0x7f070004;
         public static final int saved=0x7f070008;
-        public static final int title_activity_params=0x7f070025;
         public static final int wifi_summary=0x7f070022;
         public static final int wifi_title=0x7f070021;
         public static final int yes=0x7f070005;
@@ -174,17 +146,13 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f090000;
+        public static final int AppBaseTheme=0x7f080000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f090001;
+        public static final int AppTheme=0x7f080001;
     }
     public static final class xml {
-        public static final int pref_data_sync=0x7f040000;
-        public static final int pref_general=0x7f040001;
-        public static final int pref_headers=0x7f040002;
-        public static final int pref_notification=0x7f040003;
-        public static final int settings=0x7f040004;
+        public static final int settings=0x7f040000;
     }
 }
