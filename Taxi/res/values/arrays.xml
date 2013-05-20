@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    	<string-array name="sel_memory">
+		<item>/mnt/sdcard2</item>
+		<item>/mnt/sdcard</item>
+	</string-array>
+</resources>

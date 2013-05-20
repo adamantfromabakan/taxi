@@ -19,6 +19,8 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -27,6 +29,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.TypedValue;
@@ -49,6 +52,8 @@ import android.widget.Toast;
 public class MainActivity extends Activity  /*implements LocationListener*/ implements android.view.View.OnClickListener {
 	private static final String TAG = "MainActivity";
 	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+	private static final String MY_SETTINGS = "app_settings";
+	public static Context appcontext;
 	final int DIALOG_TIME = 1;
 	final int DIALOG_REFRESH = 2;
 	final int DIALOG_CALL = 3;
@@ -90,6 +95,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	public sysLog LGWR;
 	public SocketTAXI mSocket;
 	public sysConfig sysConf;
+	public sysPrefs sysPref;
 	public TableLayout table;
 	public static List<clsOrders> list;
     public static List<clsDriverInfo> driver;
@@ -111,8 +117,6 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
-
 		
 		if (this.flg_icon<1) { 
 			this.flg_icon=1;
@@ -126,14 +130,33 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 				
 		super.onCreate(savedInstanceState);
         setContentView(com.example.taxi.R.layout.taxi);
+        SharedPreferences sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+        // проверяем, первый ли раз открывается программа
+        boolean hasVisited = sp.getBoolean("hasVisited", false);
+		
+        if (!hasVisited) {
+            // выводим нужную активность
+        	addshortcut();
+            Editor e = sp.edit();
+            e.putBoolean("hasVisited", true);
+            e.commit(); // не забудьте подтвердить изменения
+        }
+        this.appcontext =  getApplicationContext();
+        //Context context = getApplicationContext();
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context); 
+        //Toast.makeText(this, prefs.getString("ServerTaxi", "90.189.119.84"), Toast.LENGTH_LONG).show();
         
 		try {
 			this.setTitle("Такси №1");
 		 TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		 dic = new sysDictionary();
 		 mSocket = new SocketTAXI(dic, LGWR);
-		 sysConf = new sysConfig(dic);	
-		 sysConf.writeConfig();
+		 //sysConf = new sysConfig(dic);	
+		 //sysConf.writeConfig();
+		 sysPref = new sysPrefs(dic);
+		 this.dic = sysPref.getConfig();
+		 sysPref.putConfig();
+		 
 		 LGWR = new sysLog();
 		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - Starting program Taxi1...");
 		 LGWR.logwriter(dic.logcom, dic.logpath, dic.getSysdate()+" - android.os.Build.VERSION.SDK_INT:"+android.os.Build.VERSION.SDK_INT);
@@ -323,7 +346,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
 		int s=0;
-      Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
+      //Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
       if (item.getTitle()=="О программе") {s=1;}
       if (item.getTitle()=="Параметры") {s=2;}
       if (item.getTitle()=="Звонить") {s=3;}
@@ -348,7 +371,9 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        
 		       break;
 	     case 3: 
-	    	 
+			 sysPref = new sysPrefs(dic);
+			 this.dic = sysPref.getConfig();
+			 sysPref.putConfig();
 		       break;
 	     case 4: 
 	    	 

@@ -100,13 +100,13 @@ public class sysConfig extends Properties /*implements java.io.Serializable*/   
     		dic.setServerTaxiPortGPS(Integer.parseInt(prop.getProperty("ServerTaxiPortGPS")));
     		dic.setServerTaxiPortCMD(Integer.parseInt(prop.getProperty("ServerTaxiPortCMD")));
     		dic.setDefaultIMEI(prop.getProperty("DefaultIMEI"));
-    		dic.setInternalIMEI(Integer.parseInt(prop.getProperty("InternalIMEI")));
+    		//dic.setInternalIMEI(prop.getProperty("InternalIMEI"));
     		dic.setOrderFreshPer(Integer.parseInt(prop.getProperty("orderfreshper")));
     		dic.setGpsPerFresh(Integer.parseInt(prop.getProperty("gpsperfresh")));
     		dic.setGpsIdleFresh(Integer.parseInt(prop.getProperty("gpsidlefresh")));
     		dic.setOrderBySave(prop.getProperty("OrderBySave"));
-    		dic.setAutoAnsIPATS(Integer.parseInt(prop.getProperty("AutoAnsIPATS")));
-    		dic.setAutoGotoOrders(Integer.parseInt(prop.getProperty("AutoGotoOrders")));
+    		//dic.setAutoAnsIPATS(prop.getProperty("AutoAnsIPATS"));
+    		//dic.setAutoGotoOrders(prop.getProperty("AutoGotoOrders"));
     		dic.setServerIPATSIP(prop.getProperty("ServerIPATS.IP"));
     		dic.setServerIPATSPort(Integer.parseInt(prop.getProperty("ServerIPATS.Port")));
     		dic.setServerIPATSLogin(prop.getProperty("ServerIPATS.Login"));

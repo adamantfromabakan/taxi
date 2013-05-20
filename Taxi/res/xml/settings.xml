@@ -1,13 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+		android:title="Настройки сервера ТАКСИ">
+    <EditTextPreference
+    android:key="ServerTaxi"
+    android:title="IP сервера такси"
+    android:summary="Устанавливает новый IP адрес сервера"
+    android:defaultValue="90.189.119.84"
+    android:dialogTitle="Введите IP адрес сервера" />
+    <EditTextPreference
+    android:key="ServerTaxiPortGPS"
+    android:title="Порт GPS"
+    android:summary="Устанавливает новый порт GPS сервера такси"
+    android:defaultValue="35570"
+    android:dialogTitle="Введите новый порт от 0 до 65535" />
+    <EditTextPreference
+    android:key="ServerTaxiPortCMD"
+    android:title="Порт CMD"
+    android:summary="Устанавливает новый порт CMD сервера такси"
+    android:defaultValue="35572"
+    android:dialogTitle="Введите новый порт от 0 до 65535" />
+    <EditTextPreference
+    android:key="DefaultIMEI"
+    android:title="IMEI по умолчанию"
+    android:summary="Устанавливает новый IP адрес сервера"
+    android:defaultValue="354473050898478"
+    android:dialogTitle="Введите новый IMEI" />
     <CheckBoxPreference
-        android:key="wifi"
-        android:title="@string/wifi_title"
-        android:summary="@string/wifi_summary"
-        android:defaultValue="true" />
-  <CheckBoxPreference
-        android:key="hints"
-        android:title="@string/hints_title"
-        android:summary="@string/hints_summary"
-        android:defaultValue="true" />
+        android:key="InternalIMEI"
+        android:title="Внутренний IMEI"
+        android:summary="Использовать внутренний IMEI для работы"
+        android:defaultValue="false" />
+    <EditTextPreference
+    android:key="orderfreshper"
+    android:title="Период заявок"
+    android:summary="Устанавливает период обновления заявок"
+    android:defaultValue="20000"
+    android:dialogTitle="Введите новый период обновления" />
+    <EditTextPreference
+    android:key="gpsperfresh"
+    android:title="Период GPS"
+    android:summary="Устанавливает период обновления GPS"
+    android:defaultValue="10000"
+    android:dialogTitle="Введите новый период обновления" />        
+    <EditTextPreference
+    android:key="gpsidlefresh"
+    android:title="Период GPS (idle)"
+    android:summary="Устанавливает период обновления GPS при простое"
+    android:defaultValue="600000"
+    android:dialogTitle="Введите новый период обновления" />        
+<ListPreference
+	android:key="OrderBySave"
+	android:title="Тип носителя"
+	android:summary="Устанавливает тип носителя для хранения данных"
+	android:defaultValue="/mnt/sdcard2"
+	android:entries="@array/sel_memory"
+	android:entryValues="@array/sel_memory"
+	android:dialogTitle="Выберите тип носителя" />    
+    <CheckBoxPreference
+        android:key="AutoAnsIPATS"
+        android:title="Автоответ IP-ATS"
+        android:summary="Автоответ на входящий звонок IP-ATS"
+        android:defaultValue="false" />
+    <CheckBoxPreference
+        android:key="AutoGotoOrders"
+        android:title="Автопереход в заявки"
+        android:summary="Переход в раздел Заявки после входящего звонка"
+        android:defaultValue="false" />  
+      </PreferenceCategory>  
+    
+    <PreferenceCategory
+		android:title="Настройки сервера IP-ATS">
+    <EditTextPreference
+    android:key="ServerIPATSIP"
+    android:title="IP сервера IP-ATS"
+    android:summary="Устанавливает новый IP сервера IP-ATS"
+    android:defaultValue="90.189.119.84"
+    android:dialogTitle="Введите IP адрес сервера" />
+    <EditTextPreference
+    android:key="ServerIPATSPort"
+    android:title="Порт IP-ATS"
+    android:summary="Устанавливает новый порт сервера IP-ATS"
+    android:defaultValue="14570"
+    android:dialogTitle="Введите новый порт от 0 до 65535" />
+    <EditTextPreference
+    android:key="ServerIPATSLogin"
+    android:title="Логин IP-ATS"
+    android:summary="Устанавливает логин для авторизации"
+    android:defaultValue="201"
+    android:dialogTitle="Введите новый логин IP-ATS" />
+    <EditTextPreference
+    android:key="ServerIPATSPassword"
+    android:title="Пароль IP-ATS"
+    android:summary="Устанавливает пароль для авторизации"
+    android:defaultValue="q1kdid93"
+    android:dialogTitle="Введите новый пароль IP-ATS" />
+
+    <EditTextPreference
+    android:key="ServerIPATSname1"
+    android:title="Контакт №1"
+    android:summary="Устанавливает имя 1 контакта"
+    android:defaultValue="Оператор"
+    android:dialogTitle="Введите новое имя контакта" />
+    <EditTextPreference
+    android:key="ServerIPATSnumber1"
+    android:title="Контакт №1 номер"
+    android:summary="Устанавливает номер вызова 1 контакта"
+    android:defaultValue="101"
+    android:dialogTitle="Введите новый номер контакта" /> 
+           
+    <EditTextPreference
+    android:key="ServerIPATSname2"
+    android:title="Контакт №2"
+    android:summary="Устанавливает имя 2 контакта"
+    android:defaultValue="Оператор"
+    android:dialogTitle="Введите новое имя контакта" />
+    <EditTextPreference
+    android:key="ServerIPATSnumber2"
+    android:title="Контакт №2 номер"
+    android:summary="Устанавливает номер вызова 2 контакта"
+    android:defaultValue="102"
+    android:dialogTitle="Введите новый номер контакта" />        
+
+    <EditTextPreference
+    android:key="ServerIPATSname3"
+    android:title="Контакт №3"
+    android:summary="Устанавливает имя 3 контакта"
+    android:defaultValue=""
+    android:dialogTitle="Введите новое имя контакта" />
+    <EditTextPreference
+    android:key="ServerIPATSnumber3"
+    android:title="Контакт №3 номер"
+    android:summary="Устанавливает номер вызова 3 контакта"
+    android:defaultValue=""
+    android:dialogTitle="Введите новый номер контакта" />        
+    
+    <EditTextPreference
+    android:key="ServerIPATSname4"
+    android:title="Контакт №4"
+    android:summary="Устанавливает имя 4 контакта"
+    android:defaultValue=""
+    android:dialogTitle="Введите новое имя контакта" />
+    <EditTextPreference
+    android:key="ServerIPATSnumber4"
+    android:title="Контакт №4 номер"
+    android:summary="Устанавливает номер вызова 4 контакта"
+    android:defaultValue=""
+    android:dialogTitle="Введите новый номер контакта" />        
+    
+    <EditTextPreference
+    android:key="ServerIPATSname5"
+    android:title="Контакт №5"
+    android:summary="Устанавливает имя 5 контакта"
+    android:defaultValue=""
+    android:dialogTitle="Введите новое имя контакта" />
+    <EditTextPreference
+    android:key="ServerIPATSnumber5"
+    android:title="Контакт №5 номер"
+    android:summary="Устанавливает номер вызова 5 контакта"
+    android:defaultValue=""
+    android:dialogTitle="Введите новый номер контакта" />        
+    
+    <EditTextPreference
+    android:key="ServerIPATSname6"
+    android:title="Контакт №6"
+    android:summary="Устанавливает имя 6 контакта"
+    android:defaultValue="Шеф"
+    android:dialogTitle="Введите новое имя контакта" />
+    <EditTextPreference
+    android:key="ServerIPATSnumber6"
+    android:title="Контакт №6 номер"
+    android:summary="Устанавливает номер вызова 6 контакта"
+    android:defaultValue="83904122222"
+    android:dialogTitle="Введите новый номер контакта" />        
+	</PreferenceCategory>
+	<PreferenceCategory
+		android:title="Дополнительно">
+    <EditTextPreference
+    android:key="RingFile"
+    android:title="Рингтон"
+    android:summary="Файл для проигрывания при входящем звонке"
+    android:defaultValue="Ringln.wav"
+    android:dialogTitle="Введите новое имя файла" />
+    <EditTextPreference
+    android:key="OpenStreetMapsUpdate"
+    android:title="Обновление OpenStreetMaps"
+    android:summary="URL для обновления OpenStreetMaps"
+    android:defaultValue="https://data.gis-lab.info/osm_dump/lates/RU-KK.osm.pbf"
+    android:dialogTitle="Введите новый номер контакта" />   
+    </PreferenceCategory>  
 </PreferenceScreen>
+
+
+
+

@@ -13,13 +13,13 @@ public class sysDictionary {
 	public int ServerTaxiPortGPS=35570;
 	public int ServerTaxiPortCMD=35572;
 	public String DefaultIMEI="354473050898478";
-	public int InternalIMEI=0;
+	public boolean InternalIMEI=false;
 	public int orderfreshper=20*1000;
 	public int gpsperfresh=10*1000;
 	public int gpsidlefresh=600*1000;
-	public String OrderBySave="/mnt/sdcard2,/mnt/sdcard";
-	public int AutoAnsIPATS=0;
-	public int AutoGotoOrders=0;
+	public String OrderBySave="/mnt/sdcard2";
+	public boolean AutoAnsIPATS=false;
+	public boolean AutoGotoOrders=false;
 	public String ServerIPATSIP="90.189.119.84";
 	public int ServerIPATSPort=14570;
 	public String ServerIPATSLogin="201";
@@ -136,10 +136,10 @@ CornflowerBlue	#6495ED
 		return DefaultIMEI;
 	}
 	
-	public void setInternalIMEI(int vl) {
+	public void setInternalIMEI(boolean vl) {
 		InternalIMEI=vl;
 	}
-	public int getInternalIMEI() {
+	public boolean getInternalIMEI() {
 		return InternalIMEI;
 	}
 	
@@ -171,17 +171,17 @@ CornflowerBlue	#6495ED
 		return OrderBySave;
 	}
 	
-	public void setAutoAnsIPATS(int vl) {
+	public void setAutoAnsIPATS(boolean vl) {
 		AutoAnsIPATS=vl;
 	}
-	public int getAutoAnsIPATS() {
+	public boolean getAutoAnsIPATS() {
 		return AutoAnsIPATS;
 	}
 
-	public void setAutoGotoOrders(int vl) {
+	public void setAutoGotoOrders(boolean vl) {
 		AutoGotoOrders=vl;
 	}
-	public int getAutoGotoOrders() {
+	public boolean getAutoGotoOrders() {
 		return AutoGotoOrders;
 	}
 	
