@@ -340,7 +340,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 			
 			TableLayout params = (TableLayout)findViewById(com.example.taxi.R.layout.params);
 	        setContentView(params);*/
-	    	    Intent intent = new Intent(this, ParamsActivity.class);
+	    	    Intent intent = new Intent(this, SettingsActivity.class);
 	    	    //EditText editText = (EditText) findViewById(R.id.editGPSPort);
 	    	    //String message = editText.getText().toString();
 	    	    //intent.putExtra(EXTRA_MESSAGE, message);

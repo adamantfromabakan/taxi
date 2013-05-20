@@ -97,8 +97,9 @@ public class SocketTAXI {
             while((line = in.readLine()) != null) {
                 clsOrders obj = new clsOrders();
             	 tokens = line.split(delims);
-            	 //Log.d(TAG, "line: "+line);
-            	 obj.setOrder(tokens[0]);
+            	// Log.d(TAG, "line: "+line);
+            	// Log.d(TAG, "tokens.length: "+tokens.length);
+            	/*obj.setOrder(tokens[0]);
             	 obj.setId(tokens[1]);
             	 obj.setStatus(tokens[2]);
             	 obj.setOrd_date(tokens[3]);
@@ -108,12 +109,57 @@ public class SocketTAXI {
             	 obj.setOrd_km(tokens[7]);
             	 obj.setPrice(tokens[8]);
             	 obj.setOrd_from(tokens[9]);
+            	 
             	 if (tokens.length<11) {
             	 obj.setOrd_to("");            		 
             	 } else {
             	 obj.setOrd_to(tokens[10]);
-            	 }
+            	 }*/
             	
+         		switch (tokens.length) {
+       	  case 11: 
+       	   	obj.setOrder(tokens[0]);
+       	   	obj.setId(tokens[1]);
+       	   	obj.setStatus(tokens[2]);
+       	   	obj.setOrd_date(tokens[3]);
+       	   	obj.setOrd_date_beg(tokens[4]);
+       	   	obj.setOrd_date_out(tokens[5]);
+       	   	obj.setOrd_date_end(tokens[6]);
+       	   	obj.setOrd_km(tokens[7]);
+       	   	obj.setPrice(tokens[8]);
+       	   	obj.setOrd_from(tokens[9]);
+       	   	obj.setOrd_to(tokens[10]);
+       	   	   break;
+       	  case 10:
+     	    obj.setOrder(tokens[0]);
+     	    obj.setId(tokens[1]);
+     	    obj.setStatus(tokens[2]);
+     	    obj.setOrd_date(tokens[3]);
+     	    obj.setOrd_date_beg(tokens[4]);
+     	    obj.setOrd_date_out(tokens[5]);
+     	    obj.setOrd_date_end(tokens[6]);
+     	    obj.setOrd_km(tokens[7]);
+     	    obj.setPrice(tokens[8]);
+     	    obj.setOrd_from(tokens[9]);
+     	    obj.setOrd_to("");
+     	       break;   
+       	  case 9:
+       		obj.setOrder(tokens[0]);
+   	    	obj.setId(tokens[1]);
+   	    	obj.setStatus(tokens[2]);
+   	    	obj.setOrd_date(tokens[3]);
+   	    	obj.setOrd_date_beg(tokens[4]);
+   	    	obj.setOrd_date_out(tokens[5]);
+   	    	obj.setOrd_date_end(tokens[6]);
+   	    	obj.setOrd_km(tokens[7]);
+   	    	obj.setPrice(tokens[8]);
+   	    	obj.setOrd_from("");
+   	    	obj.setOrd_to("");
+   	    	   break;    	   
+       	    	   
+       	    	   
+         		}
+            	 
             	 //Log.d(TAG, "obj: "+obj.toString());
             	 list.add(obj);
             } 

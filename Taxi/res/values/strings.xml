@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Такси №1</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_settings">Параметры</string>
     <string name="hello_world">Hello world!</string>
 	<string name="exit">Выход</string>
 	<string name="save_data">Сохранить данные?</string>
@@ -34,4 +34,8 @@
 	    <string name="DIALOG_YES">Да</string>
 	    <string name="DIALOG_NO">Нет</string>
 	    <string name="DIALOG_TITLE"></string>
+<string name="wifi_title">Wi-Fi</string>
+<string name="wifi_summary">Вкл. или выкл. сеть WiFi</string>
+<string name="hints_title">Подсказки</string>
+<string name="hints_summary">Показывать подсказки</string>
 </resources>
