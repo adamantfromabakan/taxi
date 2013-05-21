@@ -296,7 +296,9 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
     @Override
     protected void onResume() {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
-
+		 sysPref = new sysPrefs(dic);
+		 this.dic = sysPref.getConfig();
+		 sysPref.putConfig();
         // при использовании сетей типа GSM
         // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
         //        mLocationListener);
@@ -371,9 +373,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        
 		       break;
 	     case 3: 
-			 sysPref = new sysPrefs(dic);
-			 this.dic = sysPref.getConfig();
-			 sysPref.putConfig();
+
 		       break;
 	     case 4: 
 	    	 
