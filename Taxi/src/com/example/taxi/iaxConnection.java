@@ -1,5 +1,7 @@
 package com.example.taxi;
 
+import iax.client.audio.AudioFactory;
+import iax.client.audio.impl.NullAudioFactory;
 import iax.client.protocol.call.Call;
 import iax.client.protocol.peer.Peer;
 import iax.client.protocol.peer.PeerListener;
@@ -56,8 +58,8 @@ public class iaxConnection implements PeerListener {
                 
                 
                 call.execute();
-                
-                Call c = new Call(mypeer,201, null);
+                NullAudioFactory aFactory= new NullAudioFactory();
+                Call c = new Call(mypeer,201, aFactory);
                 c.startCall(number);
                 
                 
