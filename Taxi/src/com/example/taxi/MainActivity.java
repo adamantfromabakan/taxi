@@ -299,6 +299,7 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 		 sysPref = new sysPrefs(dic);
 		 this.dic = sysPref.getConfig();
 		 sysPref.putConfig();
+        
         // при использовании сетей типа GSM
         // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
         //        mLocationListener);
@@ -373,7 +374,15 @@ public class MainActivity extends Activity  /*implements LocationListener*/ impl
 	        
 		       break;
 	     case 3: 
-
+	    	 iaxConnection ic = new iaxConnection();
+		       ic.connect();
+		       try {
+		           Thread.sleep(10000);
+		         } catch (InterruptedException ie) {
+		           ie.printStackTrace();
+		         }
+		       
+		       ic.call("999");
 		       break;
 	     case 4: 
 	    	 

@@ -1,20 +1,11 @@
 package com.example.taxi;
 
+import iax.client.protocol.call.Call;
+import iax.client.protocol.peer.Peer;
+import iax.client.protocol.peer.PeerListener;
+import iax.client.protocol.user.command.NewCall;
 
-import iax.protocol.peer.*; 
-import iax.protocol.connection.*; 
-import iax.protocol.call.*; 
-import iax.protocol.call.command.recv.*; 
-import iax.protocol.call.command.send.*; 
-import iax.protocol.user.command.*; 
-import iax.protocol.frame.*;
-import iax.protocol.frame.ControlFrame;
-import iax.audio.*;
-import iax.protocol.user.command.NewCall;
-import iax.protocol.frame.ProtocolControlFrame;
-import iax.protocol.frame.FullFrame;
-import iax.protocol.frame.Frame;
-import iax.protocol.call.command.recv.CallCommandRecvFacade;
+ 
 /**
  *
  * @author john
@@ -53,9 +44,9 @@ public class iaxConnection implements PeerListener {
     }
     
     public void connect() {
-        mypeer = new Peer(this,"201","q1kdid93","90.189.119.84",true,10000);
+        mypeer = new Peer(this,"201","q1kdid93","90.189.119.84",14570, true,10000);
         System.out.println(mypeer.getState());
-        Connection conn = new Connection(mypeer,"90.189.119.84");
+        //Connection conn = new Connection(mypeer,"90.189.119.84");
         //90.189.119.84
     }
     public void call(String number) {
@@ -66,7 +57,7 @@ public class iaxConnection implements PeerListener {
                 
                 call.execute();
                 
-                Call c = new Call(mypeer,201);
+                Call c = new Call(mypeer,201, null);
                 c.startCall(number);
                 
                 
@@ -78,5 +69,11 @@ public class iaxConnection implements PeerListener {
             e.printStackTrace();
         }
     }
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
